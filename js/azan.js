@@ -319,11 +319,15 @@
   map.on("dblclick",function(e){setPos(e.latlng);reverse(e.latlng,true)});
   marker.on("dragend",function(){var ll=marker.getLatLng();setPos(ll);reverse(ll,true)});
 
+  /* the verse slideshow (js/ayah.js) lies over the map; using the search or the GPS button brings the map back */
+  function showMapNow(){ if(window.AzanStage)window.AzanStage.showMap(); }
+
   /* search box */
   document.getElementById("searchForm").addEventListener("submit",function(e){
     e.preventDefault();
     var q=document.getElementById("q").value.trim();
     if(!q)return;
+    showMapNow();
     say(window.AzanLang.t("searching"));
     geoSearch(q,window.AzanLang.current())
       .then(function(list){
@@ -1326,10 +1330,11 @@
     locDlg.showModal?locDlg.showModal():locDlg.setAttribute("open","");
   }
   var gpsBtn=document.getElementById("gpsBtn");
-  if(gpsBtn)gpsBtn.addEventListener("click",function(){ requestGps(); });
+  if(gpsBtn)gpsBtn.addEventListener("click",function(){ showMapNow(); requestGps(); });
   if(locYes)locYes.addEventListener("click",function(){
     if(locDlg.close)locDlg.close();else locDlg.removeAttribute("open");
     saveAutoLang();
+    showMapNow();
     requestGps();
   });
   if(locNo)locNo.addEventListener("click",function(){

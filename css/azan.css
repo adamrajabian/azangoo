@@ -1,0 +1,702 @@
+/* Copyright (c) 2026 azangoo.com. All rights reserved.
+   Copying, reuse, modification or redistribution of this code, or of its calculations,
+   is prohibited without written permission. See the Terms and conditions page. */
+/* اذان گو - responsive prayer times page */
+:root{
+  --night:#0b2530; --night2:#12384a; --lapis:#1c4a7a; --turq:#2fa7a0;
+  --gold:#d2a94b; --gold2:#f0d58a; --ivory:#f4ecd8; --ink:#0a1a22;
+  --tile:rgba(18,56,74,.82); --line:rgba(210,169,75,.45);
+  --bg-a:#1c4a7a; --bg-b:#0b2530;
+  --panel:rgba(11,37,48,.45); --panel-strong:rgba(11,37,48,.85); --panel-soft:rgba(11,37,48,.35);
+  --text:#f4ecd8; --heading:#f0d58a; --muted:rgba(244,236,216,.65);
+  --mosque-top:rgba(40,95,125,.62); --mosque-bottom:rgba(4,18,26,.9);
+  --r:14px;
+}
+/* light theme: the same layout with light panels and dark text */
+:root[data-theme="light"]{
+  --night:#ffffff; --night2:#eef5f7; --lapis:#dbeaf0; --turq:#2fa7a0;
+  --gold:#c9982f; --gold2:#8a6a1f; --ivory:#13303a; --ink:#0a1a22;
+  --tile:rgba(255,255,255,.9); --line:rgba(160,120,40,.55);
+  --bg-a:#e9f3f6; --bg-b:#cfe4ea;
+  --panel:rgba(255,255,255,.92); --panel-strong:#ffffff; --panel-soft:rgba(255,255,255,.75);
+  --text:#13303a; --heading:#8a6a1f; --muted:rgba(19,48,58,.6);
+  --mosque-top:rgba(19,48,58,.10); --mosque-bottom:rgba(19,48,58,.26);
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:Vazirmatn,Tahoma,sans-serif;color:var(--ivory);line-height:1.8;
+  background:
+    url("../images/pattern.svg"),
+    radial-gradient(1200px 600px at 50% -10%,var(--bg-a),var(--bg-b) 70%);
+  background-color:var(--bg-b);min-height:100vh;
+}
+/* mosque skyline: one SVG used as a mask, filled with a theme colour gradient; it stands at the very end of the page,
+   behind the footer, so the cards never cover it */
+:root{--sky-h:clamp(170px,24vw,320px)}
+body{position:relative;padding-bottom:calc(var(--sky-h)*.85)}
+body::before{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:var(--sky-h);z-index:-1;pointer-events:none;
+  background:linear-gradient(to top,var(--mosque-bottom),var(--mosque-top));
+  -webkit-mask:url("../images/mosque.svg?v=3") center bottom/cover no-repeat;
+          mask:url("../images/mosque.svg?v=3") center bottom/cover no-repeat;
+}
+@media print{body::before{display:none}}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:3px solid var(--gold2);outline-offset:2px}
+.wrap{max-width:1240px;margin-inline:auto;padding:0 14px 40px}
+
+/* header */
+.top{text-align:center;padding:22px 10px 8px}
+.logo{
+  font-family:"Aref Ruqaa",serif;font-size:clamp(3rem,10vw,5.2rem);line-height:1.2;color:var(--heading);
+  text-shadow:0 2px 0 #6b4f12,0 0 30px rgba(210,169,75,.35);
+}
+.logo small{display:block;font:500 .95rem Vazirmatn;color:var(--ivory);opacity:.8;text-shadow:none;margin-top:-6px}
+.verse{
+  margin:12px auto 0;max-width:820px;padding:9px 16px;border-block:1px solid var(--line);
+  font-size:.92rem;color:var(--heading)
+}
+
+/* date tiles */
+.dates{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:6px 0;width:100%}
+.dates .date{flex:0 0 calc(50% - 5px);max-width:calc(50% - 5px)}
+.date{
+  background:var(--tile);border:1px solid var(--line);border-radius:var(--r);padding:10px 8px;text-align:center;
+  position:relative
+}
+.date::before{content:"";position:absolute;inset:4px;border:1px dashed rgba(210,169,75,.25);border-radius:10px;pointer-events:none}
+.date{min-width:0;overflow:hidden;padding:10px 6px}
+/* the Solar Hijri date tile is for the Persian page only */
+html:not([lang="fa"]) .date-shamsi{display:none}
+.date b{display:block;font-size:clamp(1.1rem,5vw,2rem);line-height:1.2;color:var(--heading);overflow-wrap:anywhere}
+.date span{display:block;font-size:clamp(.72rem,3vw,.85rem);opacity:.85;line-height:1.5;overflow-wrap:anywhere}
+.date #d-zone{font-size:clamp(.66rem,2.6vw,.75rem);direction:ltr;opacity:.7}
+.date b.clock{font-size:clamp(.95rem,4.4vw,1.6rem);font-variant-numeric:tabular-nums;direction:ltr;white-space:nowrap}
+
+/* layout */
+.grid{display:grid;gap:14px;grid-template-columns:minmax(0,1fr)}
+.card{background:var(--tile);border:1px solid var(--line);border-radius:var(--r);padding:14px;min-width:0}
+.card h2{
+  font:700 1.05rem Vazirmatn;color:var(--heading);margin-bottom:10px;display:flex;align-items:center;gap:8px
+}
+.card h2::after{content:"";flex:1;height:1px;background:linear-gradient(to left,var(--line),transparent)}
+
+/* prayer times */
+.times{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;list-style:none;padding:0}
+.times li{
+  display:flex;justify-content:space-between;align-items:center;gap:6px;
+  background:var(--panel);border:1px solid rgba(210,169,75,.25);border-radius:10px;padding:8px 12px
+}
+.times time{font-weight:700;font-variant-numeric:tabular-nums;direction:ltr;color:var(--heading)}
+/* the next prayer: turquoise, so it is not mistaken for the gold buttons (gold = "tap me") */
+.times li.next{background:linear-gradient(135deg,#146d68,#1b837d);color:#fff;border-color:#7fe0d8;font-weight:700;box-shadow:0 0 0 1px #7fe0d8,0 3px 10px rgba(20,109,104,.35)}
+.times li.next time{color:#fff}
+.place{font-size:.85rem;opacity:.85;margin-bottom:8px;direction:ltr;text-align:right}
+
+/* map */
+.mapframe{
+  padding:7px;border-radius:var(--r);
+  background:
+    repeating-linear-gradient(45deg,rgba(210,169,75,.55) 0 5px,rgba(138,106,31,.38) 5px 10px);
+  box-shadow:0 0 0 2px var(--night),0 0 0 3px rgba(210,169,75,.5),0 14px 30px rgba(0,0,0,.4)
+}
+.mapframe .inner{border:2px solid var(--night);border-radius:8px;overflow:hidden;background:#cfe0e0}
+#map{height:min(62vw,420px);min-height:280px;width:100%}
+.coords{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:12px}
+.coords label{font-size:.82rem;opacity:.9;display:block}
+.coords label.full{grid-column:1/-1}
+.coords input{
+  width:100%;font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);
+  background:var(--night);color:var(--ivory);direction:ltr;text-align:left
+}
+.btn{
+  grid-column:1/-1;font:700 1rem Vazirmatn;padding:11px;border-radius:10px;border:0;cursor:pointer;
+  background:linear-gradient(var(--gold2),var(--gold));color:var(--ink)
+}
+.hint{font-size:.82rem;opacity:.8;margin-top:10px}
+.hint-more-btn{text-decoration:underline;font-size:inherit}
+.hint[hidden]{display:none}
+
+/* thin moving gold bar at the bottom of the screen: "tap the page once" so the automatic adhan can play.
+   Shown while the automatic adhan is on and the page has not been touched yet; any tap, click or key removes it. */
+.sound-bar{position:fixed;inset-inline:0;bottom:0;z-index:900;height:30px;box-sizing:content-box;padding-bottom:env(safe-area-inset-bottom,0px);overflow:hidden;display:flex;align-items:center;background:linear-gradient(#f0d58a,#d2a94b);color:#0a1a22;font:700 .85rem Vazirmatn,sans-serif;border-top:1px solid #8a6a1f;box-shadow:0 -2px 10px rgba(0,0,0,.35);cursor:pointer}
+.sound-bar[hidden]{display:none}
+.sound-bar-text{flex:none;display:inline-block;white-space:nowrap;padding-inline-start:100%;animation:soundMarquee 18s linear infinite}
+@keyframes soundMarquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+html[dir="rtl"] .sound-bar-text{animation-name:soundMarqueeRtl}
+@keyframes soundMarqueeRtl{from{transform:translateX(0)}to{transform:translateX(100%)}}
+@media(prefers-reduced-motion:reduce){.sound-bar{justify-content:center}.sound-bar-text{animation:none;padding:0;white-space:normal;text-align:center}}
+
+/* side cards */
+.reciters{display:grid;gap:8px;font-size:.92rem}
+.reciters label{display:flex;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--panel);cursor:pointer}
+.reciters input{accent-color:var(--gold)}
+.audio{width:100%;margin-top:10px;height:40px}
+
+footer{text-align:center;font-size:.8rem;opacity:.7;margin-top:26px}
+
+/* tablet */
+@media(min-width:640px){
+  .dates .date{flex:0 0 calc(25% - 7.5px);max-width:calc(25% - 7.5px)}
+  .times{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+/* desktop: map center, times right, side tools left (RTL order) */
+@media(min-width:980px){
+  .grid{grid-template-columns:260px 1fr 280px;align-items:start}
+  .times{grid-template-columns:1fr}
+  .col-main{order:0}
+  /* the three columns are equally tall: the tallest column sets the height and one card of each other column grows to fill it
+     (the adhan card, the map card with its map, the calendar card). Below 980px nothing of this applies. */
+  .grid{align-items:stretch}
+  .grid>.right-col,.grid>.main-col,.grid>.side{display:flex;flex-direction:column;gap:14px;align-content:normal}
+  .grid>.right-col>.card:last-child,.grid>.side>.card:last-child{flex:1 1 auto}
+  .grid>.main-col>.card:first-child{flex:1 1 auto;display:flex;flex-direction:column}
+  .grid>.main-col>.card:first-child .mapframe{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+  .grid>.main-col>.card:first-child .mapframe .inner{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+  .grid #map{height:auto;flex:1 1 auto;min-height:420px;max-height:760px}
+}
+@media(max-width:979px){
+  .col-main{order:-1}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* map search box */
+.search{display:flex;gap:8px}
+.search input{
+  flex:1;min-width:0;font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--line);
+  background:var(--night);color:var(--ivory)
+}
+.search input::placeholder{color:var(--muted)}
+.search button{
+  font:700 1rem Vazirmatn;padding:0 18px;border:0;border-radius:10px;cursor:pointer;
+  background:linear-gradient(var(--gold2),var(--gold));color:var(--ink)
+}
+.msg{font-size:.82rem;min-height:1.6em;margin:4px 2px 8px;color:var(--heading)}
+.card .mapframe{margin-top:0}
+
+/* qibla */
+.qibla{margin-top:12px;padding:8px 12px;border-radius:10px;background:var(--panel);border:1px solid rgba(210,169,75,.25);color:var(--heading);font-weight:700;font-size:.92rem}
+.qibla-tag{
+  display:flex;align-items:center;justify-content:center;white-space:nowrap;
+  background:var(--gold);color:var(--ink);border:2px solid var(--night);border-radius:13px;
+  font:700 .8rem Vazirmatn,sans-serif
+}
+
+/* adhan player */
+.auto{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:.9rem;cursor:pointer}
+.auto input{accent-color:var(--gold)}
+
+/* calendar card */
+/* calendar tabs: same look as the moon card tabs (segmented bar, gold line under the active tab) */
+.calendar .tabs{display:flex;gap:4px;margin:0 0 14px;padding:4px;background:var(--panel-soft);border:1px solid var(--line);border-radius:12px}
+.calendar .tab{
+  flex:1;font:700 .92rem/1.35 Vazirmatn;padding:9px 6px;border:0;
+  border-radius:9px;background:transparent;color:var(--ivory);cursor:pointer
+}
+.calendar .tab.active{background:var(--tile);color:var(--heading);box-shadow:inset 0 -3px 0 var(--gold)}
+.calendar .tab:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.cal-panel{
+  display:grid;gap:12px;justify-items:center;padding:16px 8px;min-width:0;background:var(--night);
+  border:1px solid var(--line);border-radius:var(--r)
+}
+.cal-label{font-weight:700;color:var(--heading)}
+.cal-panel select{
+  width:70%;font:inherit;padding:8px 10px;border-radius:8px;border:1px solid var(--line);
+  background:var(--night2);color:var(--ivory)
+}
+.calendar .tabs[hidden]{display:none}
+.cal-nav{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;min-width:0}
+.cal-step{width:36px;height:36px;flex:0 1 36px;min-width:26px;display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:10px;background:var(--night2);color:var(--ivory);cursor:pointer}
+.cal-step:hover:not(:disabled){border-color:var(--gold);color:var(--heading)}
+.cal-step:disabled{opacity:.35;cursor:default}
+.cal-step:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.cal-step svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cal-step.next svg{transform:scaleX(-1)}
+[dir="rtl"] .cal-step svg{transform:scaleX(-1)}
+[dir="rtl"] .cal-step.next svg{transform:none}
+.cal-center{flex:1 1 0;min-width:0;display:grid;gap:6px;justify-items:center}
+.cal-month{font-weight:700;color:var(--heading);font-size:1.05rem;text-align:center;max-width:100%;overflow-wrap:anywhere}
+.cal-month.dim{opacity:.4}
+.cal-panel input.cal-year{width:100%;max-width:5.5em;min-width:0;text-align:center;font:inherit;padding:6px 4px;border-radius:8px;border:1px solid var(--line);background:var(--night2);color:var(--ivory)}
+.cal-all{display:flex;align-items:center;gap:6px;cursor:pointer}
+.cal-all input{accent-color:var(--gold)}
+.cal-ok{width:auto;padding:9px 34px;margin-top:4px;grid-column:auto}
+.cal-panel .msg{margin:0;text-align:center}
+
+/* header banner */
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px;padding:4px 0 0}
+.top-side{display:flex;align-items:center;min-width:0;max-width:100%}
+.top-side .lang-select{max-width:100%;min-width:0}
+.top-start{justify-content:flex-start}
+.top-end{justify-content:flex-end}
+/* one logo box for every language: same place and size, the artwork fits inside */
+
+/* header: a soft glow behind the logo (the logo itself carries the mihrab arch) */
+:root{--glow-a:rgba(240,213,138,.14);--glow-b:rgba(47,167,160,.08);--arch-op:.38}
+:root[data-theme="light"]{--glow-a:rgba(201,152,47,.14);--glow-b:rgba(47,167,160,.07);--arch-op:.4}
+.top{position:relative;isolation:isolate}
+.top::after{content:"";position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);z-index:-1;pointer-events:none}
+.top::after{width:min(300px,76%);background:radial-gradient(ellipse at 50% 50%,var(--glow-a),var(--glow-b) 45%,transparent 72%);
+  -webkit-mask-image:linear-gradient(#000 0,#000 55%,transparent 100%);mask-image:linear-gradient(#000 0,#000 55%,transparent 100%)}
+
+/* footer: donation and copyright */
+.site-foot{margin-top:26px;text-align:center;display:grid;gap:8px;justify-items:center}
+.foot-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:10px}
+.foot-actions .btn,.foot-actions .donate-btn,.foot-actions .save-btn,.foot-actions .city-list-btn{width:auto;min-width:150px;height:44px;margin:0;padding:0 22px;display:inline-flex;align-items:center;justify-content:center;font:700 .95rem Vazirmatn,sans-serif;border-radius:12px;line-height:1}
+.foot-actions .donate{margin:0;display:flex}
+.donate{margin:0}
+.donate-btn{grid-column:auto;width:auto}
+.save-btn{width:auto;grid-column:auto}
+/* the save button under the Qibla sentence: as wide as the calculate button */
+.save-btn.save-wide{display:block;width:100%;margin-top:12px}
+#saveMsg:empty{display:none}
+.main-col{display:grid;gap:14px;min-width:0}
+.save-sub{margin:0 0 4px}
+.clear-btn{display:block;margin:6px auto 0;font-size:.82rem;text-decoration:underline}
+.clear-btn[hidden]{display:none}
+.save-confirm{background:var(--tile);border:1px solid var(--gold);border-radius:var(--r);padding:12px 14px;max-width:360px;text-align:center}
+.save-confirm[hidden]{display:none}
+.save-confirm p{margin:0 0 10px;font-weight:700;color:var(--heading)}
+.save-actions{display:flex;gap:10px;justify-content:center}
+.save-yes,.save-no{width:auto;padding:8px 26px;grid-column:auto}
+.copyright{font-size:.8rem;opacity:.75;direction:ltr;margin:0}
+
+/* helpers */
+.side{display:grid;gap:14px;min-width:0}
+img{max-width:100%;height:auto}
+.coords input.rtl{direction:rtl;text-align:right}
+
+
+/* right column (prayer times + calendar) */
+.right-col{display:grid;gap:14px;align-content:start;min-width:0}
+
+/* language switch */
+.lang-row{display:flex;justify-content:flex-end;gap:8px;max-width:643px;margin:0 auto 6px}
+.lang-select{font:700 .9rem Vazirmatn,sans-serif;padding:7px 14px;border-radius:999px;border:1px solid var(--gold);background:var(--panel-strong);color:var(--heading);cursor:pointer}
+.lang-btn{font:700 .85rem Vazirmatn,sans-serif;padding:6px 14px;border-radius:999px;border:1px solid var(--gold);background:var(--panel);color:var(--heading);cursor:pointer}
+.lang-btn:hover{background:var(--gold);color:var(--ink)}
+html[dir="ltr"] .search{flex-direction:row}
+
+/* contact dialog */
+.contact-dlg{background:var(--night2);color:var(--ivory);border:1px solid var(--gold);border-radius:var(--r);padding:18px 20px;max-width:min(420px,92vw);box-shadow:0 14px 40px rgba(0,0,0,.55)}
+.contact-dlg::backdrop{background:rgba(0,0,0,.55)}
+/* language buttons at the top of the location dialog (always left to right, each name in its own script) */
+.lang-pick{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;direction:ltr;margin:0 0 12px}
+.lang-pick button{font:600 .95rem Vazirmatn,sans-serif;padding:6px 14px;border-radius:999px;border:1px solid var(--gold);background:transparent;color:var(--ivory);cursor:pointer}
+.lang-pick button[aria-pressed="true"]{background:var(--gold);color:var(--ink)}
+.contact-dlg p{margin:0 0 12px;line-height:1.9}
+/* about dialog: wider, and the text scrolls inside it on small screens */
+.about-dlg{margin:auto;max-width:min(560px,94vw);max-height:86vh;overflow:auto}
+.about-dlg h2{margin:0 0 12px;font-size:1.15rem;color:var(--heading);text-align:center}
+.about-body p{text-align:justify}
+.about-dlg .save-actions{position:sticky;bottom:-18px;background:var(--night2);padding:10px 0 4px;margin-top:6px}
+.about-body .about-dua{text-align:center;font-weight:700;color:var(--heading);font-size:1.15rem;margin:16px 0 6px}
+.about-body .about-dua-tr{text-align:center;margin:0 0 4px}
+.about-body .about-dua-src{text-align:center;color:var(--muted);font-size:.85rem;margin:0 0 16px}
+.about-body .about-dua-tr:empty,.about-body .about-dua-src:empty{display:none}
+.contact-mail{text-align:center;direction:ltr;font-weight:700}
+.contact-mail a{color:var(--heading)}
+.contact-dlg .save-actions{justify-content:center}
+
+/* countdown line under the prayer times */
+.countdown{margin:12px 0 0;text-align:center;font-weight:700;color:var(--heading);font-size:.95rem;min-height:1.6em}
+
+/* annual calendar */
+.annual-btn{width:100%;margin-top:4px}
+.annual-box{margin-top:12px}
+.annual-title{font-weight:700;color:var(--heading);margin:0 0 8px}
+.annual-scroll{overflow-x:auto}
+table.annual{width:100%;border-collapse:collapse;font-size:.78rem;min-width:360px}
+table.annual th,table.annual td{padding:6px 4px;border-bottom:1px solid rgba(210,169,75,.25);text-align:center;white-space:nowrap}
+table.annual th{color:var(--heading);font-weight:700}
+
+/* Ramadan box */
+.ramadan{margin-top:6px;border-top:1px dashed rgba(210,169,75,.35);padding-top:6px}
+.ramadan[hidden]{display:none}
+.ram-remind{justify-content:center;margin-top:6px}
+
+/* header dropdowns sit beside the logo; on small screens they become smaller */
+@media(max-width:480px){.top-side .lang-select{font-size:.8rem;padding:6px 8px;min-width:104px}}
+
+/* nothing may be wider than the screen */
+img,select,input,button{max-width:100%}
+.wrap{overflow-x:hidden}
+
+/* current-location button next to search */
+.search .gps-btn{flex:none;width:46px;height:46px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid var(--gold);background:var(--panel);color:var(--heading);cursor:pointer;padding:0}
+.search .gps-btn:hover{background:var(--gold);color:var(--ink)}
+/* search: a small gold icon button, the same size as the location button next to it */
+.search .search-btn{flex:none;width:46px;height:46px;padding:0;display:inline-flex;align-items:center;justify-content:center;border-radius:10px}
+.search .search-btn:hover{filter:brightness(1.08)}
+
+
+/* round frame around the logo, with the site name under it */
+.logo-box{display:flex;align-items:center;justify-content:center}
+.logo-img{display:block;width:auto;height:clamp(112px,16vw,136px);max-width:none;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
+:root[data-theme="light"] .logo-img{filter:drop-shadow(0 1px 1px rgba(70,45,5,.55)) drop-shadow(0 3px 6px rgba(0,0,0,.18))}
+.logo-caption{margin:0;font:700 clamp(11px,2.6vw,13px) Vazirmatn,sans-serif;letter-spacing:.5px;color:var(--heading);direction:ltr;text-align:center}
+
+/* home: one small box that opens the city list */
+.city-list-btn{display:inline-block;padding:9px 22px;box-sizing:border-box;border-radius:12px;background:linear-gradient(var(--gold2),var(--gold));color:var(--ink);font-weight:700;text-decoration:none}
+
+/* city lists (country list and per-country lists) */
+.list-tools{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.list-tools input,.list-tools select{font:inherit;padding:9px 12px;border-radius:10px;border:1px solid var(--gold);background:#fff;color:#13303a;min-width:0}
+.country-list,.city-list{list-style:none;padding:0;margin:0}
+.country-list li,.city-list li{padding:6px 0;border-bottom:1px solid rgba(210,169,75,.25)}
+.country-list .count{opacity:.7;font-size:.85rem}
+
+/* terms link in the footer */
+.terms-line{margin:6px 0 0;text-align:center;font-size:.85rem}
+.terms-link{color:var(--heading)}
+/* About us and Contact us: plain text links in the footer line (they open dialogs) */
+.link-btn{background:none;border:0;padding:0;margin:0;font:inherit;color:var(--heading);text-decoration:none;cursor:pointer}
+
+/* save-defaults pop-up */
+.save-dlg{text-align:center}
+.save-dlg p{margin:0 0 14px;font-weight:700;color:var(--heading)}
+
+/* daily dua timer and the footer spacing */
+.dua-timer{margin:6px 0 0;text-align:center;font-size:.9rem;font-weight:700;color:var(--heading);min-height:1.4em}
+.terms-line{margin:0}
+
+/* ---- icons: line style, one colour (they take the colour of the text next to them, so they follow the dark/light
+   theme and the gold of the site). Small SVG pictures used as masks on ::before / ::after, so the translated texts and
+   the page scripts are not touched. ---- */
+:root{
+  --i-calc:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%225%22 y=%223%22 width=%2214%22 height=%2218%22 rx=%222%22/%3E%3Cpath d=%22M8 7h8v3H8zM8.5 14h.01M12 14h.01M15.5 14h.01M8.5 17.5h.01M12 17.5h.01M15.5 17.5h.01%22/%3E%3C/svg%3E");
+  --i-check:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M5 12.5l4.5 4.5L19 7.5%22/%3E%3C/svg%3E");
+  --i-crescent:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M20.5 14.2A8.6 8.6 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z%22/%3E%3Cpath d=%22M17.5 3.5v3.4M15.8 5.2h3.4%22/%3E%3C/svg%3E");
+  --i-info:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%229%22/%3E%3Cpath d=%22M12 11v5.5M12 7.5h.01%22/%3E%3C/svg%3E");
+  --i-cal2:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%224%22 y=%225.5%22 width=%2216%22 height=%2214.5%22 rx=%222%22/%3E%3Cpath d=%22M4 10h16M8.5 3.5v4M15.5 3.5v4M8.5 14h.01M12 14h.01M15.5 14h.01M8.5 17h.01M12 17h.01%22/%3E%3C/svg%3E");
+  --i-bell:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15z%22/%3E%3Cpath d=%22M10 21a2 2 0 0 0 4 0%22/%3E%3C/svg%3E");
+  --i-moonstar:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z%22/%3E%3Cpath d=%22M17.5 3v4M15.5 5h4%22/%3E%3C/svg%3E");
+  --i-moon:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5z%22/%3E%3C/svg%3E");
+  --i-sunrise:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 20h18M6.5 20a5.5 5.5 0 0 1 11 0M12 3.5v7M8.8 6.7 12 3.5l3.2 3.2%22/%3E%3C/svg%3E");
+  --i-sunset:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M3 20h18M6.5 20a5.5 5.5 0 0 1 11 0M12 3.5v7M8.8 7.3 12 10.5l3.2-3.2%22/%3E%3C/svg%3E");
+  --i-sun:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%224%22/%3E%3Cpath d=%22M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8%22/%3E%3C/svg%3E");
+  --i-clock:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%228.5%22/%3E%3Cpath d=%22M12 7v5l3 2%22/%3E%3C/svg%3E");
+  --i-phase:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%228.5%22/%3E%3Cpath d=%22M12 3.5a8.5 8.5 0 0 0 0 17z%22 fill=%22%23000%22/%3E%3C/svg%3E");
+  --i-speaker:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M4 9.5v5h4l5 4v-13l-5 4z%22/%3E%3Cpath d=%22M16 9.2a4 4 0 0 1 0 5.6M18.6 6.6a8 8 0 0 1 0 10.8%22/%3E%3C/svg%3E");
+  --i-calendar:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%224%22 y=%225.5%22 width=%2216%22 height=%2214.5%22 rx=%222%22/%3E%3Cpath d=%22M4 10h16M8.5 3.5v4M15.5 3.5v4%22/%3E%3C/svg%3E");
+  --i-compass:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%229%22/%3E%3Cpath d=%22M15.8 8.2l-2 5.6-5.6 2 2-5.6z%22/%3E%3C/svg%3E");
+  --i-save:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M5 4h11l3 3v13H5z%22/%3E%3Cpath d=%22M8 4v5h7V4M8 20v-6h8v6%22/%3E%3C/svg%3E");
+  --i-mail:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%223%22 y=%225.5%22 width=%2218%22 height=%2213%22 rx=%222%22/%3E%3Cpath d=%22M3.5 7l8.5 6.2L20.5 7%22/%3E%3C/svg%3E");
+  --i-heart:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.4a4.2 4.2 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z%22/%3E%3C/svg%3E");
+  --i-globe:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%229%22/%3E%3Cpath d=%22M3 12h18M12 3c3.2 3 3.2 15 0 18M12 3c-3.2 3-3.2 15 0 18%22/%3E%3C/svg%3E");
+}
+/* one rule gives every icon its size and its place at the start of the text (right side in RTL pages) */
+.times li>span::before,
+.card h2::before,.qibla::before,
+#saveDefaults::before,.donate-btn::before,.city-list-btn::before,
+.calc-btn::before,.cal-ok:not(.annual-btn)::before,.annual-btn::before{
+  content:"";display:inline-block;flex:none;width:1.25em;height:1.25em;vertical-align:-.28em;
+  margin-inline-end:.5em;background:currentColor;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;
+}
+.card h2::before{width:1.25em;height:1.25em;vertical-align:baseline;margin-inline-end:.55em}
+/* 1) prayer times, in the order of the list */
+.times li:nth-child(1)>span::before{--ic:var(--i-moonstar)}
+.times li:nth-child(2)>span::before{--ic:var(--i-sunrise)}
+.times li:nth-child(3)>span::before{--ic:var(--i-sun)}
+.times li:nth-child(4)>span::before{--ic:var(--i-sunset)}
+.times li:nth-child(5)>span::before{--ic:var(--i-sunset)}
+.times li:nth-child(6)>span::before{--ic:var(--i-moon)}
+.times li:nth-child(7)>span::before{--ic:var(--i-moonstar)}
+/* 2) card titles and qibla */
+#t-h::before{--ic:var(--i-clock)}
+#sv-h::before{--ic:var(--i-save)}
+#mo-h::before{--ic:var(--i-phase)}
+#a-h::before{--ic:var(--i-speaker)}
+#cal-h::before{--ic:var(--i-calendar)}
+.qibla::before{--ic:var(--i-compass)}
+/* 3) footer buttons */
+#saveDefaults::before{--ic:var(--i-save)}
+.donate-btn::before{--ic:var(--i-heart)}
+.city-list-btn::before{--ic:var(--i-globe)}
+/* 4) the four date cards: a small icon in the top corner (start side), clock / Shamsi / Hijri / Gregorian */
+.date::after{
+  content:"";position:absolute;top:9px;inset-inline-start:11px;width:1.1rem;height:1.1rem;pointer-events:none;
+  background:var(--heading);opacity:.7;
+  -webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;
+}
+.dates .date:nth-child(1)::after{--ic:var(--i-clock)}
+.dates .date:nth-child(2)::after{--ic:var(--i-calendar)}
+.dates .date:nth-child(3)::after{--ic:var(--i-moon)}
+.dates .date:nth-child(4)::after{--ic:var(--i-cal2)}
+/* 5) next to the "play adhan and dua automatically" switch */
+.auto>span[data-i18n="auto_label"]::before{
+  content:"";display:inline-block;width:1.2em;height:1.2em;vertical-align:-.25em;margin-inline-end:.45em;
+  background:currentColor;-webkit-mask:var(--i-bell) center/contain no-repeat;mask:var(--i-bell) center/contain no-repeat;
+}
+/* 6) the three action buttons: calculate times, confirm month, annual calendar */
+.calc-btn::before{--ic:var(--i-calc)}
+.cal-ok:not(.annual-btn)::before{--ic:var(--i-check)}
+.annual-btn::before{--ic:var(--i-cal2)}
+.moon-more-btn::before{--ic:var(--i-crescent)}
+
+/* hadith of the day: a thin ticker under the date tiles; tapping it opens the full text */
+.hadith{width:100%;margin:6px 0}
+.hadith[hidden],.hadith-modal[hidden]{display:none}
+.hadith-btn{display:flex;align-items:stretch;width:100%;height:38px;padding:0;overflow:hidden;border-radius:var(--r);border:1px solid rgba(47,167,160,.6);background:var(--panel);color:var(--text);font:inherit;text-align:start;cursor:pointer}
+.hadith-tag{flex:none;display:flex;align-items:center;padding:0 14px;background:linear-gradient(135deg,#146d68,#1b837d);color:#fff;font-size:.85rem;font-weight:700;white-space:nowrap}
+.hadith-view{flex:1;min-width:0;overflow:hidden;white-space:nowrap;display:flex;align-items:center;-webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent)}
+.hadith-track{display:inline-block;padding-inline-start:100%;font-size:.9rem;animation:hadith-move var(--hadith-dur,60s) linear infinite}
+html[dir="rtl"] .hadith-track{animation-name:hadith-move-rtl}
+.hadith-btn:hover .hadith-track,.hadith-btn:focus-visible .hadith-track{animation-play-state:paused}
+.hadith-btn:focus-visible{outline:2px solid var(--turq);outline-offset:2px}
+@keyframes hadith-move{to{transform:translateX(-100%)}}
+@keyframes hadith-move-rtl{to{transform:translateX(100%)}}
+@media (prefers-reduced-motion:reduce){
+  .hadith-track{animation:none;padding:0;display:block;overflow:hidden;text-overflow:ellipsis;padding-inline:12px}
+  .hadith-view{display:block;line-height:38px}
+}
+.hadith-modal{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(3,12,18,.72)}
+.hadith-card{position:relative;width:100%;max-width:560px;max-height:85vh;overflow:auto;padding:22px 20px 18px;border-radius:var(--r);border:1px solid rgba(47,167,160,.7);background:var(--panel-strong);color:var(--text);box-shadow:0 10px 40px rgba(0,0,0,.45)}
+.hadith-card h3{margin:0 0 10px;color:var(--turq);font-size:1rem}
+.hadith-narr{font-weight:700;margin:0 0 8px}
+.hadith-ar{margin:0 0 10px;font-size:1.25rem;line-height:2.1;font-family:"Amiri","Scheherazade New","Noto Naskh Arabic",serif;text-align:center}
+.hadith-t{margin:0 0 10px;line-height:2}
+.hadith-src{margin:0;font-size:.8rem;color:var(--muted)}
+.hadith-card p:empty{display:none}
+.hadith-x{position:absolute;top:8px;inset-inline-end:10px;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--text);font-size:1.5rem;line-height:1;cursor:pointer}
+.hadith-x:hover{background:rgba(47,167,160,.25)}
+html.hadith-open{overflow:hidden}
+
+/* date tiles, a little smaller: the prayer times and the map should be what the eye sees first */
+.date{padding:8px 6px}
+.date b{font-size:clamp(1rem,4.2vw,1.5rem)}
+.date #d-week{font-size:clamp(.95rem,3.8vw,1.35rem)}      /* the weekday is the longest word, so a notch smaller */
+.date span{font-size:clamp(.7rem,2.8vw,.8rem)}
+.date b.clock{font-size:clamp(.9rem,3.8vw,1.3rem)}
+@media(min-width:640px){
+  .dates .date{max-width:min(calc(25% - 7.5px),230px)}
+}
+
+/* the auto-play switch, its timer and hint now sit at the bottom of the prayer times card */
+.auto-box{margin-top:14px;padding-top:10px;border-top:1px solid var(--line)}
+.auto-box .auto{margin-top:0}
+
+/* ---- phones: smaller type and tighter boxes, so the prayer times, the map and the cards fit the screen.
+   Inputs and selects keep a 16px font on purpose (a smaller one makes iPhones zoom the page when a field is tapped).
+   Tablet and desktop are not affected. ---- */
+@media(max-width:639px){
+  body{line-height:1.65}
+  .wrap{padding:0 10px 28px}
+  .top{gap:6px}
+  .logo-img{height:clamp(84px,25vw,104px)}
+  .grid,.right-col,.main-col,.side{gap:10px}
+  .card{padding:10px;border-radius:12px}
+  .card h2{font-size:.95rem;margin-bottom:8px;gap:6px}
+  .card h2::before{width:1.1em;height:1.1em;margin-inline-end:.4em}
+
+  /* date tiles: all four in one row, small and short */
+  .dates{gap:4px;margin:4px 0;flex-wrap:nowrap}
+  .dates .date{flex:1 1 0;flex-basis:0;max-width:none;min-width:0}
+  .date{padding:4px 2px;border-radius:10px}
+  .date::before{inset:2px;border-radius:8px}
+  .date::after{display:none}
+  .date b{font-size:clamp(.78rem,3.5vw,1rem);line-height:1.2}
+  .date #d-week{font-size:clamp(.66rem,3vw,.85rem)}
+  .date b.clock{font-size:clamp(.68rem,3.1vw,.9rem)}
+  .date span{font-size:clamp(.56rem,2.4vw,.7rem);line-height:1.3}
+  .date #d-zone{font-size:clamp(.5rem,2.1vw,.6rem)}
+
+  /* hadith ticker */
+  .hadith{margin:4px 0}
+  .hadith-btn{height:32px}
+  .hadith-tag{padding:0 9px;font-size:.76rem}
+  .hadith-track{font-size:.8rem}
+  .hadith-view{line-height:32px}
+
+  /* prayer times: smaller rows; the last (odd) row, tomorrow's fajr, takes the full width */
+  .place{font-size:.76rem;margin-bottom:6px}
+  .times{gap:6px}
+  .times li{padding:4px 8px;border-radius:9px;font-size:.84rem;gap:4px}
+  .times li>span{min-width:0}
+  .times li>span::before{width:1.05em;height:1.05em;margin-inline-end:.35em;vertical-align:-.2em}
+  .times time{font-size:.9rem}
+  .times li:last-child:nth-child(odd){grid-column:1/-1}
+  .countdown{font-size:.85rem;margin-top:8px;min-height:1.4em}
+  .ramadan{margin-top:4px;padding-top:4px}
+  .auto-box{margin-top:10px;padding-top:8px}
+  .auto{font-size:.83rem;margin-top:8px;gap:6px}
+  .dua-timer{font-size:.78rem;margin-top:4px}
+  .hint{font-size:.74rem;margin-top:8px}
+  .msg{font-size:.76rem;margin:3px 2px 6px}
+
+  /* adhan voice */
+  .reciters{gap:5px;font-size:.84rem}
+  .reciters label{padding:5px 9px;border-radius:9px}
+  .audio{height:34px;margin-top:8px}
+
+  /* map and its fields */
+  .search{gap:6px}
+  .search input{padding:8px 10px}
+  .search .search-btn,.search .gps-btn{width:40px;height:40px}
+  .mapframe{padding:5px}
+  #map{height:62vw;min-height:230px}
+  .coords{gap:6px;margin-top:8px}
+  .coords label{font-size:.76rem}
+  .coords input{padding:6px 8px}
+  .btn{font-size:.92rem;padding:9px}
+  .qibla{margin-top:8px;padding:6px 10px;font-size:.82rem}
+  .save-btn.save-wide{margin-top:8px}
+  .save-sub{font-size:.74rem}
+  .clear-btn{font-size:.76rem}
+
+  /* calendar card */
+  .calendar .tab{font-size:.84rem;padding:8px 4px}
+  .cal-panel{padding:10px 8px;gap:8px}
+  .cal-label{font-size:.88rem}
+  .cal-panel select{width:86%;padding:6px 8px}
+  .cal-step{width:34px;height:34px;flex-basis:34px}
+  .cal-nav{gap:3px}
+  .cal-ok{padding:7px 26px}
+  table.annual{font-size:.72rem}
+  table.annual th,table.annual td{padding:5px 3px}
+
+  /* footer and dialogs */
+  .site-foot{margin-top:18px;gap:6px}
+  .foot-actions{gap:8px}
+  .foot-actions .btn,.foot-actions .donate-btn,.foot-actions .save-btn,.foot-actions .city-list-btn{min-width:120px;height:38px;padding:0 14px;font-size:.88rem}
+  .copyright{font-size:.72rem}
+  .terms-line{font-size:.76rem;line-height:1.9}
+  .contact-dlg{padding:14px;max-width:94vw}
+  .contact-dlg p{font-size:.88rem;margin-bottom:10px}
+  .about-dlg h2{font-size:1.02rem}
+  .about-body p{font-size:.86rem}
+  .about-dlg .save-actions{bottom:-14px}
+  .hadith-card{padding:18px 14px 14px}
+  .hadith-ar{font-size:1.1rem;line-height:2}
+  .hadith-t{font-size:.9rem;line-height:1.9}
+}
+/* very narrow phones (320-380px) */
+@media(max-width:380px){
+  .wrap{padding:0 8px 24px}
+  .card{padding:8px}
+  .times li{padding:4px 6px;font-size:.78rem}
+  .times time{font-size:.84rem}
+  .times li>span::before{display:none}
+  .date b{font-size:.88rem}
+  .date::after{display:none}
+  .reciters{font-size:.8rem}
+  .foot-actions .btn,.foot-actions .donate-btn,.foot-actions .save-btn,.foot-actions .city-list-btn{min-width:104px;padding:0 10px;font-size:.84rem}
+}
+
+
+/* ===== header v2: slim icon buttons in the corners + a soft mosque skyline behind the logo ===== */
+.top{--logo-h:clamp(112px,16vw,136px);--top-pad:4px;
+  display:flex;justify-content:center;align-items:flex-start;position:relative;isolation:isolate;overflow:hidden;
+  padding:var(--top-pad) 0 0;min-height:calc(var(--top-pad) + var(--logo-h))}
+.top .logo-wrap{position:relative;z-index:1}
+.top .logo-img{height:var(--logo-h)}
+.top .top-side{position:absolute;top:8px;z-index:2;width:auto}
+.top .top-start{inset-inline-start:2px}
+.top .top-end{inset-inline-end:2px}
+/* the two selects become round icon buttons; they still are the same <select>s, so the scripts keep working */
+.top .top-side .lang-select{-webkit-appearance:none;appearance:none;width:42px;height:42px;min-width:0;max-width:none;padding:0;
+  border-radius:50%;border:1px solid var(--gold);color:transparent;font-size:16px;text-indent:-9999px;overflow:hidden;
+  background-color:var(--panel-strong);background-repeat:no-repeat;background-position:center;background-size:22px 22px;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);transition:filter .15s,transform .15s}
+.top .top-side .lang-select:hover{filter:brightness(1.15)}
+.top .top-side .lang-select:active{transform:scale(.94)}
+.top .top-side .lang-select option{text-indent:0;color:#13303a;background:#fff}
+#langSelect{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f0d58a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18'/%3E%3C/svg%3E")}
+#themeSelect{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f0d58a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z'/%3E%3C/svg%3E")}
+:root[data-theme="light"] #langSelect{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a6a1f' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18'/%3E%3C/svg%3E")}
+:root[data-theme="light"] #themeSelect{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a6a1f' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/%3E%3C/svg%3E")}
+/* skyline: a gold silhouette, faint on purpose so the logo stays the star */
+.top::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:50%;
+  height:calc(var(--logo-h) * 1.2);aspect-ratio:640/190;top:calc(var(--top-pad) - var(--logo-h) * .18 + 24px);
+  transform:translateX(-50%);background:var(--sky-c,#f0d58a);opacity:.2;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 190'%3E%3Cdefs%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='0' y1='0' x2='0' y2='190'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.62' stop-color='%23fff' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cpath d='M236 138C236 102 270 82 320 52C370 82 404 102 404 138Z'/%3E%3Crect x='317.5' y='26' width='5' height='28'/%3E%3Ccircle cx='320' cy='22' r='6'/%3E%3Crect x='244' y='138' width='152' height='60'/%3E%3Cpath d='M150 164C150 142 172 130 190 116C208 130 230 142 230 164Z'/%3E%3Crect x='186.5' y='98' width='7' height='20'/%3E%3Ccircle cx='190' cy='95' r='4'/%3E%3Cpath d='M410 164C410 142 432 130 450 116C468 130 490 142 490 164Z'/%3E%3Crect x='446.5' y='98' width='7' height='20'/%3E%3Ccircle cx='450' cy='95' r='4'/%3E%3Crect x='148' y='164' width='344' height='40'/%3E%3Cg id='m'%3E%3Cpath d='M84 62L96 20L108 62Z'/%3E%3Crect x='94.5' y='8' width='3' height='14'/%3E%3Crect x='86' y='62' width='20' height='8'/%3E%3Crect x='80' y='70' width='32' height='7'/%3E%3Crect x='88' y='77' width='16' height='40'/%3E%3Crect x='80' y='117' width='32' height='6'/%3E%3Crect x='86' y='123' width='20' height='80'/%3E%3C/g%3E%3Cuse href='%23m' transform='translate(448 0)'/%3E%3Crect x='108' y='170' width='42' height='30'/%3E%3Crect x='490' y='170' width='42' height='30'/%3E%3Cpath d='M10 196C10 176 30 168 48 154C66 168 86 176 86 196Z'/%3E%3Cpath d='M554 196C554 176 574 168 592 154C610 168 630 176 630 196Z'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);-webkit-mask-size:100% 100%;-webkit-mask-repeat:no-repeat;-webkit-mask-composite:source-in;mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 190'%3E%3Cdefs%3E%3ClinearGradient id='g' gradientUnits='userSpaceOnUse' x1='0' y1='0' x2='0' y2='190'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.62' stop-color='%23fff' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg fill='url(%23g)'%3E%3Cpath d='M236 138C236 102 270 82 320 52C370 82 404 102 404 138Z'/%3E%3Crect x='317.5' y='26' width='5' height='28'/%3E%3Ccircle cx='320' cy='22' r='6'/%3E%3Crect x='244' y='138' width='152' height='60'/%3E%3Cpath d='M150 164C150 142 172 130 190 116C208 130 230 142 230 164Z'/%3E%3Crect x='186.5' y='98' width='7' height='20'/%3E%3Ccircle cx='190' cy='95' r='4'/%3E%3Cpath d='M410 164C410 142 432 130 450 116C468 130 490 142 490 164Z'/%3E%3Crect x='446.5' y='98' width='7' height='20'/%3E%3Ccircle cx='450' cy='95' r='4'/%3E%3Crect x='148' y='164' width='344' height='40'/%3E%3Cg id='m'%3E%3Cpath d='M84 62L96 20L108 62Z'/%3E%3Crect x='94.5' y='8' width='3' height='14'/%3E%3Crect x='86' y='62' width='20' height='8'/%3E%3Crect x='80' y='70' width='32' height='7'/%3E%3Crect x='88' y='77' width='16' height='40'/%3E%3Crect x='80' y='117' width='32' height='6'/%3E%3Crect x='86' y='123' width='20' height='80'/%3E%3C/g%3E%3Cuse href='%23m' transform='translate(448 0)'/%3E%3Crect x='108' y='170' width='42' height='30'/%3E%3Crect x='490' y='170' width='42' height='30'/%3E%3Cpath d='M10 196C10 176 30 168 48 154C66 168 86 176 86 196Z'/%3E%3Cpath d='M554 196C554 176 574 168 592 154C610 168 630 176 630 196Z'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-size:100% 100%;mask-repeat:no-repeat;mask-composite:intersect}
+:root[data-theme="light"] .top::before{--sky-c:#b8862a;opacity:.26}
+.top::after{width:min(360px,80%)}
+@media(max-width:639px){
+  .top{--logo-h:clamp(84px,25vw,104px);--top-pad:4px;min-height:calc(var(--top-pad) + var(--logo-h))}
+  .top::before{top:calc(var(--top-pad) - var(--logo-h) * .18 + 14px)}
+  .top .top-side{top:4px}
+  .top .top-side .lang-select{width:38px;height:38px;background-size:20px 20px}
+  .top .top-side .lang-select{min-width:0}
+}
+
+
+/* ===== "adhan is near": replaces the hadith ticker for the last 15 minutes before an adhan ===== */
+.hadith.is-alert .hadith-btn{display:none}
+.adhan-alert{display:flex;align-items:center;gap:10px;width:100%;height:46px;padding:0 14px;border-radius:var(--r);border:1px solid #8be8ad;
+  background:linear-gradient(135deg,#0d7a3b,#22a95a);color:#fff;font:inherit;text-align:start;cursor:pointer;
+  box-shadow:0 2px 12px rgba(34,169,90,.35)}
+.adhan-alert[hidden]{display:none}
+.adhan-alert:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.aa-ico{flex:none;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.2);animation:aa-pulse 2s ease-in-out infinite}
+.aa-text{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;overflow:hidden;white-space:nowrap}
+.aa-name{font-size:1.02rem;font-weight:800}
+.aa-title{font-size:.8rem;opacity:.85;overflow:hidden;text-overflow:ellipsis}
+.aa-time{flex:none;font:800 1.45rem/1 Vazirmatn,sans-serif;letter-spacing:.5px;font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+.adhan-alert.is-now{background:linear-gradient(135deg,#0b6a33,#17924a)}
+.adhan-alert.is-now .aa-name{font-size:1.1rem}
+.hadith.is-last .adhan-alert{background:linear-gradient(135deg,#b45309,#e08a1a);border-color:#ffd08a;box-shadow:0 2px 12px rgba(224,138,26,.4)}
+.hadith.is-last .adhan-alert.is-now{background:linear-gradient(135deg,#0b6a33,#17924a);border-color:#8be8ad}
+@keyframes aa-pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,.45)}50%{transform:scale(1.07);box-shadow:0 0 0 7px rgba(255,255,255,0)}}
+@media(prefers-reduced-motion:reduce){.aa-ico{animation:none}}
+@media(max-width:639px){
+  .adhan-alert{height:40px;padding:0 10px;gap:8px}
+  .aa-ico{width:26px;height:26px}
+  .aa-name{font-size:.92rem}
+  .aa-title{font-size:.72rem}
+  .aa-time{font-size:1.2rem}
+}
+
+
+/* the manual latitude/longitude/city fields and the calculate button are not shown any more (the map, search and GPS set the place; the scripts still use the fields internally) */
+.coords{display:none}
+
+
+/* phones and tablets (one column): order is map, times and adhan, moon, save settings, calendar. The columns stop being boxes here so cards can swap places; from 980px up nothing changes. */
+@media(max-width:979px){
+  .grid>.main-col,.grid>.side{display:contents}
+  .grid>.main-col>.card:first-child{order:1}
+  .grid>.right-col{order:2}
+  .grid>.side>.card:first-child{order:3}
+  .grid>.main-col>.card[aria-labelledby="sv-h"]{order:4}
+  .grid>.side>.card:not(:first-child){order:5}
+}
+
+
+/* ===== header icons: closer to the logo on desktop + our own wide dropdown ===== */
+@media(min-width:900px){
+  .top .top-start{inset-inline-start:max(2px,calc(50% - 340px))}
+  .top .top-end{inset-inline-end:max(2px,calc(50% - 340px))}
+  /* desktop only: moon|sun switch + "Language" pill instead of the two round icon selects */
+  .top .top-side{top:10px}
+  .top .top-side .lang-select{display:none}
+  .top .hm-theme,.top .hm-lang{display:inline-flex}   /* .top: wins over the later display:none below */
+}
+.hm-theme,.hm-lang{display:none;align-items:center}
+.hm-theme{gap:2px;padding:3px;border-radius:999px;border:1px solid var(--gold);background:var(--panel-strong);
+  box-shadow:0 2px 10px rgba(0,0,0,.28)}
+.hm-seg{display:inline-flex;align-items:center;justify-content:center;width:44px;height:34px;padding:0;border:0;border-radius:999px;
+  background:transparent;color:var(--heading);cursor:pointer;transition:background .2s,color .2s,box-shadow .2s,transform .12s}
+.hm-seg:hover{background:rgba(210,169,75,.18)}
+.hm-seg:active{transform:scale(.94)}
+.hm-seg.on,.hm-seg.on:hover{background:linear-gradient(135deg,#f0d58a,#d2a94b);color:var(--ink);box-shadow:0 1px 6px rgba(210,169,75,.45)}
+:root[data-theme="light"] .hm-seg:hover{background:rgba(201,152,47,.16)}
+:root[data-theme="light"] .hm-seg.on,:root[data-theme="light"] .hm-seg.on:hover{background:linear-gradient(135deg,#e3bd62,#c9982f);box-shadow:0 1px 6px rgba(160,120,40,.4)}
+.hm-lang{direction:ltr;gap:8px;height:42px;padding:0 14px;border-radius:999px;border:1px solid var(--gold);background:var(--panel-strong);color:var(--heading);
+  font:600 .9rem Vazirmatn,Tahoma,sans-serif;letter-spacing:.2px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.28);
+  transition:border-color .15s,box-shadow .15s,transform .12s}
+.hm-lang:hover{border-color:var(--gold2);box-shadow:0 2px 14px rgba(210,169,75,.35)}
+.hm-lang:active{transform:scale(.97)}
+.hm-lang .hm-chev{transition:transform .2s}
+.hm-lang.is-open .hm-chev{transform:rotate(180deg)}
+.hm-seg:focus-visible,.hm-lang:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.hm-menu{position:fixed;z-index:10000;min-width:150px;max-width:calc(100vw - 16px);padding:6px;display:grid;gap:2px;
+  background:var(--panel-strong);border:1px solid var(--gold);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.35);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.hm-menu button{font:600 .95rem Vazirmatn,Tahoma,sans-serif;text-align:center;white-space:nowrap;padding:8px 14px;border:0;border-radius:9px;
+  background:transparent;color:var(--ivory);cursor:pointer}
+.hm-menu button:hover,.hm-menu button:focus-visible{background:var(--gold);color:var(--ink);outline:none}
+.hm-menu button[aria-selected="true"]{background:rgba(210,169,75,.22);color:var(--heading)}
+.hm-menu button[aria-selected="true"]:hover,.hm-menu button[aria-selected="true"]:focus-visible{background:var(--gold);color:var(--ink)}

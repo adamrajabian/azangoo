@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>شہروں کے اوقات نماز | Azangoo</title>
+<meta name="description" content="اذان گو پر اوقات نماز والے ممالک اور شہر۔">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="شہروں کے اوقات نماز | Azangoo">
+<meta property="og:description" content="اذان گو پر اوقات نماز والے ممالک اور شہر۔">
+<meta property="og:image" content="https://www.azangoo.com/images/og-image.png">
+<link rel="icon" href="../../favicon.ico?v=4" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../../icons/icon-32.png?v=4">
+<style>
+body{font-family:Vazirmatn,Tahoma,sans-serif;margin:0;background:#0b2530;color:#f4ecd8;line-height:1.8}
+main{max-width:980px;margin:0 auto;padding:18px}
+h1{color:#f0d58a;font-size:1.5rem;margin:8px 0}
+h2{color:#f0d58a;font-size:1.1rem;margin:16px 0 4px}
+a{color:#f0d58a}
+.card{background:rgba(18,56,74,.82);border:1px solid rgba(210,169,75,.45);border-radius:14px;padding:12px 14px;margin:12px 0}
+.list-tools{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.list-tools input,.list-tools select{font:inherit;padding:9px 12px;border-radius:10px;border:1px solid #d2a94b;background:#fff;color:#13303a;min-width:0}
+ul{list-style:none;padding:0;margin:0}
+li{padding:6px 0;border-bottom:1px solid rgba(210,169,75,.25)}
+.count{opacity:.7;font-size:.85rem}
+.home{display:inline-block;margin-bottom:6px}
+@media(max-width:600px){body{line-height:1.7}main{padding:12px}h1{font-size:1.25rem}h2{font-size:1rem}.card{padding:9px 10px;margin:9px 0}li{padding:4px 0}.list-tools{gap:8px;margin:8px 0}.list-tools input,.list-tools select{padding:7px 10px}}
+</style>
+</head>
+<body>
+<main>
+<nav><a class="home" href="../../ur/index.html">اذان گو کا صفحہ</a></nav>
+<h1>شہروں کے اوقات نماز</h1>
+<p>اذان گو پر اوقات نماز والے ممالک اور شہر۔</p>
+<div class="list-tools"><input id="listSearch" type="search" placeholder="شہر تلاش کریں…" aria-label="شہر تلاش کریں…">
+<select id="listCountry" aria-label="ممالک"><option value="">تمام ممالک</option><option value="ireland">آئرلینڈ</option><option value="iceland">آئس لینڈ</option><option value="ivory-coast">آئیوری کوسٹ</option><option value="azerbaijan">آذربائیجان</option><option value="armenia">آرمینیا</option><option value="austria">آسٹریا</option><option value="australia">آسٹریلیا</option><option value="italy">اٹلی</option><option value="argentina">ارجنٹینا</option><option value="jordan">اردن</option><option value="eritrea">اریٹیریا</option><option value="uzbekistan">ازبکستان</option><option value="equatorial-guinea">استوائی گیانا</option><option value="estonia">اسٹونیا</option><option value="afghanistan">افغانستان</option><option value="el-salvador">ال سلواڈور</option><option value="albania">البانیہ</option><option value="algeria">الجیریا</option><option value="united-states">امریکا</option><option value="indonesia">انڈونیشیا</option><option value="angola">انگولا</option><option value="ethiopia">ایتھوپیا</option><option value="iran">ایران</option><option value="ecuador">ایکواڈور</option><option value="bahrain">بحرین</option><option value="brazil">برازیلی</option><option value="burkina-faso">برکینا فاسو</option><option value="burundi">برنڈی</option><option value="bulgaria">بلغاریہ</option><option value="bangladesh">بنگلہ دیش</option><option value="india">بھارت</option><option value="bahamas">بہاماس</option><option value="botswana">بوتسوانا</option><option value="bosnia-and-herzegovina">بوسنیا اور ہرزیگووینا</option><option value="bolivia">بولیویا</option><option value="belarus">بیلاروس</option><option value="belgium">بیلجیم</option><option value="benin">بینن</option><option value="papua-new-guinea">پاپوآ نیو گنی</option><option value="pakistan">پاکستان</option><option value="portugal">پرتگال</option><option value="poland">پولینڈ</option><option value="paraguay">پیراگوئے</option><option value="peru">پیرو</option><option value="puerto-rico">پیورٹو ریکو</option><option value="taiwan">تائیوان</option><option value="tajikistan">تاجکستان</option><option value="turkmenistan">ترکمانستان</option><option value="turkey">ترکی</option><option value="tanzania">تنزانیہ</option><option value="thailand">تھائی لینڈ</option><option value="tunisia">تونس</option><option value="timor-leste">تیمور لیسٹ</option><option value="togo">ٹوگو</option><option value="japan">جاپان</option><option value="georgia">جارجیا</option><option value="djibouti">جبوتی</option><option value="germany">جرمنی</option><option value="jamaica">جمائیکا</option><option value="dominican-republic">جمہوریہ ڈومينيکن</option><option value="south-africa">جنوبی افریقہ</option><option value="south-sudan">جنوبی سوڈان</option><option value="south-korea">جنوبی کوریا</option><option value="chad">چاڈ</option><option value="chile">چلی</option><option value="czechia">چیکیا</option><option value="china">چین</option><option value="denmark">ڈنمارک</option><option value="rwanda">روانڈا</option><option value="russia">روس</option><option value="romania">رومانیہ</option><option value="zambia">زامبیا</option><option value="zimbabwe">زمبابوے</option><option value="serbia">سربیا</option><option value="sri-lanka">سری لنکا</option><option value="saudi-arabia">سعودی عرب</option><option value="slovakia">سلوواکیہ</option><option value="slovenia">سلووینیا</option><option value="switzerland">سوئٹزر لینڈ</option><option value="eswatini">سواتنی</option><option value="sudan">سوڈان</option><option value="suriname">سورینام</option><option value="sweden">سویڈن</option><option value="sierra-leone">سیرالیون</option><option value="senegal">سینیگل</option><option value="syria">شام</option><option value="north-korea">شمالی کوریا</option><option value="north-macedonia">شمالی مقدونیہ</option><option value="somalia">صومالیہ</option><option value="iraq">عراق</option><option value="oman">عمان</option><option value="france">فرانس</option><option value="philippines">فلپائن</option><option value="palestinian-territory">فلسطین</option><option value="finland">فن لینڈ</option><option value="cyprus">قبرص</option><option value="kazakhstan">قزاخستان</option><option value="qatar">قطر</option><option value="democratic-republic-of-the-congo">کانگو (DRC)</option><option value="republic-of-the-congo">کانگو (جمہوریہ)</option><option value="kyrgyzstan">کرغزستان</option><option value="croatia">کروشیا</option><option value="cambodia">کمبوڈیا</option><option value="costa-rica">کوسٹا ریکا</option><option value="kosovo">کوسووو</option><option value="colombia">کولمبیا</option><option value="kuwait">کویت</option><option value="cabo-verde">کیپ ورڈی</option><option value="cameroon">کیمرون</option><option value="kenya">کینیا</option><option value="canada">کینیڈا</option><option value="cuba">کیوبا</option><option value="curacao">کیوراکاؤ</option><option value="guinea">گنی</option><option value="guinea-bissau">گنی بساؤ</option><option value="ghana">گھانا</option><option value="guatemala">گواٹے مالا</option><option value="guyana">گیانا</option><option value="gabon">گیبون</option><option value="laos">لاؤس</option><option value="liberia">لائبیریا</option><option value="lebanon">لبنان</option><option value="latvia">لٹویا</option><option value="libya">لیبیا</option><option value="lithuania">لیتھونیا</option><option value="lesotho">لیسوتھو</option><option value="mauritius">ماریشس</option><option value="moldova">مالدووا</option><option value="mali">مالی</option><option value="united-arab-emirates">متحدہ عرب امارات</option><option value="madagascar">مڈغاسکر</option><option value="morocco">مراکش</option><option value="egypt">مصر</option><option value="macao">مکاؤ</option><option value="malaysia">ملائشیا</option><option value="malawi">ملاوی</option><option value="mauritania">موریطانیہ</option><option value="mozambique">موزمبیق</option><option value="montenegro">مونٹے نیگرو</option><option value="myanmar">میانمار (برما)</option><option value="mexico">میکسیکو</option><option value="niger">نائجر</option><option value="nigeria">نائجیریا</option><option value="norway">ناروے</option><option value="namibia">نامیبیا</option><option value="nicaragua">نکاراگووا</option><option value="nepal">نیپال</option><option value="the-netherlands">نیدر لینڈز</option><option value="new-zealand">نیوزی ینڈ</option><option value="hong-kong">ہانگ کانگ</option><option value="spain">ہسپانیہ</option><option value="hungary">ہنگری</option><option value="honduras">ہونڈاروس</option><option value="haiti">ہیٹی</option><option value="central-african-republic">وسط افریقی جمہوریہ</option><option value="vietnam">ویتنام</option><option value="venezuela">وینزوئیلا</option><option value="yemen">یمن</option><option value="united-kingdom">یو کے</option><option value="uruguay">یوروگوئے</option><option value="ukraine">یوکرین</option><option value="uganda">یوگنڈا</option></select></div>
+<div class="card country-row" data-filter="آئرلینڈ" data-country="ireland">
+<h2><a href="ireland/index.html">آئرلینڈ</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="آئس لینڈ" data-country="iceland">
+<h2><a href="iceland/index.html">آئس لینڈ</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="آئیوری کوسٹ" data-country="ivory-coast">
+<h2><a href="ivory-coast/index.html">آئیوری کوسٹ</a> <span class="count">(۱۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="آذربائیجان" data-country="azerbaijan">
+<h2><a href="azerbaijan/index.html">آذربائیجان</a> <span class="count">(۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="آرمینیا" data-country="armenia">
+<h2><a href="armenia/index.html">آرمینیا</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="آسٹریا" data-country="austria">
+<h2><a href="austria/index.html">آسٹریا</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="آسٹریلیا" data-country="australia">
+<h2><a href="australia/index.html">آسٹریلیا</a> <span class="count">(۱۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="اٹلی" data-country="italy">
+<h2><a href="italy/index.html">اٹلی</a> <span class="count">(۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="ارجنٹینا" data-country="argentina">
+<h2><a href="argentina/index.html">ارجنٹینا</a> <span class="count">(۴۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="اردن" data-country="jordan">
+<h2><a href="jordan/index.html">اردن</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="اریٹیریا" data-country="eritrea">
+<h2><a href="eritrea/index.html">اریٹیریا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="ازبکستان" data-country="uzbekistan">
+<h2><a href="uzbekistan/index.html">ازبکستان</a> <span class="count">(۱۷)</span></h2>
+</div>
+<div class="card country-row" data-filter="استوائی گیانا" data-country="equatorial-guinea">
+<h2><a href="equatorial-guinea/index.html">استوائی گیانا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="اسٹونیا" data-country="estonia">
+<h2><a href="estonia/index.html">اسٹونیا</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="افغانستان" data-country="afghanistan">
+<h2><a href="afghanistan/index.html">افغانستان</a> <span class="count">(۱۰)</span></h2>
+</div>
+<div class="card country-row" data-filter="ال سلواڈور" data-country="el-salvador">
+<h2><a href="el-salvador/index.html">ال سلواڈور</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="البانیہ" data-country="albania">
+<h2><a href="albania/index.html">البانیہ</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="الجیریا" data-country="algeria">
+<h2><a href="algeria/index.html">الجیریا</a> <span class="count">(۳۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="امریکا" data-country="united-states">
+<h2><a href="united-states/index.html">امریکا</a> <span class="count">(۲۵۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="انڈونیشیا" data-country="indonesia">
+<h2><a href="indonesia/index.html">انڈونیشیا</a> <span class="count">(۱۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="انگولا" data-country="angola">
+<h2><a href="angola/index.html">انگولا</a> <span class="count">(۱۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="ایتھوپیا" data-country="ethiopia">
+<h2><a href="ethiopia/index.html">ایتھوپیا</a> <span class="count">(۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="ایران" data-country="iran">
+<h2><a href="iran/index.html">ایران</a> <span class="count">(۱۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="ایکواڈور" data-country="ecuador">
+<h2><a href="ecuador/index.html">ایکواڈور</a> <span class="count">(۱۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="بحرین" data-country="bahrain">
+<h2><a href="bahrain/index.html">بحرین</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="برازیلی" data-country="brazil">
+<h2><a href="brazil/index.html">برازیلی</a> <span class="count">(۲۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="برکینا فاسو" data-country="burkina-faso">
+<h2><a href="burkina-faso/index.html">برکینا فاسو</a> <span class="count">(۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="برنڈی" data-country="burundi">
+<h2><a href="burundi/index.html">برنڈی</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="بلغاریہ" data-country="bulgaria">
+<h2><a href="bulgaria/index.html">بلغاریہ</a> <span class="count">(۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="بنگلہ دیش" data-country="bangladesh">
+<h2><a href="bangladesh/index.html">بنگلہ دیش</a> <span class="count">(۱۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="بھارت" data-country="india">
+<h2><a href="india/index.html">بھارت</a> <span class="count">(۱۹۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="بہاماس" data-country="bahamas">
+<h2><a href="bahamas/index.html">بہاماس</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="بوتسوانا" data-country="botswana">
+<h2><a href="botswana/index.html">بوتسوانا</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="بوسنیا اور ہرزیگووینا" data-country="bosnia-and-herzegovina">
+<h2><a href="bosnia-and-herzegovina/index.html">بوسنیا اور ہرزیگووینا</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="بولیویا" data-country="bolivia">
+<h2><a href="bolivia/index.html">بولیویا</a> <span class="count">(۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="بیلاروس" data-country="belarus">
+<h2><a href="belarus/index.html">بیلاروس</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="بیلجیم" data-country="belgium">
+<h2><a href="belgium/index.html">بیلجیم</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="بینن" data-country="benin">
+<h2><a href="benin/index.html">بینن</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="پاپوآ نیو گنی" data-country="papua-new-guinea">
+<h2><a href="papua-new-guinea/index.html">پاپوآ نیو گنی</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="پاکستان" data-country="pakistan">
+<h2><a href="pakistan/index.html">پاکستان</a> <span class="count">(۶۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="پرتگال" data-country="portugal">
+<h2><a href="portugal/index.html">پرتگال</a> <span class="count">(۷)</span></h2>
+</div>
+<div class="card country-row" data-filter="پولینڈ" data-country="poland">
+<h2><a href="poland/index.html">پولینڈ</a> <span class="count">(۱۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="پیراگوئے" data-country="paraguay">
+<h2><a href="paraguay/index.html">پیراگوئے</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="پیرو" data-country="peru">
+<h2><a href="peru/index.html">پیرو</a> <span class="count">(۱۷)</span></h2>
+</div>
+<div class="card country-row" data-filter="پیورٹو ریکو" data-country="puerto-rico">
+<h2><a href="puerto-rico/index.html">پیورٹو ریکو</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="تائیوان" data-country="taiwan">
+<h2><a href="taiwan/index.html">تائیوان</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="تاجکستان" data-country="tajikistan">
+<h2><a href="tajikistan/index.html">تاجکستان</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="ترکمانستان" data-country="turkmenistan">
+<h2><a href="turkmenistan/index.html">ترکمانستان</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="ترکی" data-country="turkey">
+<h2><a href="turkey/index.html">ترکی</a> <span class="count">(۶۰)</span></h2>
+</div>
+<div class="card country-row" data-filter="تنزانیہ" data-country="tanzania">
+<h2><a href="tanzania/index.html">تنزانیہ</a> <span class="count">(۲۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="تھائی لینڈ" data-country="thailand">
+<h2><a href="thailand/index.html">تھائی لینڈ</a> <span class="count">(۱۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="تونس" data-country="tunisia">
+<h2><a href="tunisia/index.html">تونس</a> <span class="count">(۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="تیمور لیسٹ" data-country="timor-leste">
+<h2><a href="timor-leste/index.html">تیمور لیسٹ</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="ٹوگو" data-country="togo">
+<h2><a href="togo/index.html">ٹوگو</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="جاپان" data-country="japan">
+<h2><a href="japan/index.html">جاپان</a> <span class="count">(۸۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="جارجیا" data-country="georgia">
+<h2><a href="georgia/index.html">جارجیا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="جبوتی" data-country="djibouti">
+<h2><a href="djibouti/index.html">جبوتی</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="جرمنی" data-country="germany">
+<h2><a href="germany/index.html">جرمنی</a> <span class="count">(۲۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="جمائیکا" data-country="jamaica">
+<h2><a href="jamaica/index.html">جمائیکا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="جمہوریہ ڈومينيکن" data-country="dominican-republic">
+<h2><a href="dominican-republic/index.html">جمہوریہ ڈومينيکن</a> <span class="count">(۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="جنوبی افریقہ" data-country="south-africa">
+<h2><a href="south-africa/index.html">جنوبی افریقہ</a> <span class="count">(۲۰)</span></h2>
+</div>
+<div class="card country-row" data-filter="جنوبی سوڈان" data-country="south-sudan">
+<h2><a href="south-sudan/index.html">جنوبی سوڈان</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="جنوبی کوریا" data-country="south-korea">
+<h2><a href="south-korea/index.html">جنوبی کوریا</a> <span class="count">(۲۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="چاڈ" data-country="chad">
+<h2><a href="chad/index.html">چاڈ</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="چلی" data-country="chile">
+<h2><a href="chile/index.html">چلی</a> <span class="count">(۱۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="چیکیا" data-country="czechia">
+<h2><a href="czechia/index.html">چیکیا</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="چین" data-country="china">
+<h2><a href="china/index.html">چین</a> <span class="count">(۲۲۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="ڈنمارک" data-country="denmark">
+<h2><a href="denmark/index.html">ڈنمارک</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="روانڈا" data-country="rwanda">
+<h2><a href="rwanda/index.html">روانڈا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="روس" data-country="russia">
+<h2><a href="russia/index.html">روس</a> <span class="count">(۸۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="رومانیہ" data-country="romania">
+<h2><a href="romania/index.html">رومانیہ</a> <span class="count">(۱۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="زامبیا" data-country="zambia">
+<h2><a href="zambia/index.html">زامبیا</a> <span class="count">(۱۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="زمبابوے" data-country="zimbabwe">
+<h2><a href="zimbabwe/index.html">زمبابوے</a> <span class="count">(۷)</span></h2>
+</div>
+<div class="card country-row" data-filter="سربیا" data-country="serbia">
+<h2><a href="serbia/index.html">سربیا</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="سری لنکا" data-country="sri-lanka">
+<h2><a href="sri-lanka/index.html">سری لنکا</a> <span class="count">(۷)</span></h2>
+</div>
+<div class="card country-row" data-filter="سعودی عرب" data-country="saudi-arabia">
+<h2><a href="saudi-arabia/index.html">سعودی عرب</a> <span class="count">(۱۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="سلوواکیہ" data-country="slovakia">
+<h2><a href="slovakia/index.html">سلوواکیہ</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="سلووینیا" data-country="slovenia">
+<h2><a href="slovenia/index.html">سلووینیا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="سوئٹزر لینڈ" data-country="switzerland">
+<h2><a href="switzerland/index.html">سوئٹزر لینڈ</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="سواتنی" data-country="eswatini">
+<h2><a href="eswatini/index.html">سواتنی</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="سوڈان" data-country="sudan">
+<h2><a href="sudan/index.html">سوڈان</a> <span class="count">(۱۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="سورینام" data-country="suriname">
+<h2><a href="suriname/index.html">سورینام</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="سویڈن" data-country="sweden">
+<h2><a href="sweden/index.html">سویڈن</a> <span class="count">(۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="سیرالیون" data-country="sierra-leone">
+<h2><a href="sierra-leone/index.html">سیرالیون</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="سینیگل" data-country="senegal">
+<h2><a href="senegal/index.html">سینیگل</a> <span class="count">(۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="شام" data-country="syria">
+<h2><a href="syria/index.html">شام</a> <span class="count">(۱۰)</span></h2>
+</div>
+<div class="card country-row" data-filter="شمالی کوریا" data-country="north-korea">
+<h2><a href="north-korea/index.html">شمالی کوریا</a> <span class="count">(۱۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="شمالی مقدونیہ" data-country="north-macedonia">
+<h2><a href="north-macedonia/index.html">شمالی مقدونیہ</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="صومالیہ" data-country="somalia">
+<h2><a href="somalia/index.html">صومالیہ</a> <span class="count">(۷)</span></h2>
+</div>
+<div class="card country-row" data-filter="عراق" data-country="iraq">
+<h2><a href="iraq/index.html">عراق</a> <span class="count">(۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="عمان" data-country="oman">
+<h2><a href="oman/index.html">عمان</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="فرانس" data-country="france">
+<h2><a href="france/index.html">فرانس</a> <span class="count">(۲۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="فلپائن" data-country="philippines">
+<h2><a href="philippines/index.html">فلپائن</a> <span class="count">(۴۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="فلسطین" data-country="palestinian-territory">
+<h2><a href="palestinian-territory/index.html">فلسطین</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="فن لینڈ" data-country="finland">
+<h2><a href="finland/index.html">فن لینڈ</a> <span class="count">(۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="قبرص" data-country="cyprus">
+<h2><a href="cyprus/index.html">قبرص</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="قزاخستان" data-country="kazakhstan">
+<h2><a href="kazakhstan/index.html">قزاخستان</a> <span class="count">(۲۰)</span></h2>
+</div>
+<div class="card country-row" data-filter="قطر" data-country="qatar">
+<h2><a href="qatar/index.html">قطر</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="کانگو (DRC)" data-country="democratic-republic-of-the-congo">
+<h2><a href="democratic-republic-of-the-congo/index.html">کانگو (DRC)</a> <span class="count">(۱۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="کانگو (جمہوریہ)" data-country="republic-of-the-congo">
+<h2><a href="republic-of-the-congo/index.html">کانگو (جمہوریہ)</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="کرغزستان" data-country="kyrgyzstan">
+<h2><a href="kyrgyzstan/index.html">کرغزستان</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="کروشیا" data-country="croatia">
+<h2><a href="croatia/index.html">کروشیا</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="کمبوڈیا" data-country="cambodia">
+<h2><a href="cambodia/index.html">کمبوڈیا</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="کوسٹا ریکا" data-country="costa-rica">
+<h2><a href="costa-rica/index.html">کوسٹا ریکا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="کوسووو" data-country="kosovo">
+<h2><a href="kosovo/index.html">کوسووو</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="کولمبیا" data-country="colombia">
+<h2><a href="colombia/index.html">کولمبیا</a> <span class="count">(۳۰)</span></h2>
+</div>
+<div class="card country-row" data-filter="کویت" data-country="kuwait">
+<h2><a href="kuwait/index.html">کویت</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="کیپ ورڈی" data-country="cabo-verde">
+<h2><a href="cabo-verde/index.html">کیپ ورڈی</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="کیمرون" data-country="cameroon">
+<h2><a href="cameroon/index.html">کیمرون</a> <span class="count">(۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="کینیا" data-country="kenya">
+<h2><a href="kenya/index.html">کینیا</a> <span class="count">(۱۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="کینیڈا" data-country="canada">
+<h2><a href="canada/index.html">کینیڈا</a> <span class="count">(۴۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="کیوبا" data-country="cuba">
+<h2><a href="cuba/index.html">کیوبا</a> <span class="count">(۱۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="کیوراکاؤ" data-country="curacao">
+<h2><a href="curacao/index.html">کیوراکاؤ</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="گنی" data-country="guinea">
+<h2><a href="guinea/index.html">گنی</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="گنی بساؤ" data-country="guinea-bissau">
+<h2><a href="guinea-bissau/index.html">گنی بساؤ</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="گھانا" data-country="ghana">
+<h2><a href="ghana/index.html">گھانا</a> <span class="count">(۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="گواٹے مالا" data-country="guatemala">
+<h2><a href="guatemala/index.html">گواٹے مالا</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="گیانا" data-country="guyana">
+<h2><a href="guyana/index.html">گیانا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="گیبون" data-country="gabon">
+<h2><a href="gabon/index.html">گیبون</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="لاؤس" data-country="laos">
+<h2><a href="laos/index.html">لاؤس</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="لائبیریا" data-country="liberia">
+<h2><a href="liberia/index.html">لائبیریا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="لبنان" data-country="lebanon">
+<h2><a href="lebanon/index.html">لبنان</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="لٹویا" data-country="latvia">
+<h2><a href="latvia/index.html">لٹویا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="لیبیا" data-country="libya">
+<h2><a href="libya/index.html">لیبیا</a> <span class="count">(۱۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="لیتھونیا" data-country="lithuania">
+<h2><a href="lithuania/index.html">لیتھونیا</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="لیسوتھو" data-country="lesotho">
+<h2><a href="lesotho/index.html">لیسوتھو</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="ماریشس" data-country="mauritius">
+<h2><a href="mauritius/index.html">ماریشس</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="مالدووا" data-country="moldova">
+<h2><a href="moldova/index.html">مالدووا</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="مالی" data-country="mali">
+<h2><a href="mali/index.html">مالی</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="متحدہ عرب امارات" data-country="united-arab-emirates">
+<h2><a href="united-arab-emirates/index.html">متحدہ عرب امارات</a> <span class="count">(۷)</span></h2>
+</div>
+<div class="card country-row" data-filter="مڈغاسکر" data-country="madagascar">
+<h2><a href="madagascar/index.html">مڈغاسکر</a> <span class="count">(۷)</span></h2>
+</div>
+<div class="card country-row" data-filter="مراکش" data-country="morocco">
+<h2><a href="morocco/index.html">مراکش</a> <span class="count">(۲۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="مصر" data-country="egypt">
+<h2><a href="egypt/index.html">مصر</a> <span class="count">(۱۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="مکاؤ" data-country="macao">
+<h2><a href="macao/index.html">مکاؤ</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="ملائشیا" data-country="malaysia">
+<h2><a href="malaysia/index.html">ملائشیا</a> <span class="count">(۲۰)</span></h2>
+</div>
+<div class="card country-row" data-filter="ملاوی" data-country="malawi">
+<h2><a href="malawi/index.html">ملاوی</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="موریطانیہ" data-country="mauritania">
+<h2><a href="mauritania/index.html">موریطانیہ</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="موزمبیق" data-country="mozambique">
+<h2><a href="mozambique/index.html">موزمبیق</a> <span class="count">(۱۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="مونٹے نیگرو" data-country="montenegro">
+<h2><a href="montenegro/index.html">مونٹے نیگرو</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="میانمار (برما)" data-country="myanmar">
+<h2><a href="myanmar/index.html">میانمار (برما)</a> <span class="count">(۱۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="میکسیکو" data-country="mexico">
+<h2><a href="mexico/index.html">میکسیکو</a> <span class="count">(۵۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="نائجر" data-country="niger">
+<h2><a href="niger/index.html">نائجر</a> <span class="count">(۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="نائجیریا" data-country="nigeria">
+<h2><a href="nigeria/index.html">نائجیریا</a> <span class="count">(۳۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="ناروے" data-country="norway">
+<h2><a href="norway/index.html">ناروے</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="نامیبیا" data-country="namibia">
+<h2><a href="namibia/index.html">نامیبیا</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="نکاراگووا" data-country="nicaragua">
+<h2><a href="nicaragua/index.html">نکاراگووا</a> <span class="count">(۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="نیپال" data-country="nepal">
+<h2><a href="nepal/index.html">نیپال</a> <span class="count">(۱۰)</span></h2>
+</div>
+<div class="card country-row" data-filter="نیدر لینڈز" data-country="the-netherlands">
+<h2><a href="the-netherlands/index.html">نیدر لینڈز</a> <span class="count">(۱۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="نیوزی ینڈ" data-country="new-zealand">
+<h2><a href="new-zealand/index.html">نیوزی ینڈ</a> <span class="count">(۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="ہانگ کانگ" data-country="hong-kong">
+<h2><a href="hong-kong/index.html">ہانگ کانگ</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="ہسپانیہ" data-country="spain">
+<h2><a href="spain/index.html">ہسپانیہ</a> <span class="count">(۱۵)</span></h2>
+</div>
+<div class="card country-row" data-filter="ہنگری" data-country="hungary">
+<h2><a href="hungary/index.html">ہنگری</a> <span class="count">(۱)</span></h2>
+</div>
+<div class="card country-row" data-filter="ہونڈاروس" data-country="honduras">
+<h2><a href="honduras/index.html">ہونڈاروس</a> <span class="count">(۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="ہیٹی" data-country="haiti">
+<h2><a href="haiti/index.html">ہیٹی</a> <span class="count">(۴)</span></h2>
+</div>
+<div class="card country-row" data-filter="وسط افریقی جمہوریہ" data-country="central-african-republic">
+<h2><a href="central-african-republic/index.html">وسط افریقی جمہوریہ</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="ویتنام" data-country="vietnam">
+<h2><a href="vietnam/index.html">ویتنام</a> <span class="count">(۴۸)</span></h2>
+</div>
+<div class="card country-row" data-filter="وینزوئیلا" data-country="venezuela">
+<h2><a href="venezuela/index.html">وینزوئیلا</a> <span class="count">(۲۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="یمن" data-country="yemen">
+<h2><a href="yemen/index.html">یمن</a> <span class="count">(۶)</span></h2>
+</div>
+<div class="card country-row" data-filter="یو کے" data-country="united-kingdom">
+<h2><a href="united-kingdom/index.html">یو کے</a> <span class="count">(۲۹)</span></h2>
+</div>
+<div class="card country-row" data-filter="یوروگوئے" data-country="uruguay">
+<h2><a href="uruguay/index.html">یوروگوئے</a> <span class="count">(۳)</span></h2>
+</div>
+<div class="card country-row" data-filter="یوکرین" data-country="ukraine">
+<h2><a href="ukraine/index.html">یوکرین</a> <span class="count">(۱۲)</span></h2>
+</div>
+<div class="card country-row" data-filter="یوگنڈا" data-country="uganda">
+<h2><a href="uganda/index.html">یوگنڈا</a> <span class="count">(۱۱)</span></h2>
+</div>
+</main>
+<script src="../../js/lists.js"></script>
+</body>
+</html>

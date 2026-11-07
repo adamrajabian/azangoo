@@ -1,0 +1,30 @@
+{
+  "name": "Azangoo",
+  "short_name": "Azangoo",
+  "description": "Prayer times for any city by its local time, Hijri and solar calendars, new crescent sighting and adhan playback.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "en/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b2530",
+  "theme_color": "#0b2530",
+  "icons": [
+    {
+      "src": "icons/en/icon-192.png?v=1",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/en/icon-512.png?v=1",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/en/icon-512-maskable.png?v=1",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

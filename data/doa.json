@@ -1,0 +1,74 @@
+[
+  {
+    "month": "محرم",
+    "order": "1",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "صفر",
+    "order": "2",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "ربیع‌الاول",
+    "order": "3",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "ربیع‌الثانی",
+    "order": "4",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "جمادی‌الاول",
+    "order": "5",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "جمادی‌الثانی",
+    "order": "6",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "رجب",
+    "order": "7",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "شعبان",
+    "order": "8",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "رمضان",
+    "order": "9",
+    "daily": "1",
+    "ramadan": "1"
+  },
+  {
+    "month": "شوال",
+    "order": "10",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "ذی‌القعده",
+    "order": "11",
+    "daily": "1",
+    "ramadan": "0"
+  },
+  {
+    "month": "ذی‌الحجه",
+    "order": "12",
+    "daily": "1",
+    "ramadan": "0"
+  }
+]

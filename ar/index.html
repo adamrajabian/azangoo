@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!-- Copyright (c) 2026 azangoo.com. All rights reserved.
+     Copying, reuse or redistribution of this page, its code or its calculations is prohibited
+     without written permission. See the Terms and conditions page. -->
+<html lang="ar" dir="rtl" data-page-lang="ar" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<base href="../">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>أذان گو - أوقات الصلاة، رؤية الهلال وتقويم أوقات الصلاة</title>
+<script>
+/* theme before first paint: saved defaults if any, otherwise dark */
+(function(){try{var s=JSON.parse(localStorage.getItem('azangoo-defaults'));
+  document.documentElement.setAttribute('data-theme',(s&&s.theme==='light')?'light':'dark');}
+  catch(e){document.documentElement.setAttribute('data-theme','dark');}})();
+</script>
+
+<meta name="description" content="أوقات الصلاة بالتوقيت المحلي لكل مدينة، التقويم الهجري والشمسي، رؤية الهلال وتشغيل الأذان.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0b2530">
+<link rel="canonical" href="https://www.azangoo.com/ar/">
+<link rel="alternate" hreflang="fa" href="https://www.azangoo.com/fa/">
+<link rel="alternate" hreflang="en" href="https://www.azangoo.com/en/">
+<link rel="alternate" hreflang="ur" href="https://www.azangoo.com/ur/">
+<link rel="alternate" hreflang="ar" href="https://www.azangoo.com/ar/">
+<link rel="alternate" hreflang="x-default" href="https://www.azangoo.com/">
+<link rel="icon" href="favicon.ico?v=4" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png?v=4">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=4">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png?v=4">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="اذان گو">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="اذان گو">
+<meta property="og:title" content="أذان گو - أوقات الصلاة، رؤية الهلال وتقويم أوقات الصلاة">
+<meta property="og:description" content="أوقات الصلاة بالتوقيت المحلي لكل مدينة، التقويم الهجري والشمسي، رؤية الهلال وتشغيل الأذان.">
+<meta property="og:url" content="https://www.azangoo.com/ar/">
+<meta property="og:image" content="https://www.azangoo.com/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ar_SA">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="أذان گو - أوقات الصلاة، رؤية الهلال وتقويم أوقات الصلاة">
+<meta name="twitter:description" content="أوقات الصلاة بالتوقيت المحلي لكل مدينة، التقويم الهجري والشمسي، رؤية الهلال وتشغيل الأذان.">
+<meta name="twitter:image" content="https://www.azangoo.com/images/og-image.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'">
+<link rel="stylesheet" href="css/azan.css?v=20261177">
+<link rel="stylesheet" href="css/moon.css?v=20261165">
+</head>
+<body>
+<div class="sound-bar" id="soundBar" role="status" hidden><span class="sound-bar-text" data-i18n="sound_bar">لتشغيل الأذان والدعاء تلقائيًا، انقر على الصفحة مرة واحدة</span></div>
+<div class="wrap">
+
+  <header class="top">
+    <div class="top-side top-start"><select id="langSelect" class="lang-select" aria-label="Language"></select></div>
+    <div class="logo-wrap">
+      <div class="logo-box">
+        <img class="logo-img" alt="اذان گو" data-i18n-attr="alt:logo_alt"
+         src="images/azangoo-logo-192.webp"
+         srcset="images/azangoo-logo-96.webp 96w, images/azangoo-logo-144.webp 144w, images/azangoo-logo-192.webp 192w, images/azangoo-logo-288.webp 288w, images/azangoo-logo-448.webp 448w"
+         data-src-fa="images/azangoo-logo-192.webp" data-srcset-fa="images/azangoo-logo-96.webp 96w, images/azangoo-logo-144.webp 144w, images/azangoo-logo-192.webp 192w, images/azangoo-logo-288.webp 288w, images/azangoo-logo-448.webp 448w"
+         data-src-en="images/azangoo-logo-192.webp" data-srcset-en="images/azangoo-logo-96.webp 96w, images/azangoo-logo-144.webp 144w, images/azangoo-logo-192.webp 192w, images/azangoo-logo-288.webp 288w, images/azangoo-logo-448.webp 448w"
+         sizes="(max-width: 480px) 94px, 115px">
+      </div>
+    </div>
+    <div class="top-side top-end"><select id="themeSelect" class="lang-select" aria-label="Theme"><option value="dark" data-i18n="theme_dark">داكن</option><option value="light" data-i18n="theme_light">فاتح</option></select></div>
+  </header>
+
+  <section class="dates" data-i18n-attr="aria-label:dates_label" aria-label="التاريخ والوقت">
+    <div class="date"><b id="d-week">یکشنبه</b><b class="clock" id="clock">12:56:06</b><span id="d-zone"></span></div>
+    <div class="date date-shamsi"><b id="d-j-day">۱۹</b><span id="d-j-my">مهر ۱۴۰۵</span></div>
+    <div class="date"><b id="d-h-day">۲۹</b><span id="d-h-my">ربیع الثانی ۱۴۴۸</span></div>
+    <div class="date"><b id="d-g-day">۱۱</b><span id="d-g-my">اکتبر ۲۰۲۶</span></div>
+  </section>
+
+  <section class="hadith" id="hadithBar" data-i18n-attr="aria-label:hadith_title" hidden aria-label="حديث اليوم">
+    <button type="button" class="hadith-btn" id="hadithOpen" aria-haspopup="dialog">
+      <span class="hadith-tag" data-i18n="hadith_title">حديث اليوم</span>
+      <span class="hadith-view"><span class="hadith-track" id="hadithTrack"></span></span>
+    </button>
+  </section>
+
+  <main class="grid">
+
+    <!-- right column: prayer times -->
+        <div class="right-col">
+      <section class="card" aria-labelledby="t-h">
+      <h2 id="t-h"><span data-i18n="times_title">أوقات الصلاة اليوم</span></h2>
+      <p class="place" id="place"></p>
+      <ul class="times">
+        <li><span><span data-i18n="fajr">أذان الفجر</span></span><time data-t="fajr">6:09</time></li>
+        <li><span><span data-i18n="sunrise">شروق الشمس</span></span><time data-t="sunrise">7:28</time></li>
+        <li><span><span data-i18n="dhuhr">أذان الظهر</span></span><time data-t="dhuhr">13:04</time></li>
+        <li><span><span data-i18n="sunset">غروب الشمس</span></span><time data-t="sunset">18:41</time></li>
+        <li class="next"><span><span data-i18n="maghrib">أذان المغرب</span></span><time data-t="maghrib">18:58</time></li>
+        <li><span><span data-i18n="midnight">منتصف الليل</span></span><time data-t="midnight">0:25</time></li>
+        <li><span><span data-i18n="fajr_next">فجر الغد</span></span><time data-t="fajrNext">6:10</time></li>
+      </ul>
+      <p class="countdown" id="countdown" role="timer"></p>
+      <div class="ramadan" id="ramadanBox" hidden>
+        <p class="countdown" id="ramSuhur"></p>
+        <p class="countdown" id="ramIftar"></p>
+        <label class="auto ram-remind"><input type="checkbox" id="ramRemind"><span data-i18n="ram_remind">ذكّرني قبل السحور والإفطار بعشر دقائق</span></label>
+        <p class="msg" id="ramMsg" role="status"></p>
+      </div>
+      <div class="auto-box">
+        <label class="auto"><input type="checkbox" id="autoAdhan" checked><span data-i18n="auto_label">تشغيل الأذان والدعاء تلقائيًا</span></label>
+        <p class="dua-timer" id="duaTimer"></p>
+        <p class="msg" id="adhanMsg" role="status"></p>
+        <p class="hint"><span data-i18n="auto_hint">للتشغيل التلقائي يجب أن تبقى هذه الصفحة مفتوحة وأن تنقر عليها مرة واحدة.</span> <button type="button" class="link-btn hint-more-btn" id="autoMoreBtn" data-i18n="hint_more" aria-expanded="false" aria-controls="autoMore">المزيد</button></p>
+        <p class="hint" id="autoMore" data-i18n="auto_more_text" hidden>لكي يُشغَّل الأذان دون الحاجة إلى النقر، ثبّت الموقع على جهازك (Add to Home Screen أو Install) أو اضبط الصوت على «السماح» لهذا الموقع في إعدادات المتصفح.</p>
+      </div>
+    </section>
+
+      <section class="card" aria-labelledby="a-h">
+        <h2 id="a-h"><span data-i18n="adhan_title">صوت الأذان</span></h2>
+        <div class="reciters">
+          <label><input type="radio" name="r" value="audio/AZAN-Moazenzadeh.mp3" checked><span data-i18n="r_moazen">موذن‌زاده أردبيلي</span></label>
+          <label><input type="radio" name="r" value="audio/Azan-Abather_Alhalwachi.mp3"><span data-i18n="r_abather">أباذر الحلواجي</span></label>
+          <label><input type="radio" name="r" value="audio/Azan-Hossein-Sobhdel.mp3"><span data-i18n="r_sobhdel">حسين صبحدل</span></label>
+          <label><input type="radio" name="r" value="audio/AZAN-Najafi.mp3"><span data-i18n="r_najafi">فريد نجفي</span></label>
+          <label><input type="radio" name="r" value="audio/AZAN-Mohammad-Aghati.mp3"><span data-i18n="r_aghati">محمد آقاتي</span></label>
+        </div>
+        <audio class="audio" id="adhanPlayer" controls preload="none" src="audio/AZAN-Moazenzadeh.mp3"></audio>
+      </section>
+    </div>
+
+    <!-- center: map -->
+    <div class="col-main main-col">
+    <section class="card" data-i18n-attr="aria-label:map_label" aria-label="الخريطة">
+      <form class="search" id="searchForm" role="search">
+        <input id="q" type="search" data-i18n-ph="search_ph" data-i18n-attr="aria-label:search_ph" autocomplete="off" dir="ltr" aria-label="ابحث عن مدينة أو عنوان…" placeholder="ابحث عن مدينة أو عنوان…">
+        <button type="submit" class="search-btn" data-i18n-attr="title:search_btn;aria-label:search_btn" title="بحث" aria-label="بحث"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></button>
+        <button type="button" class="gps-btn" id="gpsBtn" data-i18n-attr="title:gps_btn;aria-label:gps_btn" title="استخدام موقعي الحالي" aria-label="استخدام موقعي الحالي"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3"/></svg></button>
+      </form>
+      <p class="msg" id="msg" role="status"></p>
+      <div class="mapframe"><div class="inner"><div id="map" role="application" data-i18n-attr="aria-label:map_label" aria-label="الخريطة"></div></div></div>
+      <form class="coords">
+        <label><span data-i18n="lat">خط العرض</span><input id="lat" value=""></label>
+        <label><span data-i18n="lng">خط الطول</span><input id="lng" value=""></label>
+        <label class="full"><span data-i18n="city">المدينة</span><input id="city" value="" class="rtl"></label>
+        <button class="btn calc-btn" type="submit"><span data-i18n="calc_btn">احسب الأوقات</span></button>
+      </form>
+      <p class="qibla" id="qibla" role="status"></p>
+      <p class="hint"><span data-i18n="map_hint">انقر نقرًا مزدوجًا على الخريطة أو اسحب المؤشر لتغيير المكان.</span></p>
+    </section>
+
+      <section class="card" aria-labelledby="sv-h">
+        <h2 id="sv-h"><span data-i18n="save_title">حفظ المكان والإعدادات</span></h2>
+      <p class="hint save-sub" data-i18n="save_sub">يُحفظ في هذا المتصفح المكان على الخريطة وصوت الأذان والتشغيل التلقائي واللغة والمظهر الداكن/الفاتح.</p>
+      <button type="button" id="saveDefaults" class="btn save-btn save-wide"><span data-i18n="save_btn">حفظ للمرة القادمة</span></button>
+      <p class="msg" id="saveMsg" role="status"></p>
+      <button type="button" class="link-btn clear-btn" id="clearDefaults" data-i18n="clear_btn" hidden>حذف الإعدادات المحفوظة</button>
+      </section>
+    </div>
+
+    <!-- left column: tools -->
+    <aside class="side">
+      <section class="card" aria-labelledby="mo-h">
+        <h2 id="mo-h"><span data-i18n="moon_title">رؤية الهلال</span></h2>
+        <div class="tabs moon-tabs" id="moonTabs" role="tablist" hidden>
+          <button type="button" role="tab" id="mtab-now" aria-selected="true" aria-controls="moonPanelNow" class="tab active"><span data-i18n="moon_tab_now">القمر الآن</span></button>
+          <button type="button" role="tab" id="mtab-next" aria-selected="false" aria-controls="moonMore" class="tab"></button>
+        </div>
+        <div id="moonPanelNow" role="tabpanel" aria-labelledby="mtab-now">
+        <div class="moon">
+          <img class="moon-img" id="moonImg" src="images/moon/MoonL32.gif" width="84" height="84" alt="تصویر ماه">
+        </div>
+        <dl class="moon-info">
+          <dt><span data-i18n="moon_now">نسبة الإضاءة الآن</span></dt><dd id="mNow">—</dd>
+          <dt><span data-i18n="moon_rise">طلوع القمر</span></dt><dd id="mRise">—</dd>
+          <dd class="sub" id="mRiseDir"></dd>
+          <dt><span data-i18n="moon_set">غروب القمر</span></dt><dd id="mSet">—</dd>
+          <dd class="sub" id="mSetDir"></dd>
+          <dt><span data-i18n="moon_sunset">نسبة الإضاءة عند الغروب</span></dt><dd id="mSunset">—</dd>
+          <dt id="mHorizDt" hidden><span data-i18n="sky_vis_l"></span><button type="button" class="help-btn" id="horizHelpBtn" aria-expanded="false" aria-controls="horizHelp" data-i18n-attr="aria-label:sky_vis_help_label;title:sky_vis_help_label">?</button><span class="help-text" id="horizHelp" data-i18n="sky_vis_help" hidden></span></dt><dd id="mHoriz" hidden>—</dd>
+        </dl>
+        </div>
+        <div class="moon-more" id="moonMore" role="tabpanel" aria-labelledby="mtab-next" hidden>
+          <div class="moon-clip" id="moonClip">
+            <p class="moon-note moon-intro" id="mIntro"></p>
+            <div id="moonMsgs">
+              <p class="moon-text" id="mText"></p>
+              <p class="moon-text moon-start" id="mStart"></p>
+            </div>
+            <div class="moon-text moon-sky" id="moonSky" hidden>
+              <span class="sky-line" id="skySunset"></span>
+              <span class="sky-note" id="skyNote"></span>
+            </div>
+            <p class="moon-text moon-why" id="mWhy"></p>
+            <p class="moon-text moon-best" id="mBest"></p>
+            <p class="moon-note" id="mNote" data-i18n="moon_odeh">تُقدَّر رؤية الهلال بمعيار عودة (Odeh V-criterion)؛ وهو تقدير وليس إعلانًا رسميًا.</p>
+          </div>
+          <button type="button" class="moon-toggle" id="moonToggle" aria-expanded="false" aria-controls="moonClip" hidden></button>
+        </div>
+      </section>
+
+      <section class="card calendar" aria-labelledby="cal-h">
+        <h2 id="cal-h"><span data-i18n="cal_title">تقويم أوقات الصلاة</span></h2>
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" id="tab-greg" aria-selected="false" aria-controls="panel-cal" class="tab"><span data-i18n="cal_greg">ميلادي</span></button>
+          <button type="button" role="tab" id="tab-sol" aria-selected="true" aria-controls="panel-cal" class="tab active"><span data-i18n="cal_shamsi">شمسي</span></button>
+        </div>
+        <form class="cal-panel" id="panel-cal" role="tabpanel" aria-labelledby="tab-sol">
+          <p class="cal-label" id="calLabel">انتخاب سال و ماه:</p>
+          <div class="cal-nav">
+            <button type="button" class="cal-step" id="calPrevYear"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 6l-6 6 6 6M19 6l-6 6 6 6"/></svg></button>
+            <button type="button" class="cal-step" id="calPrevMonth"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <div class="cal-center">
+              <span class="cal-month" id="calMonthName" aria-live="polite"></span>
+              <input type="text" class="cal-year" id="calYear" inputmode="numeric" autocomplete="off" maxlength="5">
+            </div>
+            <button type="button" class="cal-step next" id="calNextMonth"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+            <button type="button" class="cal-step next" id="calNextYear"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 6l-6 6 6 6M19 6l-6 6 6 6"/></svg></button>
+          </div>
+          <label class="cal-all"><input type="checkbox" id="calAll"> <span id="calAllText"></span></label>
+          <button type="submit" class="btn cal-ok"><span data-i18n="cal_ok">تأكيد</span></button>
+          <p class="msg" id="calMsg" role="status"></p>
+        </form>
+        <button type="button" class="btn cal-ok annual-btn" id="annualBtn" aria-expanded="false" aria-controls="annualBox" data-i18n="annual_btn">التقويم السنوي</button>
+        <div class="annual-box" id="annualBox"></div>
+      </section>
+      
+    </aside>
+
+  </main>
+  <footer class="site-foot">
+    <div class="foot-actions">
+      <form class="donate" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="hosted_button_id" value="3QYFTJCUQAEKL">
+            <button type="submit" class="btn donate-btn" data-i18n="donate" data-i18n-attr="title:donate_title" title="انقر هنا للمساهمة في تكاليف هذا الموقع">تبرع</button>
+          </form>
+      <a class="city-list-btn" id="cityListLink" href="ar/prayer-times/index.html" data-i18n="city_list_btn">تصفح المدن</a>
+    </div>
+    <dialog class="contact-dlg save-dlg" id="saveDlg">
+      <p data-i18n="save_q">سيتم حفظ إعداداتك الحالية (المكان على الخريطة، صوت الأذان، التشغيل التلقائي للأذان والدعاء، اللغة، والمظهر الداكن/الفاتح) في هذا المتصفح وتحميلها تلقائيًا في المرة القادمة. ستحل محل إعداداتك المحفوظة سابقًا. هل تريد الحفظ؟</p>
+      <div class="save-actions">
+        <button type="button" class="btn save-yes" id="saveYes"><span data-i18n="yes">نعم</span></button>
+        <button type="button" class="btn save-no" id="saveNo"><span data-i18n="no">لا</span></button>
+      </div>
+    </dialog>
+    <dialog class="contact-dlg save-dlg" id="clearDlg">
+      <p data-i18n="clear_q">سيتم حذف مكانك وإعداداتك المحفوظة من هذا المتصفح. هل تريد الحذف؟</p>
+      <div class="save-actions">
+        <button type="button" class="btn save-yes" id="clearYes"><span data-i18n="yes">نعم</span></button>
+        <button type="button" class="btn save-no" id="clearNo"><span data-i18n="no">لا</span></button>
+      </div>
+    </dialog>
+    <dialog class="contact-dlg" id="locDlg">
+      <div class="lang-pick" id="locLang" role="group" aria-label="Language"></div>
+      <p data-i18n="loc_text">لعرض أوقات الصلاة الصحيحة لمكانك، هل نسمح بقراءة موقعك الحالي؟ يُستخدم الموقع في متصفحك فقط ويُحفظ فيه كمكانك الافتراضي، ولا يُرسل إلى خادمنا.</p>
+      <div class="save-actions">
+        <button type="button" class="btn save-yes" id="locYes" data-i18n="loc_yes">أسمح</button>
+        <button type="button" class="btn save-no" id="locNo" data-i18n="loc_no">ليس الآن</button>
+      </div>
+    </dialog>
+    <dialog class="contact-dlg about-dlg" id="aboutDlg" aria-labelledby="aboutTitle">
+      <h2 id="aboutTitle" data-i18n="about_title">عن أذان گو</h2>
+      <div class="about-body">
+        <p data-i18n="about_p1">أطلقنا موقع «أذان گو» عام ٢٠١١م، وكان يعمل آنذاك على خرائط غوغل، وظلّ يعمل لفترة طويلة بصورة جيدة ودون أي مشكلة. لكن بعد مدة أوقفت غوغل خدمة الخرائط عنّا، فأصبح تقديم أوقات الصلاة في «أذان گو» أمرًا صعبًا.</p>
+        <p data-i18n="about_p2">وفي هذا العام ٢٠٢٦م، منّ الله المنّان علينا مرة أخرى بأن نكون في خدمتكم أيها المصلّون الكرام، وهذه المرة بتصميم جديد وإمكانات عصرية وصفحة يسهل عرضها واستخدامها على الهاتف المحمول.</p>
+        <p data-i18n="about_p3">هدفنا أن يصل صوت الأذان إلى بيتك ومكان عملك وأينما كنت، أيًّا كانت البقعة التي تعيش فيها من العالم. ولهذا نحسب أوقات الصلاة للمكان الذي تختاره على الخريطة، ونوفّر إلى جانبها اتجاه القبلة وصوت الأذان وأدعية اليوم وأدعية شهر رمضان ورؤية الهلال والتقويم، بأربع لغات: الفارسية والإنجليزية والأردية والعربية.</p>
+        <p data-i18n="about_calc">تُحسب أوقات الصلاة في «أذان گو» على أساس حسابات علمية، وباستخدام خطّ الطول وخطّ العرض لمكان إقامتك. وفي طريقة «أذان گو» تتغيّر زاوية الفجر مع خطّ العرض (من ١٨ درجة عند خطوط العرض المنخفضة إلى ١٢ درجة عند خطوط العرض العالية)، فلا تُطبَّق زاوية ثابتة واحدة على جميع الأماكن؛ ويُحسب المغرب والعشاء عند زاويتي ٤ و١٥ درجة. ونرى أن هذه الطريقة أنسب للمدن المختلفة في خطوط العرض.</p>
+        <p data-i18n="about_moon">تُقدَّر رؤية الهلال في «أذان گو» بالحساب الفلكي وللمكان الذي اخترته بالذات. ففي غروب اليوم التاسع والعشرين من الشهر القمري يحسب «أذان گو» موضعَي الشمس والقمر، ويتحقق بمعيار عودة (Odeh) من إمكان رؤية الهلال الجديد في ذلك المكان. يعتمد هذا المعيار على ارتفاع القمر فوق الأفق وعرض الهلال عند الغروب، وتكون النتيجة إحدى أربع حالات: يُرى بالعين المجرّدة؛ يُرى بالمنظار أو التلسكوب وربما بالعين المجرّدة أيضًا؛ يُرى بالأداة البصرية فقط؛ أو لا يُرى بأي وسيلة. فإذا كان الهلال يُرى بالعين المجرّدة، أو يُرى بالأداة البصرية مع إمكان رؤيته بالعين المجرّدة (الحالتان الأوليان)، انتهى الشهر الحالي في ذلك اليوم التاسع والعشرين وكان تسعة وعشرين يومًا. وإن كان يُرى بالأداة البصرية فقط أو لا يُرى إطلاقًا (الحالتان الأخيرتان)، أتمّ الشهر ثلاثين يومًا. ويُعرض بداية الشهر التالي على الأساس نفسه. كما يبيّن «أذان گو» أفضل وقت لرصد الهلال (نحو أربعة أتساع المسافة الزمنية بين غروب الشمس وغروب القمر) وارتفاع الهلال واتجاهه في تلك اللحظة.</p>
+        <p data-i18n="about_moon_note">هذه النتيجة تقدير علمي وليست إعلانًا رسميًا، وقد تختلف عن إعلان مرجعك الديني أو الجهة الرسمية في مدينتك؛ فلكل جهة معيارها وطريقتها، وقد تشترط الرؤية بالعين المجرّدة. أما «وضوح الأفق» في بطاقة القمر فيُظهر حالة الطقس فقط ولا يغيّر حكم الرؤية. وللأحكام الشرعية كبداية شهر رمضان والعيد، يُرجى الرجوع إلى مرجعك الديني أو الجهة الرسمية في بلدك.</p>
+        <p data-i18n="about_p4">«أذان گو» غير تابع لأي جهة أو مؤسسة أو منظمة أو جماعة، حكومية كانت أو غير حكومية، في أي مكان من العالم.</p>
+        <p data-i18n="about_p5">نأمل أن نكون قد قدّمنا خدمة، ولو يسيرة، للمصلّين. ولا شك أنه لولا لطف الله تعالى ورحمته وعناية الحجة المهدي (عجّل الله فرجه الشريف) لما تيسّر لنا هذا العمل. وفي الختام نلتمس منكم أيها المصلّون الأعزاء الدعاء؛ فلا تحرمونا من دعائكم عند الأذان والصلاة، ولا تنسوا الدعاء بتعجيل فرج مولانا إمام الزمان (عجّل الله فرجه الشريف).</p>
+        <p class="about-dua" lang="ar" dir="rtl">فَضْلُ الْوَقْتِ الْأَوَّلِ عَلَى الْآخِرِ كَفَضْلِ الْآخِرَةِ عَلَى الدُّنْيَا</p>
+        <p class="about-dua-tr" data-i18n="about_hadith"></p>
+        <p class="about-dua-src" data-i18n="about_hadith_src">الإمام الصادق (عليه السلام) — ثواب الأعمال، باب فضل الوقت الأول على الآخر</p>
+        <p data-i18n="about_p6">يسعدنا أن نسمع آراءكم واقتراحاتكم عبر «اتصل بنا».</p>
+      </div>
+      <div class="save-actions">
+        <button type="button" class="btn save-no" id="closeAbout" data-i18n="close_btn">إغلاق</button>
+      </div>
+    </dialog>
+    <dialog class="contact-dlg" id="contactDlg">
+      <p data-i18n="contact_text">لأي سؤال أو اقتراح أو ملاحظة يمكنك التواصل معنا عبر البريد الإلكتروني:</p>
+      <p class="contact-mail"><a href="mailto:info.azangoo@gmail.com">info.azangoo@gmail.com</a></p>
+      <div class="save-actions">
+        <button type="button" class="btn save-yes" id="copyMail" data-i18n="copy_btn">نسخ البريد</button>
+        <button type="button" class="btn save-no" id="closeContact" data-i18n="close_btn">إغلاق</button>
+      </div>
+      <p class="msg" id="copyMsg" role="status"></p>
+    </dialog>
+    <p class="copyright">© 2026 azangoo.com · All rights reserved</p>
+    <p class="terms-line"><button type="button" class="link-btn" id="aboutBtn" data-i18n="about_btn">من نحن</button> · <button type="button" class="link-btn" id="contactBtn" data-i18n="contact_btn">اتصل بنا</button> · <a class="terms-link" href="ar/terms/index.html" data-i18n="terms_link">شروط الاستخدام</a> · <a class="terms-link privacy-link" href="ar/privacy/index.html" data-i18n="privacy_link">الخصوصية</a> · <a class="terms-link widget-link" href="ar/widget/index.html" data-i18n="widget_link">أضف أوقات الصلاة إلى موقعك</a></p>
+  </footer>
+</div>
+
+<div class="hadith-modal" id="hadithModal" role="dialog" aria-modal="true" aria-labelledby="hadithModalT" hidden>
+  <div class="hadith-card">
+    <button type="button" class="hadith-x" id="hadithClose" data-i18n-attr="aria-label:hadith_close" aria-label="إغلاق">×</button>
+    <h3 id="hadithModalT" data-i18n="hadith_title">حديث اليوم</h3>
+    <p class="hadith-narr" id="hadithN"></p>
+    <p class="hadith-ar" id="hadithA" lang="ar" dir="rtl"></p>
+    <p class="hadith-t" id="hadithT"></p>
+    <p class="hadith-src" id="hadithS"></p>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>window.L||document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>')</script>
+<script src="js/lang.js?v=20261176"></script>
+<script src="js/official.js?v=20261120"></script>
+<script src="js/azangoo-prayer-times.js"></script>
+<script src="js/moon-info.js?v=20261161"></script>
+<script src="js/calendar-pdf.js?v=20261109"></script>
+<script src="js/contact.js?v=20261145"></script>
+<script src="js/theme.js"></script>
+<script src="js/header-menu.js?v=2"></script>
+<script src="js/calendar.js?v=20261102"></script>
+<script src="js/azan.js?v=20261176"></script>
+<script src="js/hadith.js?v=20261173"></script>
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prayer times by city | Azangoo</title>
+<meta name="description" content="Countries and cities with prayer times on Azangoo.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Prayer times by city | Azangoo">
+<meta property="og:description" content="Countries and cities with prayer times on Azangoo.">
+<meta property="og:image" content="https://www.azangoo.com/images/og-image.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../../icons/icon-32.png">
+<style>
+body{font-family:Vazirmatn,Tahoma,sans-serif;margin:0;background:#0b2530;color:#f4ecd8;line-height:1.8}
+main{max-width:980px;margin:0 auto;padding:18px}
+h1{color:#f0d58a;font-size:1.5rem;margin:8px 0}
+h2{color:#f0d58a;font-size:1.1rem;margin:16px 0 4px}
+a{color:#f0d58a}
+.card{background:rgba(18,56,74,.82);border:1px solid rgba(210,169,75,.45);border-radius:14px;padding:12px 14px;margin:12px 0}
+.list-tools{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.list-tools input,.list-tools select{font:inherit;padding:9px 12px;border-radius:10px;border:1px solid #d2a94b;background:#fff;color:#13303a;min-width:0}
+ul{list-style:none;padding:0;margin:0}
+li{padding:6px 0;border-bottom:1px solid rgba(210,169,75,.25)}
+.count{opacity:.7;font-size:.85rem}
+.home{display:inline-block;margin-bottom:6px}
+</style>
+</head>
+<body>
+<main>
+<nav><a class="home" href="../../index.html">Azangoo home</a></nav>
+<h1>Prayer times by city</h1>
+<p>Countries and cities with prayer times on Azangoo.</p>
+<div class="list-tools"><input id="listSearch" type="search" placeholder="Search a city…" aria-label="Search a city…">
+<select id="listCountry" aria-label="Countries"><option value="">All countries</option><option value="afghanistan">Afghanistan</option><option value="albania">Albania</option><option value="algeria">Algeria</option><option value="angola">Angola</option><option value="argentina">Argentina</option><option value="armenia">Armenia</option><option value="australia">Australia</option><option value="austria">Austria</option><option value="azerbaijan">Azerbaijan</option><option value="bahamas">Bahamas</option><option value="bahrain">Bahrain</option><option value="bangladesh">Bangladesh</option><option value="belarus">Belarus</option><option value="belgium">Belgium</option><option value="benin">Benin</option><option value="bolivia">Bolivia</option><option value="bosnia-and-herzegovina">Bosnia and Herzegovina</option><option value="botswana">Botswana</option><option value="brazil">Brazil</option><option value="bulgaria">Bulgaria</option><option value="burkina-faso">Burkina Faso</option><option value="burundi">Burundi</option><option value="cabo-verde">Cabo Verde</option><option value="cambodia">Cambodia</option><option value="cameroon">Cameroon</option><option value="canada">Canada</option><option value="central-african-republic">Central African Republic</option><option value="chad">Chad</option><option value="chile">Chile</option><option value="china">China</option><option value="colombia">Colombia</option><option value="costa-rica">Costa Rica</option><option value="croatia">Croatia</option><option value="cuba">Cuba</option><option value="curacao">Curacao</option><option value="cyprus">Cyprus</option><option value="czechia">Czechia</option><option value="democratic-republic-of-the-congo">Democratic Republic of the Congo</option><option value="denmark">Denmark</option><option value="djibouti">Djibouti</option><option value="dominican-republic">Dominican Republic</option><option value="ecuador">Ecuador</option><option value="egypt">Egypt</option><option value="el-salvador">El Salvador</option><option value="equatorial-guinea">Equatorial Guinea</option><option value="eritrea">Eritrea</option><option value="estonia">Estonia</option><option value="eswatini">Eswatini</option><option value="ethiopia">Ethiopia</option><option value="finland">Finland</option><option value="france">France</option><option value="gabon">Gabon</option><option value="gambia">Gambia</option><option value="georgia">Georgia</option><option value="germany">Germany</option><option value="ghana">Ghana</option><option value="greece">Greece</option><option value="guatemala">Guatemala</option><option value="guinea">Guinea</option><option value="guinea-bissau">Guinea-Bissau</option><option value="guyana">Guyana</option><option value="haiti">Haiti</option><option value="honduras">Honduras</option><option value="hong-kong">Hong Kong</option><option value="hungary">Hungary</option><option value="iceland">Iceland</option><option value="india">India</option><option value="indonesia">Indonesia</option><option value="iran">Iran</option><option value="iraq">Iraq</option><option value="ireland">Ireland</option><option value="italy">Italy</option><option value="ivory-coast">Ivory Coast</option><option value="jamaica">Jamaica</option><option value="japan">Japan</option><option value="jordan">Jordan</option><option value="kazakhstan">Kazakhstan</option><option value="kenya">Kenya</option><option value="kosovo">Kosovo</option><option value="kuwait">Kuwait</option><option value="kyrgyzstan">Kyrgyzstan</option><option value="laos">Laos</option><option value="latvia">Latvia</option><option value="lebanon">Lebanon</option><option value="lesotho">Lesotho</option><option value="liberia">Liberia</option><option value="libya">Libya</option><option value="lithuania">Lithuania</option><option value="macao">Macao</option><option value="madagascar">Madagascar</option><option value="malawi">Malawi</option><option value="malaysia">Malaysia</option><option value="maldives">Maldives</option><option value="mali">Mali</option><option value="mauritania">Mauritania</option><option value="mauritius">Mauritius</option><option value="mexico">Mexico</option><option value="moldova">Moldova</option><option value="mongolia">Mongolia</option><option value="montenegro">Montenegro</option><option value="morocco">Morocco</option><option value="mozambique">Mozambique</option><option value="myanmar">Myanmar</option><option value="namibia">Namibia</option><option value="nepal">Nepal</option><option value="new-zealand">New Zealand</option><option value="nicaragua">Nicaragua</option><option value="niger">Niger</option><option value="nigeria">Nigeria</option><option value="north-korea">North Korea</option><option value="north-macedonia">North Macedonia</option><option value="norway">Norway</option><option value="oman">Oman</option><option value="pakistan">Pakistan</option><option value="palestinian-territory">Palestinian Territory</option><option value="panama">Panama</option><option value="papua-new-guinea">Papua New Guinea</option><option value="paraguay">Paraguay</option><option value="peru">Peru</option><option value="philippines">Philippines</option><option value="poland">Poland</option><option value="portugal">Portugal</option><option value="puerto-rico">Puerto Rico</option><option value="qatar">Qatar</option><option value="republic-of-the-congo">Republic of the Congo</option><option value="reunion">Reunion</option><option value="romania">Romania</option><option value="russia">Russia</option><option value="rwanda">Rwanda</option><option value="saudi-arabia">Saudi Arabia</option><option value="senegal">Senegal</option><option value="serbia">Serbia</option><option value="sierra-leone">Sierra Leone</option><option value="singapore">Singapore</option><option value="slovakia">Slovakia</option><option value="slovenia">Slovenia</option><option value="somalia">Somalia</option><option value="south-africa">South Africa</option><option value="south-korea">South Korea</option><option value="south-sudan">South Sudan</option><option value="spain">Spain</option><option value="sri-lanka">Sri Lanka</option><option value="sudan">Sudan</option><option value="suriname">Suriname</option><option value="sweden">Sweden</option><option value="switzerland">Switzerland</option><option value="syria">Syria</option><option value="taiwan">Taiwan</option><option value="tajikistan">Tajikistan</option><option value="tanzania">Tanzania</option><option value="thailand">Thailand</option><option value="the-netherlands">The Netherlands</option><option value="timor-leste">Timor Leste</option><option value="togo">Togo</option><option value="tunisia">Tunisia</option><option value="turkey">Turkey</option><option value="turkmenistan">Turkmenistan</option><option value="uganda">Uganda</option><option value="ukraine">Ukraine</option><option value="united-arab-emirates">United Arab Emirates</option><option value="united-kingdom">United Kingdom</option><option value="united-states">United States</option><option value="uruguay">Uruguay</option><option value="uzbekistan">Uzbekistan</option><option value="venezuela">Venezuela</option><option value="vietnam">Vietnam</option><option value="western-sahara">Western Sahara</option><option value="yemen">Yemen</option><option value="zambia">Zambia</option><option value="zimbabwe">Zimbabwe</option></select></div>
+<div class="card country-row" data-filter="Afghanistan" data-country="afghanistan">
+<h2><a href="afghanistan/index.html">Afghanistan</a> <span class="count">(11)</span></h2>
+</div>
+<div class="card country-row" data-filter="Albania" data-country="albania">
+<h2><a href="albania/index.html">Albania</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Algeria" data-country="algeria">
+<h2><a href="algeria/index.html">Algeria</a> <span class="count">(42)</span></h2>
+</div>
+<div class="card country-row" data-filter="Angola" data-country="angola">
+<h2><a href="angola/index.html">Angola</a> <span class="count">(51)</span></h2>
+</div>
+<div class="card country-row" data-filter="Argentina" data-country="argentina">
+<h2><a href="argentina/index.html">Argentina</a> <span class="count">(50)</span></h2>
+</div>
+<div class="card country-row" data-filter="Armenia" data-country="armenia">
+<h2><a href="armenia/index.html">Armenia</a> <span class="count">(9)</span></h2>
+</div>
+<div class="card country-row" data-filter="Australia" data-country="australia">
+<h2><a href="australia/index.html">Australia</a> <span class="count">(22)</span></h2>
+</div>
+<div class="card country-row" data-filter="Austria" data-country="austria">
+<h2><a href="austria/index.html">Austria</a> <span class="count">(11)</span></h2>
+</div>
+<div class="card country-row" data-filter="Azerbaijan" data-country="azerbaijan">
+<h2><a href="azerbaijan/index.html">Azerbaijan</a> <span class="count">(6)</span></h2>
+</div>
+<div class="card country-row" data-filter="Bahamas" data-country="bahamas">
+<h2><a href="bahamas/index.html">Bahamas</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Bahrain" data-country="bahrain">
+<h2><a href="bahrain/index.html">Bahrain</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Bangladesh" data-country="bangladesh">
+<h2><a href="bangladesh/index.html">Bangladesh</a> <span class="count">(56)</span></h2>
+</div>
+<div class="card country-row" data-filter="Belarus" data-country="belarus">
+<h2><a href="belarus/index.html">Belarus</a> <span class="count">(13)</span></h2>
+</div>
+<div class="card country-row" data-filter="Belgium" data-country="belgium">
+<h2><a href="belgium/index.html">Belgium</a> <span class="count">(10)</span></h2>
+</div>
+<div class="card country-row" data-filter="Benin" data-country="benin">
+<h2><a href="benin/index.html">Benin</a> <span class="count">(6)</span></h2>
+</div>
+<div class="card country-row" data-filter="Bolivia" data-country="bolivia">
+<h2><a href="bolivia/index.html">Bolivia</a> <span class="count">(9)</span></h2>
+</div>
+<div class="card country-row" data-filter="Bosnia and Herzegovina" data-country="bosnia-and-herzegovina">
+<h2><a href="bosnia-and-herzegovina/index.html">Bosnia and Herzegovina</a> <span class="count">(5)</span></h2>
+</div>
+<div class="card country-row" data-filter="Botswana" data-country="botswana">
+<h2><a href="botswana/index.html">Botswana</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Brazil" data-country="brazil">
+<h2><a href="brazil/index.html">Brazil</a> <span class="count">(400)</span></h2>
+</div>
+<div class="card country-row" data-filter="Bulgaria" data-country="bulgaria">
+<h2><a href="bulgaria/index.html">Bulgaria</a> <span class="count">(6)</span></h2>
+</div>
+<div class="card country-row" data-filter="Burkina Faso" data-country="burkina-faso">
+<h2><a href="burkina-faso/index.html">Burkina Faso</a> <span class="count">(7)</span></h2>
+</div>
+<div class="card country-row" data-filter="Burundi" data-country="burundi">
+<h2><a href="burundi/index.html">Burundi</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Cabo Verde" data-country="cabo-verde">
+<h2><a href="cabo-verde/index.html">Cabo Verde</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Cambodia" data-country="cambodia">
+<h2><a href="cambodia/index.html">Cambodia</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Cameroon" data-country="cameroon">
+<h2><a href="cameroon/index.html">Cameroon</a> <span class="count">(16)</span></h2>
+</div>
+<div class="card country-row" data-filter="Canada" data-country="canada">
+<h2><a href="canada/index.html">Canada</a> <span class="count">(80)</span></h2>
+</div>
+<div class="card country-row" data-filter="Central African Republic" data-country="central-african-republic">
+<h2><a href="central-african-republic/index.html">Central African Republic</a> <span class="count">(5)</span></h2>
+</div>
+<div class="card country-row" data-filter="Chad" data-country="chad">
+<h2><a href="chad/index.html">Chad</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Chile" data-country="chile">
+<h2><a href="chile/index.html">Chile</a> <span class="count">(38)</span></h2>
+</div>
+<div class="card country-row" data-filter="China" data-country="china">
+<h2><a href="china/index.html">China</a> <span class="count">(707)</span></h2>
+</div>
+<div class="card country-row" data-filter="Colombia" data-country="colombia">
+<h2><a href="colombia/index.html">Colombia</a> <span class="count">(56)</span></h2>
+</div>
+<div class="card country-row" data-filter="Costa Rica" data-country="costa-rica">
+<h2><a href="costa-rica/index.html">Costa Rica</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Croatia" data-country="croatia">
+<h2><a href="croatia/index.html">Croatia</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Cuba" data-country="cuba">
+<h2><a href="cuba/index.html">Cuba</a> <span class="count">(31)</span></h2>
+</div>
+<div class="card country-row" data-filter="Curacao" data-country="curacao">
+<h2><a href="curacao/index.html">Curacao</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Cyprus" data-country="cyprus">
+<h2><a href="cyprus/index.html">Cyprus</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Czechia" data-country="czechia">
+<h2><a href="czechia/index.html">Czechia</a> <span class="count">(5)</span></h2>
+</div>
+<div class="card country-row" data-filter="Democratic Republic of the Congo" data-country="democratic-republic-of-the-congo">
+<h2><a href="democratic-republic-of-the-congo/index.html">Democratic Republic of the Congo</a> <span class="count">(38)</span></h2>
+</div>
+<div class="card country-row" data-filter="Denmark" data-country="denmark">
+<h2><a href="denmark/index.html">Denmark</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Djibouti" data-country="djibouti">
+<h2><a href="djibouti/index.html">Djibouti</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Dominican Republic" data-country="dominican-republic">
+<h2><a href="dominican-republic/index.html">Dominican Republic</a> <span class="count">(13)</span></h2>
+</div>
+<div class="card country-row" data-filter="Ecuador" data-country="ecuador">
+<h2><a href="ecuador/index.html">Ecuador</a> <span class="count">(17)</span></h2>
+</div>
+<div class="card country-row" data-filter="Egypt" data-country="egypt">
+<h2><a href="egypt/index.html">Egypt</a> <span class="count">(75)</span></h2>
+</div>
+<div class="card country-row" data-filter="El Salvador" data-country="el-salvador">
+<h2><a href="el-salvador/index.html">El Salvador</a> <span class="count">(7)</span></h2>
+</div>
+<div class="card country-row" data-filter="Equatorial Guinea" data-country="equatorial-guinea">
+<h2><a href="equatorial-guinea/index.html">Equatorial Guinea</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Eritrea" data-country="eritrea">
+<h2><a href="eritrea/index.html">Eritrea</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Estonia" data-country="estonia">
+<h2><a href="estonia/index.html">Estonia</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Eswatini" data-country="eswatini">
+<h2><a href="eswatini/index.html">Eswatini</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Ethiopia" data-country="ethiopia">
+<h2><a href="ethiopia/index.html">Ethiopia</a> <span class="count">(30)</span></h2>
+</div>
+<div class="card country-row" data-filter="Finland" data-country="finland">
+<h2><a href="finland/index.html">Finland</a> <span class="count">(10)</span></h2>
+</div>
+<div class="card country-row" data-filter="France" data-country="france">
+<h2><a href="france/index.html">France</a> <span class="count">(55)</span></h2>
+</div>
+<div class="card country-row" data-filter="Gabon" data-country="gabon">
+<h2><a href="gabon/index.html">Gabon</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Gambia" data-country="gambia">
+<h2><a href="gambia/index.html">Gambia</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Georgia" data-country="georgia">
+<h2><a href="georgia/index.html">Georgia</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Germany" data-country="germany">
+<h2><a href="germany/index.html">Germany</a> <span class="count">(101)</span></h2>
+</div>
+<div class="card country-row" data-filter="Ghana" data-country="ghana">
+<h2><a href="ghana/index.html">Ghana</a> <span class="count">(17)</span></h2>
+</div>
+<div class="card country-row" data-filter="Greece" data-country="greece">
+<h2><a href="greece/index.html">Greece</a> <span class="count">(8)</span></h2>
+</div>
+<div class="card country-row" data-filter="Guatemala" data-country="guatemala">
+<h2><a href="guatemala/index.html">Guatemala</a> <span class="count">(18)</span></h2>
+</div>
+<div class="card country-row" data-filter="Guinea" data-country="guinea">
+<h2><a href="guinea/index.html">Guinea</a> <span class="count">(12)</span></h2>
+</div>
+<div class="card country-row" data-filter="Guinea-Bissau" data-country="guinea-bissau">
+<h2><a href="guinea-bissau/index.html">Guinea-Bissau</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Guyana" data-country="guyana">
+<h2><a href="guyana/index.html">Guyana</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Haiti" data-country="haiti">
+<h2><a href="haiti/index.html">Haiti</a> <span class="count">(15)</span></h2>
+</div>
+<div class="card country-row" data-filter="Honduras" data-country="honduras">
+<h2><a href="honduras/index.html">Honduras</a> <span class="count">(12)</span></h2>
+</div>
+<div class="card country-row" data-filter="Hong Kong" data-country="hong-kong">
+<h2><a href="hong-kong/index.html">Hong Kong</a> <span class="count">(26)</span></h2>
+</div>
+<div class="card country-row" data-filter="Hungary" data-country="hungary">
+<h2><a href="hungary/index.html">Hungary</a> <span class="count">(16)</span></h2>
+</div>
+<div class="card country-row" data-filter="Iceland" data-country="iceland">
+<h2><a href="iceland/index.html">Iceland</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="India" data-country="india">
+<h2><a href="india/index.html">India</a> <span class="count">(538)</span></h2>
+</div>
+<div class="card country-row" data-filter="Indonesia" data-country="indonesia">
+<h2><a href="indonesia/index.html">Indonesia</a> <span class="count">(170)</span></h2>
+</div>
+<div class="card country-row" data-filter="Iran" data-country="iran">
+<h2><a href="iran/index.html">Iran</a> <span class="count">(105)</span></h2>
+</div>
+<div class="card country-row" data-filter="Iraq" data-country="iraq">
+<h2><a href="iraq/index.html">Iraq</a> <span class="count">(52)</span></h2>
+</div>
+<div class="card country-row" data-filter="Ireland" data-country="ireland">
+<h2><a href="ireland/index.html">Ireland</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Italy" data-country="italy">
+<h2><a href="italy/index.html">Italy</a> <span class="count">(50)</span></h2>
+</div>
+<div class="card country-row" data-filter="Ivory Coast" data-country="ivory-coast">
+<h2><a href="ivory-coast/index.html">Ivory Coast</a> <span class="count">(23)</span></h2>
+</div>
+<div class="card country-row" data-filter="Jamaica" data-country="jamaica">
+<h2><a href="jamaica/index.html">Jamaica</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Japan" data-country="japan">
+<h2><a href="japan/index.html">Japan</a> <span class="count">(293)</span></h2>
+</div>
+<div class="card country-row" data-filter="Jordan" data-country="jordan">
+<h2><a href="jordan/index.html">Jordan</a> <span class="count">(11)</span></h2>
+</div>
+<div class="card country-row" data-filter="Kazakhstan" data-country="kazakhstan">
+<h2><a href="kazakhstan/index.html">Kazakhstan</a> <span class="count">(23)</span></h2>
+</div>
+<div class="card country-row" data-filter="Kenya" data-country="kenya">
+<h2><a href="kenya/index.html">Kenya</a> <span class="count">(29)</span></h2>
+</div>
+<div class="card country-row" data-filter="Kosovo" data-country="kosovo">
+<h2><a href="kosovo/index.html">Kosovo</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Kuwait" data-country="kuwait">
+<h2><a href="kuwait/index.html">Kuwait</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Kyrgyzstan" data-country="kyrgyzstan">
+<h2><a href="kyrgyzstan/index.html">Kyrgyzstan</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Laos" data-country="laos">
+<h2><a href="laos/index.html">Laos</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Latvia" data-country="latvia">
+<h2><a href="latvia/index.html">Latvia</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Lebanon" data-country="lebanon">
+<h2><a href="lebanon/index.html">Lebanon</a> <span class="count">(7)</span></h2>
+</div>
+<div class="card country-row" data-filter="Lesotho" data-country="lesotho">
+<h2><a href="lesotho/index.html">Lesotho</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Liberia" data-country="liberia">
+<h2><a href="liberia/index.html">Liberia</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Libya" data-country="libya">
+<h2><a href="libya/index.html">Libya</a> <span class="count">(19)</span></h2>
+</div>
+<div class="card country-row" data-filter="Lithuania" data-country="lithuania">
+<h2><a href="lithuania/index.html">Lithuania</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Macao" data-country="macao">
+<h2><a href="macao/index.html">Macao</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Madagascar" data-country="madagascar">
+<h2><a href="madagascar/index.html">Madagascar</a> <span class="count">(7)</span></h2>
+</div>
+<div class="card country-row" data-filter="Malawi" data-country="malawi">
+<h2><a href="malawi/index.html">Malawi</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Malaysia" data-country="malaysia">
+<h2><a href="malaysia/index.html">Malaysia</a> <span class="count">(86)</span></h2>
+</div>
+<div class="card country-row" data-filter="Maldives" data-country="maldives">
+<h2><a href="maldives/index.html">Maldives</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Mali" data-country="mali">
+<h2><a href="mali/index.html">Mali</a> <span class="count">(10)</span></h2>
+</div>
+<div class="card country-row" data-filter="Mauritania" data-country="mauritania">
+<h2><a href="mauritania/index.html">Mauritania</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Mauritius" data-country="mauritius">
+<h2><a href="mauritius/index.html">Mauritius</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Mexico" data-country="mexico">
+<h2><a href="mexico/index.html">Mexico</a> <span class="count">(146)</span></h2>
+</div>
+<div class="card country-row" data-filter="Moldova" data-country="moldova">
+<h2><a href="moldova/index.html">Moldova</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Mongolia" data-country="mongolia">
+<h2><a href="mongolia/index.html">Mongolia</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Montenegro" data-country="montenegro">
+<h2><a href="montenegro/index.html">Montenegro</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Morocco" data-country="morocco">
+<h2><a href="morocco/index.html">Morocco</a> <span class="count">(41)</span></h2>
+</div>
+<div class="card country-row" data-filter="Mozambique" data-country="mozambique">
+<h2><a href="mozambique/index.html">Mozambique</a> <span class="count">(17)</span></h2>
+</div>
+<div class="card country-row" data-filter="Myanmar" data-country="myanmar">
+<h2><a href="myanmar/index.html">Myanmar</a> <span class="count">(37)</span></h2>
+</div>
+<div class="card country-row" data-filter="Namibia" data-country="namibia">
+<h2><a href="namibia/index.html">Namibia</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Nepal" data-country="nepal">
+<h2><a href="nepal/index.html">Nepal</a> <span class="count">(15)</span></h2>
+</div>
+<div class="card country-row" data-filter="New Zealand" data-country="new-zealand">
+<h2><a href="new-zealand/index.html">New Zealand</a> <span class="count">(9)</span></h2>
+</div>
+<div class="card country-row" data-filter="Nicaragua" data-country="nicaragua">
+<h2><a href="nicaragua/index.html">Nicaragua</a> <span class="count">(5)</span></h2>
+</div>
+<div class="card country-row" data-filter="Niger" data-country="niger">
+<h2><a href="niger/index.html">Niger</a> <span class="count">(6)</span></h2>
+</div>
+<div class="card country-row" data-filter="Nigeria" data-country="nigeria">
+<h2><a href="nigeria/index.html">Nigeria</a> <span class="count">(111)</span></h2>
+</div>
+<div class="card country-row" data-filter="North Korea" data-country="north-korea">
+<h2><a href="north-korea/index.html">North Korea</a> <span class="count">(29)</span></h2>
+</div>
+<div class="card country-row" data-filter="North Macedonia" data-country="north-macedonia">
+<h2><a href="north-macedonia/index.html">North Macedonia</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Norway" data-country="norway">
+<h2><a href="norway/index.html">Norway</a> <span class="count">(6)</span></h2>
+</div>
+<div class="card country-row" data-filter="Oman" data-country="oman">
+<h2><a href="oman/index.html">Oman</a> <span class="count">(9)</span></h2>
+</div>
+<div class="card country-row" data-filter="Pakistan" data-country="pakistan">
+<h2><a href="pakistan/index.html">Pakistan</a> <span class="count">(136)</span></h2>
+</div>
+<div class="card country-row" data-filter="Palestinian Territory" data-country="palestinian-territory">
+<h2><a href="palestinian-territory/index.html">Palestinian Territory</a> <span class="count">(7)</span></h2>
+</div>
+<div class="card country-row" data-filter="Panama" data-country="panama">
+<h2><a href="panama/index.html">Panama</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Papua New Guinea" data-country="papua-new-guinea">
+<h2><a href="papua-new-guinea/index.html">Papua New Guinea</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Paraguay" data-country="paraguay">
+<h2><a href="paraguay/index.html">Paraguay</a> <span class="count">(6)</span></h2>
+</div>
+<div class="card country-row" data-filter="Peru" data-country="peru">
+<h2><a href="peru/index.html">Peru</a> <span class="count">(26)</span></h2>
+</div>
+<div class="card country-row" data-filter="Philippines" data-country="philippines">
+<h2><a href="philippines/index.html">Philippines</a> <span class="count">(149)</span></h2>
+</div>
+<div class="card country-row" data-filter="Poland" data-country="poland">
+<h2><a href="poland/index.html">Poland</a> <span class="count">(47)</span></h2>
+</div>
+<div class="card country-row" data-filter="Portugal" data-country="portugal">
+<h2><a href="portugal/index.html">Portugal</a> <span class="count">(10)</span></h2>
+</div>
+<div class="card country-row" data-filter="Puerto Rico" data-country="puerto-rico">
+<h2><a href="puerto-rico/index.html">Puerto Rico</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Qatar" data-country="qatar">
+<h2><a href="qatar/index.html">Qatar</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Republic of the Congo" data-country="republic-of-the-congo">
+<h2><a href="republic-of-the-congo/index.html">Republic of the Congo</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Reunion" data-country="reunion">
+<h2><a href="reunion/index.html">Reunion</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Romania" data-country="romania">
+<h2><a href="romania/index.html">Romania</a> <span class="count">(26)</span></h2>
+</div>
+<div class="card country-row" data-filter="Russia" data-country="russia">
+<h2><a href="russia/index.html">Russia</a> <span class="count">(214)</span></h2>
+</div>
+<div class="card country-row" data-filter="Rwanda" data-country="rwanda">
+<h2><a href="rwanda/index.html">Rwanda</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Saudi Arabia" data-country="saudi-arabia">
+<h2><a href="saudi-arabia/index.html">Saudi Arabia</a> <span class="count">(30)</span></h2>
+</div>
+<div class="card country-row" data-filter="Senegal" data-country="senegal">
+<h2><a href="senegal/index.html">Senegal</a> <span class="count">(19)</span></h2>
+</div>
+<div class="card country-row" data-filter="Serbia" data-country="serbia">
+<h2><a href="serbia/index.html">Serbia</a> <span class="count">(8)</span></h2>
+</div>
+<div class="card country-row" data-filter="Sierra Leone" data-country="sierra-leone">
+<h2><a href="sierra-leone/index.html">Sierra Leone</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Singapore" data-country="singapore">
+<h2><a href="singapore/index.html">Singapore</a> <span class="count">(26)</span></h2>
+</div>
+<div class="card country-row" data-filter="Slovakia" data-country="slovakia">
+<h2><a href="slovakia/index.html">Slovakia</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Slovenia" data-country="slovenia">
+<h2><a href="slovenia/index.html">Slovenia</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Somalia" data-country="somalia">
+<h2><a href="somalia/index.html">Somalia</a> <span class="count">(10)</span></h2>
+</div>
+<div class="card country-row" data-filter="South Africa" data-country="south-africa">
+<h2><a href="south-africa/index.html">South Africa</a> <span class="count">(76)</span></h2>
+</div>
+<div class="card country-row" data-filter="South Korea" data-country="south-korea">
+<h2><a href="south-korea/index.html">South Korea</a> <span class="count">(59)</span></h2>
+</div>
+<div class="card country-row" data-filter="South Sudan" data-country="south-sudan">
+<h2><a href="south-sudan/index.html">South Sudan</a> <span class="count">(5)</span></h2>
+</div>
+<div class="card country-row" data-filter="Spain" data-country="spain">
+<h2><a href="spain/index.html">Spain</a> <span class="count">(93)</span></h2>
+</div>
+<div class="card country-row" data-filter="Sri Lanka" data-country="sri-lanka">
+<h2><a href="sri-lanka/index.html">Sri Lanka</a> <span class="count">(11)</span></h2>
+</div>
+<div class="card country-row" data-filter="Sudan" data-country="sudan">
+<h2><a href="sudan/index.html">Sudan</a> <span class="count">(23)</span></h2>
+</div>
+<div class="card country-row" data-filter="Suriname" data-country="suriname">
+<h2><a href="suriname/index.html">Suriname</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Sweden" data-country="sweden">
+<h2><a href="sweden/index.html">Sweden</a> <span class="count">(12)</span></h2>
+</div>
+<div class="card country-row" data-filter="Switzerland" data-country="switzerland">
+<h2><a href="switzerland/index.html">Switzerland</a> <span class="count">(6)</span></h2>
+</div>
+<div class="card country-row" data-filter="Syria" data-country="syria">
+<h2><a href="syria/index.html">Syria</a> <span class="count">(13)</span></h2>
+</div>
+<div class="card country-row" data-filter="Taiwan" data-country="taiwan">
+<h2><a href="taiwan/index.html">Taiwan</a> <span class="count">(27)</span></h2>
+</div>
+<div class="card country-row" data-filter="Tajikistan" data-country="tajikistan">
+<h2><a href="tajikistan/index.html">Tajikistan</a> <span class="count">(7)</span></h2>
+</div>
+<div class="card country-row" data-filter="Tanzania" data-country="tanzania">
+<h2><a href="tanzania/index.html">Tanzania</a> <span class="count">(34)</span></h2>
+</div>
+<div class="card country-row" data-filter="Thailand" data-country="thailand">
+<h2><a href="thailand/index.html">Thailand</a> <span class="count">(53)</span></h2>
+</div>
+<div class="card country-row" data-filter="The Netherlands" data-country="the-netherlands">
+<h2><a href="the-netherlands/index.html">The Netherlands</a> <span class="count">(30)</span></h2>
+</div>
+<div class="card country-row" data-filter="Timor Leste" data-country="timor-leste">
+<h2><a href="timor-leste/index.html">Timor Leste</a> <span class="count">(1)</span></h2>
+</div>
+<div class="card country-row" data-filter="Togo" data-country="togo">
+<h2><a href="togo/index.html">Togo</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Tunisia" data-country="tunisia">
+<h2><a href="tunisia/index.html">Tunisia</a> <span class="count">(13)</span></h2>
+</div>
+<div class="card country-row" data-filter="Turkey" data-country="turkey">
+<h2><a href="turkey/index.html">Turkey</a> <span class="count">(113)</span></h2>
+</div>
+<div class="card country-row" data-filter="Turkmenistan" data-country="turkmenistan">
+<h2><a href="turkmenistan/index.html">Turkmenistan</a> <span class="count">(4)</span></h2>
+</div>
+<div class="card country-row" data-filter="Uganda" data-country="uganda">
+<h2><a href="uganda/index.html">Uganda</a> <span class="count">(23)</span></h2>
+</div>
+<div class="card country-row" data-filter="Ukraine" data-country="ukraine">
+<h2><a href="ukraine/index.html">Ukraine</a> <span class="count">(91)</span></h2>
+</div>
+<div class="card country-row" data-filter="United Arab Emirates" data-country="united-arab-emirates">
+<h2><a href="united-arab-emirates/index.html">United Arab Emirates</a> <span class="count">(16)</span></h2>
+</div>
+<div class="card country-row" data-filter="United Kingdom" data-country="united-kingdom">
+<h2><a href="united-kingdom/index.html">United Kingdom</a> <span class="count">(107)</span></h2>
+</div>
+<div class="card country-row" data-filter="United States" data-country="united-states">
+<h2><a href="united-states/index.html">United States</a> <span class="count">(356)</span></h2>
+</div>
+<div class="card country-row" data-filter="Uruguay" data-country="uruguay">
+<h2><a href="uruguay/index.html">Uruguay</a> <span class="count">(3)</span></h2>
+</div>
+<div class="card country-row" data-filter="Uzbekistan" data-country="uzbekistan">
+<h2><a href="uzbekistan/index.html">Uzbekistan</a> <span class="count">(23)</span></h2>
+</div>
+<div class="card country-row" data-filter="Venezuela" data-country="venezuela">
+<h2><a href="venezuela/index.html">Venezuela</a> <span class="count">(67)</span></h2>
+</div>
+<div class="card country-row" data-filter="Vietnam" data-country="vietnam">
+<h2><a href="vietnam/index.html">Vietnam</a> <span class="count">(143)</span></h2>
+</div>
+<div class="card country-row" data-filter="Western Sahara" data-country="western-sahara">
+<h2><a href="western-sahara/index.html">Western Sahara</a> <span class="count">(2)</span></h2>
+</div>
+<div class="card country-row" data-filter="Yemen" data-country="yemen">
+<h2><a href="yemen/index.html">Yemen</a> <span class="count">(7)</span></h2>
+</div>
+<div class="card country-row" data-filter="Zambia" data-country="zambia">
+<h2><a href="zambia/index.html">Zambia</a> <span class="count">(18)</span></h2>
+</div>
+<div class="card country-row" data-filter="Zimbabwe" data-country="zimbabwe">
+<h2><a href="zimbabwe/index.html">Zimbabwe</a> <span class="count">(8)</span></h2>
+</div>
+</main>
+<script src="../../js/lists.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ویجت اوقات شرعی اذان‌گو · Azangoo prayer-times widget</title>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Vazirmatn,Tahoma,sans-serif;background:#eef3f5;color:#13303a;line-height:1.9}
+  main{max-width:980px;margin:0 auto;padding:22px 16px 60px}
+  h1{font-size:1.5em;margin:6px 0}
+  h2{font-size:1.15em;margin:30px 0 10px;border-bottom:2px solid #c9982f;padding-bottom:4px}
+  p.en{direction:ltr;text-align:left;color:#456;margin:2px 0 10px}
+  .panel{background:#fff;border:1px solid #d7e3e8;border-radius:12px;padding:14px 16px}
+  .builder{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+  label{display:flex;flex-direction:column;font-size:.85em;gap:2px}
+  input,select{font:inherit;padding:6px 8px;border:1px solid #b9cdd4;border-radius:8px;background:#fff;min-width:0}
+  input[type=color]{padding:2px;height:36px}
+  .stage{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;margin-top:14px}
+  .stage>.pv{flex:1 1 320px;min-width:280px;padding:16px;border-radius:12px;background:repeating-conic-gradient(#e6edf0 0 25%,#f6f9fa 0 50%) 0 0/20px 20px}
+  .stage>.code{flex:1 1 360px}
+  textarea{width:100%;height:190px;direction:ltr;text-align:left;font:12.5px/1.5 Consolas,monospace;border:1px solid #b9cdd4;border-radius:8px;padding:8px}
+  button{font:inherit;padding:7px 14px;border:0;border-radius:8px;background:#1c7f79;color:#fff;cursor:pointer}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+  code{direction:ltr;unicode-bidi:isolate;background:#e7eff2;padding:0 5px;border-radius:5px}
+  table{border-collapse:collapse;width:100%;font-size:.88em}
+  td,th{border:1px solid #d7e3e8;padding:5px 8px;text-align:start;vertical-align:top;background:#fff}
+  td:first-child{direction:ltr;white-space:nowrap;font-family:Consolas,monospace}
+</style>
+</head>
+<body>
+<main>
+  <h1>ویجت اوقات شرعی اذان‌گو</h1>
+  <p class="en">Azangoo prayer-times widget: add the prayer times of any city to your own website.</p>
+
+  <h2>۱) ساخت کد / Build your code</h2>
+  <div class="panel">
+    <div class="builder">
+      <label>شهر / City<input id="b-city" value="Toronto"></label>
+      <label>کد کشور (اختیاری) / Country code<input id="b-cc" value="CA" maxlength="2"></label>
+      <label>عرض جغرافیایی / Latitude<input id="b-lat" placeholder="43.65"></label>
+      <label>طول جغرافیایی / Longitude<input id="b-lng" placeholder="-79.38"></label>
+      <label>منطقهٔ زمانی / Time zone<input id="b-tz" placeholder="America/Toronto"></label>
+      <label>زبان / Language<select id="b-lang"><option value="fa">فارسی</option><option value="en" selected>English</option><option value="ur">اردو</option><option value="ar">العربية</option></select></label>
+      <label>تم / Theme<select id="b-theme"><option>auto</option><option>light</option><option>night</option><option>dark</option><option>emerald</option><option>ocean</option><option>sand</option><option>rose</option></select></label>
+      <label>چیدمان / Layout<select id="b-layout"><option>list</option><option>grid</option><option>row</option></select></label>
+      <label>ساعت / Clock<select id="b-clock"><option>24</option><option>12</option></select></label>
+      <label>رنگ تأکید / Accent<input id="b-accent" type="color" value="#1c7f79"></label>
+      <label>رنگ پس‌زمینه / Background<input id="b-bg" type="color" value="#ffffff"></label>
+      <label>گوشه‌ها / Radius (px)<input id="b-radius" type="number" min="0" max="40" value="14"></label>
+    </div>
+    <p style="margin:8px 0 0;font-size:.85em">رنگ‌ها فقط وقتی اعمال می‌شوند که تیک «رنگ دلخواه» را بزنید. · Colors apply only when "custom colors" is ticked.
+      <label style="display:inline-flex;flex-direction:row;gap:6px;align-items:center;margin-inline-start:10px"><input id="b-custom" type="checkbox">رنگ دلخواه / custom colors</label></p>
+    <div class="stage">
+      <div class="pv" id="preview"></div>
+      <div class="code">
+        <textarea id="out" readonly></textarea>
+        <button id="copy" type="button">کپی / Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <h2>۲) تم‌ها / Themes</h2>
+  <div class="gallery" id="themes"></div>
+
+  <h2>۳) چیدمان‌ها / Layouts</h2>
+  <div class="gallery" style="grid-template-columns:1fr">
+    <div class="azangoo-widget" data-lat="21.4225" data-lng="39.8262" data-timezone="Asia/Riyadh" data-name="مکه · Makkah" data-lang="ar" data-layout="row" data-theme="emerald" data-width="760px"></div>
+    <div class="azangoo-widget" data-lat="35.6892" data-lng="51.389" data-timezone="Asia/Tehran" data-name="تهران" data-lang="fa" data-layout="grid" data-theme="night" data-width="520px"></div>
+  </div>
+
+  <h2>۴) گزینه‌ها / Options</h2>
+  <table>
+    <tr><th>data-…</th><th>توضیح · Description</th></tr>
+    <tr><td>city, country</td><td>نام شهر و کد دو حرفی کشور · a city name and an optional 2-letter country code (looked up once, then remembered in the visitor's browser)</td></tr>
+    <tr><td>lat, lng</td><td>مختصات به‌جای شهر · coordinates instead of a city</td></tr>
+    <tr><td>timezone</td><td>مثل <code>Asia/Tehran</code>. همراه با lat و lng هیچ درخواستی به بیرون فرستاده نمی‌شود · with lat + lng it makes no outside request at all</td></tr>
+    <tr><td>name</td><td>نام نمایشی · the name shown</td></tr>
+    <tr><td>lang</td><td>fa · en · ur · ar</td></tr>
+    <tr><td>theme</td><td>auto · light · night · dark · emerald · ocean · sand · rose</td></tr>
+    <tr><td>layout</td><td>list · grid · row</td></tr>
+    <tr><td>show</td><td>fajr,sunrise,dhuhr,sunset,maghrib,midnight</td></tr>
+    <tr><td>clock</td><td>24 · 12</td></tr>
+    <tr><td>digits</td><td>native · latin</td></tr>
+    <tr><td>next</td><td>1 · 0 — علامت‌زدن اذان بعدی · mark the next adhan</td></tr>
+    <tr><td>width</td><td>مثل <code>340px</code> · e.g. <code>340px</code></td></tr>
+    <tr><td>accent, bg, color, radius, font, size</td><td>ظاهر دلخواه · your own look (CSS colors and sizes)</td></tr>
+  </table>
+  <p style="margin-top:14px;font-size:.9em">برای صفحه‌هایی که بعد از بارگذاری ساخته می‌شوند: <code>AzangooWidget.render(element, {city:"Toronto", lang:"en"})</code> یا <code>AzangooWidget.init()</code>.<br>
+  <span class="en" style="display:block">For pages that build content after loading: <code>AzangooWidget.render(element, {…})</code> or <code>AzangooWidget.init()</code>.</span></p>
+</main>
+
+<script src="js/azangoo-widget.js"></script>
+<script>
+(function(){
+  var PUBLIC='https://arajabian.github.io/azangoo/js/azangoo-widget.js';
+  var $=function(id){return document.getElementById(id)};
+  /* the theme gallery */
+  var themes=['auto','light','night','dark','emerald','ocean','sand','rose'];
+  var places=[['Istanbul','Europe/Istanbul','41.0082','28.9784','en'],['اصفهان','Asia/Tehran','32.6546','51.668','fa'],['لاہور','Asia/Karachi','31.5497','74.3436','ur'],['القاهرة','Africa/Cairo','30.0444','31.2357','ar']];
+  var g=$('themes');
+  themes.forEach(function(t,i){
+    var p=places[i%places.length], d=document.createElement('div');
+    d.className='azangoo-widget';
+    d.setAttribute('data-lat',p[2]);d.setAttribute('data-lng',p[3]);d.setAttribute('data-timezone',p[1]);
+    d.setAttribute('data-name',p[0]);d.setAttribute('data-lang',p[4]);d.setAttribute('data-theme',t);d.setAttribute('data-show','fajr,sunrise,dhuhr,maghrib');
+    g.appendChild(d);
+  });
+  AzangooWidget.init();
+
+  /* the builder */
+  var ids=['city','cc','lat','lng','tz','lang','theme','layout','clock','accent','bg','radius'];
+  function val(k){return $('b-'+k).value.trim()}
+  function attrs(){
+    var a=[],lat=val('lat'),lng=val('lng');
+    if(lat&&lng){a.push(['lat',lat],['lng',lng]);if(val('city'))a.push(['name',val('city')]);if(val('tz'))a.push(['timezone',val('tz')])}
+    else{a.push(['city',val('city')]);if(val('cc'))a.push(['country',val('cc').toUpperCase()]);if(val('tz'))a.push(['timezone',val('tz')])}
+    a.push(['lang',val('lang')],['theme',val('theme')],['layout',val('layout')]);
+    if(val('clock')==='12')a.push(['clock','12']);
+    if($('b-custom').checked){a.push(['accent',val('accent')],['bg',val('bg')],['radius',val('radius')]);}
+    return a;
+  }
+  function update(){
+    var a=attrs(),pv=$('preview');
+    pv.innerHTML='';
+    var d=document.createElement('div');d.className='azangoo-widget';
+    a.forEach(function(x){d.setAttribute('data-'+x[0],x[1])});
+    pv.appendChild(d);
+    AzangooWidget.render(d);
+    $('out').value='<div class="azangoo-widget"\n'+a.map(function(x){return '     data-'+x[0]+'="'+x[1].replace(/"/g,'&quot;')+'"'}).join('\n')+'></div>\n<script src="'+PUBLIC+'" async><\/script>';
+  }
+  ids.concat(['custom']).forEach(function(k){$('b-'+k).addEventListener('input',update);$('b-'+k).addEventListener('change',update)});
+  $('copy').addEventListener('click',function(){$('out').select();try{document.execCommand('copy')}catch(e){}});
+  update();
+})();
+</script>
+</body>
+</html>

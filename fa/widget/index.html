@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>افزودن اوقات شرعی به سایت شما | Azangoo</title>
+<meta name="description" content="ویجت رایگان اوقات شرعی اذان گو برای سایت شما: شهر یا مختصات را بدهید، تم و رنگ را انتخاب کنید و کد آماده را کپی کنید.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="افزودن اوقات شرعی به سایت شما | Azangoo">
+<meta property="og:description" content="ویجت رایگان اوقات شرعی اذان گو برای سایت شما: شهر یا مختصات را بدهید، تم و رنگ را انتخاب کنید و کد آماده را کپی کنید.">
+<meta property="og:image" content="https://www.azangoo.com/images/og-image.png">
+<link rel="icon" href="../../favicon.ico?v=4" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../../icons/icon-32.png?v=4">
+<style>
+body{font-family:Vazirmatn,Tahoma,sans-serif;margin:0;background:#0b2530;color:#f4ecd8;line-height:1.8}
+main{max-width:980px;margin:0 auto;padding:18px}
+h1{color:#f0d58a;font-size:1.5rem;margin:8px 0}
+h2{color:#f0d58a;font-size:1.1rem;margin:16px 0 4px}
+a{color:#f0d58a}
+.card{background:rgba(18,56,74,.82);border:1px solid rgba(210,169,75,.45);border-radius:14px;padding:12px 14px;margin:12px 0}
+.list-tools{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.list-tools input,.list-tools select{font:inherit;padding:9px 12px;border-radius:10px;border:1px solid #d2a94b;background:#fff;color:#13303a;min-width:0}
+ul{list-style:none;padding:0;margin:0}
+li{padding:6px 0;border-bottom:1px solid rgba(210,169,75,.25)}
+.count{opacity:.7;font-size:.85rem}
+.home{display:inline-block;margin-bottom:6px}
+@media(max-width:600px){body{line-height:1.7}main{padding:12px}h1{font-size:1.25rem}h2{font-size:1rem}.card{padding:9px 10px;margin:9px 0}li{padding:4px 0}.list-tools{gap:8px;margin:8px 0}.list-tools input,.list-tools select{padding:7px 10px}}
+
+.wcode{direction:ltr;text-align:left;background:#071a22;border:1px solid rgba(210,169,75,.35);border-radius:10px;padding:10px 12px;overflow:auto;font:13px/1.6 Consolas,monospace;white-space:pre;color:#f4ecd8;margin:8px 0}
+.wb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
+.wb-grid label{display:flex;flex-direction:column;font-size:.85rem;gap:2px}
+.wb-grid input,.wb-grid select{font:inherit;padding:7px 9px;border:1px solid #d2a94b;border-radius:8px;background:#fff;color:#13303a;min-width:0}
+.wb-grid input[type=color]{padding:2px;height:38px}
+.wb-grid .wb-check{flex-direction:row;align-items:center;gap:6px}
+.wb-grid .wb-check input{width:auto}
+.wb-stage{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;margin-top:14px}
+.wb-pv{flex:1 1 300px;min-width:260px;padding:14px;border-radius:12px;background:rgba(255,255,255,.08)}
+.wb-code{flex:1 1 340px}
+.wb-code textarea{width:100%;height:200px;direction:ltr;text-align:left;font:12.5px/1.5 Consolas,monospace;border:1px solid #d2a94b;border-radius:8px;padding:8px;background:#071a22;color:#f4ecd8}
+.wb-btn{font:inherit;margin-top:8px;padding:8px 16px;border:0;border-radius:10px;background:#d2a94b;color:#0b2530;cursor:pointer;font-weight:700}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+table.opt{border-collapse:collapse;width:100%;table-layout:fixed;font-size:.9rem}
+table.opt td{overflow-wrap:anywhere}
+table.opt td:first-child{width:36%}
+table.opt td{border:1px solid rgba(210,169,75,.3);padding:6px 9px;vertical-align:top}
+table.opt td:first-child{direction:ltr;text-align:left;font-family:Consolas,monospace;color:#f0d58a}
+.hint{font-size:.85rem;opacity:.8}
+@media(max-width:600px){.wcode{font-size:11.5px;padding:8px 10px}.wb-stage{gap:10px;margin-top:10px}.wb-pv{padding:10px}.wb-code textarea{height:160px;font-size:11.5px}.gal{grid-template-columns:1fr;gap:10px}table.opt{font-size:.8rem}table.opt td{padding:5px 6px}}
+</style>
+</head>
+<body>
+<main>
+<nav><a class="home" href="../../fa/index.html">صفحهٔ اصلی اذان گو</a></nav>
+<h1>افزودن اوقات شرعی به سایت شما</h1>
+<p>با یک تکه کد کوتاه، اوقات شرعی هر شهر را با لوگوی اذان گو در سایت خودتان نشان دهید. رایگان است، به چهار زبان کار می‌کند و تم و رنگ آن را می‌توانید به سلیقهٔ خودتان تغییر دهید.</p>
+<section class="card"><h2>شروع سریع</h2><p>کد زیر را هر جای صفحه که می‌خواهید بگذارید. بسته به اینکه نام شهر یا مختصات را دارید، یکی از دو نمونه را انتخاب کنید.</p>
+<p class="count">با نام شهر</p><pre class="wcode">&lt;div class=&quot;azangoo-widget&quot; data-city=&quot;Toronto&quot; data-country=&quot;CA&quot; data-lang=&quot;fa&quot; data-theme=&quot;auto&quot;&gt;&lt;/div&gt;
+&lt;script src=&quot;https://www.azangoo.com/js/azangoo-widget.js&quot; async&gt;&lt;/script&gt;</pre>
+<p class="count">با مختصات</p><pre class="wcode">&lt;div class=&quot;azangoo-widget&quot; data-lat=&quot;43.65&quot; data-lng=&quot;-79.38&quot; data-timezone=&quot;America/Toronto&quot; data-name=&quot;Toronto&quot; data-lang=&quot;fa&quot;&gt;&lt;/div&gt;
+&lt;script src=&quot;https://www.azangoo.com/js/azangoo-widget.js&quot; async&gt;&lt;/script&gt;</pre></section>
+<section class="card" id="wb" data-lang="fa" data-copied="کپی شد"><h2>ساخت کد</h2>
+<div class="wb-grid">
+<label>شهر<input id="b-city" value="Toronto"></label>
+<label>کد کشور (اختیاری)<input id="b-cc" value="CA" maxlength="2" dir="ltr"></label>
+<label>عرض جغرافیایی<input id="b-lat" dir="ltr" placeholder="43.65"></label>
+<label>طول جغرافیایی<input id="b-lng" dir="ltr" placeholder="-79.38"></label>
+<label>منطقهٔ زمانی<input id="b-tz" dir="ltr" placeholder="America/Toronto"></label>
+<label>زبان ویجت<select id="b-lang"><option value="fa" selected>فارسی</option><option value="en">English</option><option value="ur">اردو</option><option value="ar">العربية</option></select></label>
+<label>تم<select id="b-theme"><option value="auto">auto</option><option value="light">light</option><option value="night">night</option><option value="dark">dark</option><option value="emerald">emerald</option><option value="ocean">ocean</option><option value="sand">sand</option><option value="rose">rose</option></select></label>
+<label>چیدمان<select id="b-layout"><option value="list">فهرست</option><option value="grid">کاشی</option><option value="row">یک ردیف</option></select></label>
+<label>ساعت<select id="b-clock"><option value="24">24</option><option value="12">12</option></select></label>
+<label class="wb-check"><input id="b-custom" type="checkbox">رنگ دلخواه</label>
+<label>رنگ تأکید<input id="b-accent" type="color" value="#1c7f79"></label>
+<label>پس‌زمینه<input id="b-bg" type="color" value="#ffffff"></label>
+<label>گردی گوشه‌ها<input id="b-radius" type="number" min="0" max="40" value="14"></label>
+</div>
+<p class="hint">نام انگلیسی شهر معمولاً بهتر پیدا می‌شود. اگر مختصات را پر کنید، شهر فقط برای نمایش نام استفاده می‌شود.</p>
+<div class="wb-stage"><div class="wb-pv" id="wb-preview" aria-label="پیش‌نمایش"></div>
+<div class="wb-code"><textarea id="wb-out" readonly aria-label="کد"></textarea><button class="wb-btn" id="wb-copy" type="button">کپی کد</button></div></div></section>
+<section class="card"><h2>تم‌ها</h2><div class="gal" id="wb-gallery"></div></section>
+<section class="card"><h2>گزینه‌ها</h2><table class="opt">
+<tr><td>city, country</td><td>نام شهر و کد دو حرفی کشور (مثلاً CA). شهر یک بار پیدا و در مرورگر بازدیدکننده نگه داشته می‌شود.</td></tr>
+<tr><td>lat, lng</td><td>مختصات به‌جای نام شهر.</td></tr>
+<tr><td>timezone</td><td>مثل Asia/Tehran. همراه با lat و lng هیچ درخواستی به بیرون فرستاده نمی‌شود.</td></tr>
+<tr><td>name</td><td>نامی که در ویجت نوشته می‌شود.</td></tr>
+<tr><td>lang</td><td>fa · en · ur · ar</td></tr>
+<tr><td>theme</td><td>auto · light · night · dark · emerald · ocean · sand · rose</td></tr>
+<tr><td>layout</td><td>list · grid · row</td></tr>
+<tr><td>show</td><td>اوقات نمایشی، با کاما: fajr,sunrise,dhuhr,sunset,maghrib,midnight</td></tr>
+<tr><td>clock</td><td>24 یا 12</td></tr>
+<tr><td>digits</td><td>native (ارقام فارسی یا عربی) یا latin</td></tr>
+<tr><td>next</td><td>1 یا 0: علامت‌زدن اذان بعدی</td></tr>
+<tr><td>width</td><td>حداکثر عرض، مثل 340px</td></tr>
+<tr><td>accent, bg, color, radius, font, size</td><td>ظاهر دلخواه با رنگ‌ها و اندازه‌های CSS.</td></tr>
+</table></section>
+<section class="card"><h2>نکته‌ها</h2><p>اگر نام شهر را بدهید، مرورگر بازدیدکننده یک بار شهر را از Open-Meteo پیدا می‌کند و نتیجه را در خودش نگه می‌دارد. اگر مختصات را همراه با data-timezone بدهید، هیچ درخواستی به بیرون فرستاده نمی‌شود.</p>
+<p>لوگو و پیوند اذان گو در ویجت همیشه نمایش داده می‌شود و قابل حذف نیست.</p>
+<p>استفاده از ویجت فقط با بارگذاری فایل آن از خود اذان گو مجاز است. کپی کردن فایل‌ها، میزبانی آن‌ها در جای دیگر یا تغییر در آن‌ها بدون اجازهٔ کتبی ممنوع است.</p>
+<p>اوقات به روش اذان گو محاسبه می‌شود و ممکن است با دفاتر مراجع تقلید متفاوت باشد.</p></section>
+<section class="card" id="link"><h2>افزودن لینک اذان گو برای شهر و محل شما در سایت شما</h2><p>اگر ویجت نمی‌خواهید و فقط یک لینک یا دکمه لازم دارید، این لینک‌ها صفحهٔ اصلی اذان گو را مستقیم روی شهر شما و به زبان خودتان باز می‌کنند. نام شهر و کشور را به انگلیسی بنویسید.</p>
+<p class="count">با نام شهر و کشور</p><pre class="wcode">https://www.azangoo.com/go/?city=Toronto&amp;country=Canada&amp;lang=fa</pre>
+<p class="count">با مختصات</p><pre class="wcode">https://www.azangoo.com/go/?lat=43.65&amp;lng=-79.38&amp;lang=fa</pre>
+<p class="count">نمونهٔ لینک در صفحهٔ شما</p><pre class="wcode">&lt;a href=&quot;https://www.azangoo.com/go/?city=Toronto&amp;country=Canada&amp;lang=fa&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;اوقات شرعی تورنتو&lt;/a&gt;</pre>
+<p>پارامتر lang یکی از fa، en، ur یا ar است. این لینک‌ها برای موتورهای جستجو شناخته نمی‌شوند. بازدیدکننده‌ای که قبلاً مکان دیگری را در اذان گو ذخیره کرده باشد هم با این لینک شهر شما را می‌بیند. برای ساخت راحت‌تر لینک، <a href="../../go/">فرم ساخت لینک</a> را باز کنید.</p></section>
+<script src="../../js/azangoo-widget.js"></script>
+<script src="../../js/widget-builder.js"></script>
+</main>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "source": "مراکز اسلامی کانادا",
+  "updated": "2026-10-16",
+  "months": [
+    {
+      "start": "2026-11-11",
+      "length": 29,
+      "hijriMonth": 6,
+      "hijriYear": 1448,
+      "regions": ["CA", "US"]
+    },
+    {
+      "start": "2026-11-11",
+      "length": 30,
+      "hijriMonth": 6,
+      "hijriYear": 1448,
+      "regions": ["IR", "IQ"]
+    }
+  ]
+}

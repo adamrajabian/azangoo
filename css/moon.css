@@ -1,0 +1,119 @@
+/* Copyright (c) 2026 azangoo.com. All rights reserved.
+   Copying, reuse, modification or redistribution of this code, or of its calculations,
+   is prohibited without written permission. See the Terms and conditions page. */
+/* Moon card (رؤیت ماه)
+   Images: images/moon/MoonL01..99.gif (lit on left), MoonR01..99.gif (lit on right),
+   Moon00.gif (new moon), Moon100.gif (full moon). The number is the illumination percent. */
+
+/* the moon picture sits in a rectangular "night sky" box: stars as background, the moon (round) in the middle */
+.moon{
+  display:flex;justify-content:center;align-items:center;padding:18px;border-radius:14px;overflow:hidden;
+  background:#0a1530 url("../images/moon-bg.webp") center/cover no-repeat;
+  border:1px solid rgba(240,213,138,.45);box-shadow:inset 0 0 30px rgba(0,0,0,.35)
+}
+
+/* the sky behind the moon follows the sun at the selected place (attribute set by js/azan.js):
+   night = the stars above, sunrise / day / sunset = pictures. The pictures are cropped to the box, so the
+   part with the sun stays in view (day: top, sunrise and sunset: bottom). */
+.moon[data-sky="sunrise"]{background-image:url("../images/moon-sky-sunrise.webp");background-position:center bottom}
+.moon[data-sky="day"]{background-image:url("../images/moon-sky-day.webp");background-position:center top}
+.moon[data-sky="sunset"]{background-image:url("../images/moon-sky-sunset.webp");background-position:center bottom}
+
+/* weather pictures: the sky state (data-sky) plus the weather (data-wx, set by js/azan.js from Open-Meteo or MET Norway).
+   Clear weather has no data-wx and uses the plain sky pictures above. Same cropping as the plain pictures. */
+.moon[data-sky="sunrise"][data-wx="partly"]{background-image:url("../images/moon-sky-sunrise-partly.webp");background-position:center bottom}
+.moon[data-sky="sunrise"][data-wx="cloudy"]{background-image:url("../images/moon-sky-sunrise-cloudy.webp");background-position:center bottom}
+.moon[data-sky="sunrise"][data-wx="fog"]{background-image:url("../images/moon-sky-sunrise-fog.webp");background-position:center bottom}
+.moon[data-sky="sunrise"][data-wx="rain"]{background-image:url("../images/moon-sky-sunrise-rain.webp");background-position:center bottom}
+.moon[data-sky="sunrise"][data-wx="snow"]{background-image:url("../images/moon-sky-sunrise-snow.webp");background-position:center bottom}
+.moon[data-sky="sunrise"][data-wx="storm"]{background-image:url("../images/moon-sky-sunrise-storm.webp");background-position:center bottom}
+.moon[data-sky="day"][data-wx="partly"]{background-image:url("../images/moon-sky-day-partly.webp");background-position:center top}
+.moon[data-sky="day"][data-wx="cloudy"]{background-image:url("../images/moon-sky-day-cloudy.webp");background-position:center top}
+.moon[data-sky="day"][data-wx="fog"]{background-image:url("../images/moon-sky-day-fog.webp");background-position:center top}
+.moon[data-sky="day"][data-wx="rain"]{background-image:url("../images/moon-sky-day-rain.webp");background-position:center top}
+.moon[data-sky="day"][data-wx="snow"]{background-image:url("../images/moon-sky-day-snow.webp");background-position:center top}
+.moon[data-sky="day"][data-wx="storm"]{background-image:url("../images/moon-sky-day-storm.webp");background-position:center top}
+.moon[data-sky="sunset"][data-wx="partly"]{background-image:url("../images/moon-sky-sunset-partly.webp");background-position:center bottom}
+.moon[data-sky="sunset"][data-wx="cloudy"]{background-image:url("../images/moon-sky-sunset-cloudy.webp");background-position:center bottom}
+.moon[data-sky="sunset"][data-wx="fog"]{background-image:url("../images/moon-sky-sunset-fog.webp");background-position:center bottom}
+.moon[data-sky="sunset"][data-wx="rain"]{background-image:url("../images/moon-sky-sunset-rain.webp");background-position:center bottom}
+.moon[data-sky="sunset"][data-wx="snow"]{background-image:url("../images/moon-sky-sunset-snow.webp");background-position:center bottom}
+.moon[data-sky="sunset"][data-wx="storm"]{background-image:url("../images/moon-sky-sunset-storm.webp");background-position:center bottom}
+.moon[data-sky="night"][data-wx="partly"]{background-image:url("../images/moon-sky-night-partly.webp");background-position:center center}
+.moon[data-sky="night"][data-wx="cloudy"]{background-image:url("../images/moon-sky-night-cloudy.webp");background-position:center center}
+.moon[data-sky="night"][data-wx="fog"]{background-image:url("../images/moon-sky-night-fog.webp");background-position:center center}
+.moon[data-sky="night"][data-wx="rain"]{background-image:url("../images/moon-sky-night-rain.webp");background-position:center center}
+.moon[data-sky="night"][data-wx="snow"]{background-image:url("../images/moon-sky-night-snow.webp");background-position:center center}
+.moon[data-sky="night"][data-wx="storm"]{background-image:url("../images/moon-sky-night-storm.webp");background-position:center center}
+
+.moon-img{
+  flex:none;width:104px;height:104px;display:block;
+  border-radius:50%;object-fit:cover;
+  box-shadow:0 0 0 1px rgba(240,213,138,.4),0 0 22px rgba(240,213,138,.35)
+}
+
+.moon dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.85rem}
+.moon dt{opacity:.75}
+.moon dd{font-weight:700;text-align:left;direction:ltr}
+
+.moon-info{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px;margin-top:12px;font-size:.88rem}
+.moon-info dt{opacity:.8}
+.moon-info dd{font-weight:700;text-align:left;direction:ltr;margin:0}
+.moon-info dd.sub{grid-column:1/-1;margin:-4px 0 4px;font-size:.8rem;font-weight:400;opacity:.85;text-align:right;direction:rtl}
+.moon-text{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--panel);border:1px solid rgba(210,169,75,.25);font-size:.85rem;line-height:1.9}
+.moon-start{font-weight:700;color:var(--ivory);margin-top:10px}
+.moon-why{margin-top:10px}
+.moon-why:empty{display:none}
+.moon-best{margin-top:10px}
+.moon-best:empty{display:none}
+.moon-text:empty{display:none}
+.moon-more[hidden],#moonPanelNow[hidden]{display:none}
+.moon-note{margin:8px 0 0;font-size:.75rem;opacity:.75;line-height:1.7}
+
+/* sky outlook in the moon card: cloud at sunset (last days of the month), horizon visibility, cloud tonight */
+.moon-sky[hidden]{display:none}
+.moon-sky .sky-line{display:block}
+.moon-sky .sky-line+.sky-line{margin-top:6px}
+.moon-sky .sky-line:empty,.moon-sky .sky-note:empty{display:none}
+.moon-sky .sky-note{display:block;margin-top:8px;font-size:.75rem;opacity:.75;line-height:1.7}
+.moon-info [hidden]{display:none}
+/* the small "?" button next to a label, and the explanation it opens */
+.help-btn{display:inline-flex;align-items:center;justify-content:center;width:1.45em;height:1.45em;margin-inline-start:6px;padding:0;border-radius:50%;border:1px solid var(--gold);background:transparent;color:var(--gold2);font:inherit;font-size:.8rem;font-weight:700;line-height:1;cursor:pointer;vertical-align:middle}
+.help-btn:hover,.help-btn[aria-expanded="true"]{background:var(--gold);color:var(--ink)}
+.help-pop{position:fixed;z-index:1100;box-sizing:border-box;width:max-content;padding:10px 12px;padding-inline-end:34px;border-radius:10px;background:var(--panel-strong);color:var(--ivory);border:1px solid var(--gold);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.help-pop[hidden]{display:none}
+.help-pop .help-text{display:block;margin:0;font-size:.8rem;font-weight:400;line-height:1.9;direction:inherit;text-align:start}
+.help-pop .help-text[hidden]{display:block}
+.help-close{position:absolute;top:6px;inset-inline-end:6px;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border-radius:50%;border:1px solid var(--gold);background:transparent;color:var(--gold2);font:700 1.1rem/1 sans-serif;cursor:pointer}
+.help-close:hover{background:var(--gold);color:var(--ink)}
+
+/* phones: a smaller moon box and smaller texts (tablet and desktop are not affected) */
+@media(max-width:639px){
+  .moon{padding:10px}
+  .moon-img{width:84px;height:84px}
+  .moon-info{margin-top:8px;gap:4px 8px;font-size:.8rem}
+  .moon-info dd.sub{font-size:.72rem;margin:-3px 0 3px}
+  .moon-text{margin-top:8px;padding:7px 10px;font-size:.78rem;line-height:1.8}
+  .moon-note{font-size:.7rem}
+  .help-pop{padding:8px 10px;padding-inline-end:32px}
+  .help-pop .help-text{font-size:.74rem}
+}
+
+/* moon card tabs: "the Moon right now" / "<next month> sighting" */
+.moon-tabs{display:flex;gap:4px;margin:0 0 14px;padding:4px;background:var(--panel-soft);border:1px solid var(--line);border-radius:12px}
+.moon-tabs[hidden]{display:none}
+.moon-tabs .tab{flex:1;font:700 .92rem/1.35 Vazirmatn;padding:9px 6px;border:0;border-radius:9px;background:transparent;color:var(--ivory);cursor:pointer}
+.moon-tabs .tab.active{background:var(--tile);color:var(--heading);box-shadow:inset 0 -3px 0 var(--gold)}
+.moon-tabs .tab:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.moon-intro{margin:0 0 10px}
+.moon-intro:empty{display:none}
+@media (max-width:560px){.moon-tabs .tab{font-size:.84rem;padding:8px 4px}}
+
+/* "<next month> sighting" tab: the box is as tall as the "Moon right now" box (height set by js/moon-info.js);
+   a longer text is cut with a fade and the person opens / closes it with the button */
+.moon-clip{position:relative;overflow:hidden}
+.moon-clip.is-clipped{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 40px),transparent)}
+.moon-toggle{display:block;margin:8px auto 0;padding:6px 20px;border-radius:999px;border:1px solid var(--gold);background:transparent;color:var(--gold2);font:700 .85rem/1.35 Vazirmatn,sans-serif;cursor:pointer}
+.moon-toggle[hidden]{display:none}
+.moon-toggle:hover,.moon-toggle[aria-expanded="true"]:hover{background:var(--gold);color:var(--ink)}
+.moon-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}

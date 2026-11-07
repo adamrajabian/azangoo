@@ -1,0 +1,5 @@
+# TEST DATA
+CA	CAN	124	CA	Canada	Ottawa
+IR	IRN	364	IR	Iran	Tehran
+US	USA	840	US	United States	Washington
+XX	XXX	000	XX	Testland	Capital

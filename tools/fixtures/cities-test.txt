@@ -1,0 +1,6 @@
+# TEST DATA: a few lines in GeoNames format, only to check the import script
+1000001	Aurora	Aurora	Aurora,Aurore	44.00649	-79.46502	P	PPLA2	CA	.	09	.	.	.	55000	0	0	America/Toronto	2020-01-01
+1000002	Tehran	Tehran	Tehran,Teheran,تهران	35.68920	51.38900	P	PPLC	IR	.	08	.	.	.	8693706	0	0	Asia/Tehran	2020-01-01
+1000003	Smalltown	Smalltown		10.00000	20.00000	P	PPL	XX	.	01	.	.	.	500	0	0	Africa/Lagos	2020-01-01
+1000004	NoZone	NoZone		10.00000	20.00000	P	PPL	XX	.	01	.	.	.	120000	0	0		2020-01-01
+1000005	Aurora	Aurora		40.10000	-90.10000	P	PPLA2	US	.	17	.	.	.	197000	0	0	America/Chicago	2020-01-01

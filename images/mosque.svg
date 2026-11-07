@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMax slice">
+  <defs><g id="half">
+  <g opacity=".38">
+    <rect x="175" y="150" width="10" height="120"/><path d="M173 150 180 110 187 150Z"/><rect x="179" y="94" width="2" height="16"/>
+    <path d="M280 268C280 218 305 196 330 196 355 196 380 218 380 268Z"/><rect x="329" y="178" width="2" height="18"/>
+    <path d="M20 270C20 236 40 221 60 221 80 221 100 236 100 270Z"/><rect x="59" y="206" width="2" height="15"/>
+    <path d="M420 268C420 232 440 218 460 218 480 218 500 232 500 268Z"/>
+  </g>
+  <path fill-rule="evenodd" d="M0 262H801V300H0Z M24 300V282a9 9 0 0 1 18 0V300Z M80 300V282a9 9 0 0 1 18 0V300Z M136 300V282a9 9 0 0 1 18 0V300Z M192 300V282a9 9 0 0 1 18 0V300Z M248 300V282a9 9 0 0 1 18 0V300Z M304 300V282a9 9 0 0 1 18 0V300Z M360 300V282a9 9 0 0 1 18 0V300Z M416 300V282a9 9 0 0 1 18 0V300Z M472 300V282a9 9 0 0 1 18 0V300Z M528 300V282a9 9 0 0 1 18 0V300Z"/>
+  <path d="M82 264C82 232 100 218 120 218 140 218 158 232 158 264Z"/><rect x="119" y="200" width="2" height="18"/><circle cx="120" cy="197" r="3.5"/>
+  <path d="M222 264C222 232 240 218 260 218 280 218 298 232 298 264Z"/><rect x="259" y="200" width="2" height="18"/><circle cx="260" cy="197" r="3.5"/>
+  <rect x="473" y="95" width="14" height="205"/><rect x="465" y="140" width="30" height="9"/><rect x="468" y="110" width="24" height="7"/>
+  <path d="M471 95 480 52 489 95Z"/><rect x="479" y="30" width="2" height="22"/><circle cx="480" cy="27" r="3.5"/>
+  <path d="M540 240C540 196 575 170 600 170 625 170 660 196 660 240Z"/><rect x="599" y="150" width="2" height="20"/><circle cx="600" cy="147" r="3.5"/>
+  <path fill-rule="evenodd" d="M530 240H801V300H530Z M575 300V262a12 12 0 0 1 24 0V300Z M625 300V262a12 12 0 0 1 24 0V300Z M690 300V250a14 14 0 0 1 28 0V300Z M745 300V250a14 14 0 0 1 28 0V300Z"/>
+  <path d="M655 245V215C655 142 718 100 801 100V245Z"/><rect x="798" y="66" width="3" height="38"/>
+</g></defs>
+  <use href="#half"/>
+  <use href="#half" transform="translate(1600) scale(-1 1)"/>
+  <path d="M801.3 35.1A13 13 0 1 0 811.1 54.7A11 11 0 1 1 801.3 35.1Z"/>
+</svg>

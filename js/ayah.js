@@ -66,14 +66,14 @@
   if (mapBack) mapBack.innerHTML = ICON.star + '<span id="mapBackTxt"></span>';
 
   function labels() {
-    stage.setAttribute("aria-label", t("ayah_title"));
+    stage.setAttribute("aria-label", t("st_slides"));
     el.prev.setAttribute("aria-label", t("st_prev")); el.prev.title = t("st_prev");
     el.next.setAttribute("aria-label", t("st_next")); el.next.title = t("st_next");
     el.mapTxt.textContent = t("st_map");
     el.map.setAttribute("aria-label", t("st_map")); el.map.title = t("st_map");
     var bt = document.getElementById("mapBackTxt");
-    if (bt) bt.textContent = t("ayah_title");
-    if (mapBack) mapBack.setAttribute("aria-label", t("ayah_title"));
+    if (bt) bt.textContent = t("st_slides");
+    if (mapBack) mapBack.setAttribute("aria-label", t("st_slides"));
     pauseUi();
   }
   function pauseUi() {
@@ -263,7 +263,7 @@
     S.pages.forEach(function (p, i) {
       var b = document.createElement("button"); b.type = "button"; b.className = "st-dot";
       b.setAttribute("aria-label", t("st_page", { n: A.num(i + 1), total: A.num(n) }));
-      b.addEventListener("click", function () { go(i); });
+      b.addEventListener("click", function () { manual(i); });
       el.dots.appendChild(b);
     });
   }
@@ -351,20 +351,24 @@
   window.AzanStage = { showMap: showMap, showSlides: showSlides, isMap: function () { return S.mapMode; } };
 
   /* ---------- controls ---------- */
-  el.prev.addEventListener("click", function () { go(S.i - 1); });
-  el.next.addEventListener("click", function () { go(S.i + 1); });
+  /* a step made by the person always restarts the autoplay, even if the mouse is still over the slides */
+  function manual(i) { S.hover = false; go(i); }
+  el.prev.addEventListener("click", function () { manual(S.i - 1); });
+  el.next.addEventListener("click", function () { manual(S.i + 1); });
   el.pause.addEventListener("click", function () { S.userPaused = !S.userPaused; pauseUi(); schedule(); });
   el.map.addEventListener("click", function () { showMap(); });
   if (mapBack) mapBack.addEventListener("click", showSlides);
   function pausedNow(on) { S.hover = on; schedule(); }
-  stage.addEventListener("mouseenter", function () { pausedNow(true); });
-  stage.addEventListener("mouseleave", function () { pausedNow(false); });
-  stage.addEventListener("focusin", function () { pausedNow(true); });
+  /* autoplay waits while a mouse is over the slides or the keyboard focus is in them; a finger or a tap never pauses it
+     (a tap leaves a "hover" and the focus behind, which used to stop the autoplay for good) */
+  stage.addEventListener("pointerenter", function (e) { if (e.pointerType === "mouse") pausedNow(true); });
+  stage.addEventListener("pointerleave", function (e) { if (e.pointerType === "mouse") pausedNow(false); });
+  stage.addEventListener("focusin", function (e) { if (e.target.matches && e.target.matches(":focus-visible")) pausedNow(true); });
   stage.addEventListener("focusout", function () { pausedNow(false); });
   stage.addEventListener("keydown", function (e) {
     var rtl = document.documentElement.dir === "rtl";
-    if (e.key === "ArrowLeft") { go(S.i + (rtl ? 1 : -1)); e.preventDefault(); }
-    else if (e.key === "ArrowRight") { go(S.i + (rtl ? -1 : 1)); e.preventDefault(); }
+    if (e.key === "ArrowLeft") { manual(S.i + (rtl ? 1 : -1)); e.preventDefault(); }
+    else if (e.key === "ArrowRight") { manual(S.i + (rtl ? -1 : 1)); e.preventDefault(); }
   });
   /* swipe: a finger moving towards the start of the line goes to the next slide */
   var sx = null, sy = 0;
@@ -374,7 +378,7 @@
     var dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
     if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.3) return;
     var rtl = document.documentElement.dir === "rtl";
-    go(S.i + ((dx > 0) === rtl ? 1 : -1));
+    manual(S.i + ((dx > 0) === rtl ? 1 : -1));
   });
   el.body.addEventListener("pointercancel", function () { sx = null; });
 

@@ -102,7 +102,7 @@ html:not([lang="fa"]) .date-shamsi{display:none}
   box-shadow:0 0 0 2px var(--night),0 0 0 3px rgba(210,169,75,.5),0 14px 30px rgba(0,0,0,.4)
 }
 .mapframe .inner{border:2px solid var(--night);border-radius:8px;overflow:hidden;background:#cfe0e0}
-.mapframe .inner{position:relative;height:var(--stage-h)}
+.mapframe .inner{position:relative;height:var(--stage-h);isolation:isolate}   /* isolate: the high z-index values of the map and the slides stay inside the frame, so the sound bar and other fixed bars lie above it */
 :root{--stage-h:clamp(370px,104vw,450px)}
 @media(min-width:640px){:root{--stage-h:450px}}
 @media(min-width:980px){:root{--stage-h:clamp(480px,64vh,600px)}}

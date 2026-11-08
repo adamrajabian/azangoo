@@ -15,6 +15,10 @@
  *   asr     = Standard (shadow factor 1)
  *   highLats = NightMiddle, midnight = Jafari (sunset + half of sunset..fajr)
  *
+ * Other calculation methods (the same table and formulas as the Android app, PrayerCalc.kt): Jafari, University of Tehran,
+ * MWL, ISNA, Egypt, Karachi, Umm al-Qura and the Moonsighting Committee. A method changes only Fajr, Maghrib, Isha and
+ * midnight; AzanGoo is the default and its results are exactly the ones above.
+ *
  * Time-zone rules from TimeZoneCalulate.cs:
  *   - the calendar date is taken at the zone's standard (base) offset;
  *   - the time offset is the zone's offset right now (DST-aware);
@@ -91,10 +95,70 @@
   // C# Tools.GetWithNoZero
   const noZero = s => (s.charAt(0) === '0' ? s.substring(1) : s);
 
+  /* ---------- calculation methods ----------
+     fajr: angle below the horizon (null = AzanGoo's latitude table); maghrib: angle (null = at sunset);
+     isha: angle (null = ishaMin minutes after Maghrib, the Umm al-Qura rule); jafariMid: midnight is half of the way from
+     sunset to Fajr (false = from sunset to sunrise); seasonal: Fajr and Isha follow the season and latitude (Moonsighting) */
+  const METHODS = {
+    azangoo:      { fajr: null, maghrib: 4,    isha: 15,   ishaMin: null, jafariMid: true,  seasonal: false },
+    jafari:       { fajr: 16,   maghrib: 4,    isha: 14,   ishaMin: null, jafariMid: true,  seasonal: false },
+    tehran:       { fajr: 17.7, maghrib: 4.5,  isha: 14,   ishaMin: null, jafariMid: true,  seasonal: false },
+    mwl:          { fajr: 18,   maghrib: null, isha: 17,   ishaMin: null, jafariMid: false, seasonal: false },
+    isna:         { fajr: 15,   maghrib: null, isha: 15,   ishaMin: null, jafariMid: false, seasonal: false },
+    egypt:        { fajr: 19.5, maghrib: null, isha: 17.5, ishaMin: null, jafariMid: false, seasonal: false },
+    karachi:      { fajr: 18,   maghrib: null, isha: 18,   ishaMin: null, jafariMid: false, seasonal: false },
+    makkah:       { fajr: 18.5, maghrib: null, isha: null, ishaMin: 90,   jafariMid: false, seasonal: false },
+    moonsighting: { fajr: 18,   maghrib: 4,    isha: 18,   ishaMin: null, jafariMid: false, seasonal: true }
+  };
+  const METHOD_IDS = Object.keys(METHODS);
+  /* the methods offered in each language (AzanGoo first everywhere; English has all of them) */
+  const BY_LANG = {
+    fa: ['azangoo', 'jafari', 'tehran', 'moonsighting'],
+    ar: ['azangoo', 'jafari', 'makkah', 'egypt', 'mwl', 'moonsighting'],
+    ur: ['azangoo', 'jafari', 'karachi', 'mwl', 'isna', 'moonsighting']
+  };
+  const methodsFor = lang => (BY_LANG[lang] || METHOD_IDS).slice();
+  const methodOf = id => METHODS[id] ? id : 'azangoo';
+  let currentMethod = 'azangoo';     /* the one used when a call names no method (the page sets it from the saved choice) */
+  let currentAsr = 1;                /* shadow factor of Asr: 1 standard, 2 Hanafi */
+  const setMethod = id => { currentMethod = methodOf(id); return currentMethod; };
+  const getMethod = () => currentMethod;
+  const setAsrFactor = f => { currentAsr = Number(f) === 2 ? 2 : 1; return currentAsr; };
+
+  /* Moonsighting Committee (Khalid Shaukat): minutes before sunrise (Fajr) or after sunset (Isha) by latitude and day of the solar year */
+  function seasonalMinutes(lat, year, month, day, pa, pb, pc, pd) {
+    const leap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+    const daysInYear = leap ? 366 : 365;
+    const doy = Math.round((Date.UTC(year, month - 1, day) - Date.UTC(year, 0, 1)) / 86400000) + 1;
+    let dyy;
+    if (lat >= 0) { const d = doy + 10; dyy = d >= daysInYear ? d - daysInYear : d; }
+    else { const d = doy - (leap ? 173 : 172); dyy = d < 0 ? d + daysInYear : d; }
+    const k = Math.min(Math.abs(lat), 60) / 55;
+    const a = 75 + pa * k, b = 75 + pb * k, c = 75 + pc * k, d = 75 + pd * k;
+    if (dyy < 91) return a + (b - a) / 91 * dyy;
+    if (dyy < 137) return b + (c - b) / 46 * (dyy - 91);
+    if (dyy < 183) return c + (d - c) / 46 * (dyy - 137);
+    if (dyy < 229) return d + (c - d) / 46 * (dyy - 183);
+    if (dyy < 275) return c + (b - c) / 46 * (dyy - 229);
+    return b + (a - b) / 91 * (dyy - 275);
+  }
+  const seasonalFajrMinutes = (lat, y, m, d) => seasonalMinutes(lat, y, m, d, 28.65, 19.44, 32.74, 48.1);
+  const seasonalIshaMinutes = (lat, y, m, d) => seasonalMinutes(lat, y, m, d, 25.6, 2.05, -9.21, 6.14);
+
+  /* month of the Hijri calendar (1-12) of a Gregorian date: only the Umm al-Qura method needs it (Isha is 120 minutes in Ramadan) */
+  let hijriFmt = null;
+  function hijriMonth(y, m, d) {
+    try {
+      if (!hijriFmt) hijriFmt = new Intl.DateTimeFormat('en-u-ca-islamic-tbla-nu-latn', { month: 'numeric', timeZone: 'UTC' });
+      return Number(hijriFmt.format(new Date(Date.UTC(y, m - 1, d, 12))));
+    } catch (e) { return 0; }
+  }
+
   // compute one day's times at the given local date and time-zone offset (hours)
-  function computeDay(latitude, longitude, elevation, year, month, day, tz) {
+  function computeDay(latitude, longitude, elevation, year, month, day, tz, methodId, asrFactor) {
+    const M = METHODS[methodOf(methodId)];
     const jd = julian(year, month, day) - longitude / (15 * 24);
-    const fajrAngle = Number(fajrAngleForLatitude(latitude).toFixed(4));
+    const fajrAngle = Number((M.fajr != null ? M.fajr : fajrAngleForLatitude(latitude)).toFixed(4));
     const riseSet = 0.833 + 0.0347 * Math.sqrt(elevation);
 
     const midDay = t => fixHour(12 - sunPosition(jd + t).equation);
@@ -117,11 +181,13 @@
       fajr: sunAngleTime(fajrAngle, 5 / 24, 'ccw'),
       sunrise: sunAngleTime(riseSet, 6 / 24, 'ccw'),
       dhuhr: midDay(12 / 24),
-      asr: asrTime(1, 13 / 24),
+      asr: asrTime(asrFactor || 1, 13 / 24),
       sunset: sunAngleTime(riseSet, 18 / 24, ''),
-      maghrib: sunAngleTime(4, 18 / 24, ''),
-      isha: sunAngleTime(15, 18 / 24, '')
+      maghrib: 0,
+      isha: NaN
     };
+    T.maghrib = M.maghrib != null ? sunAngleTime(M.maghrib, 18 / 24, '') : T.sunset;   // no Maghrib angle: at sunset
+    if (M.isha != null) T.isha = sunAngleTime(M.isha, 18 / 24, '');
 
     // AdjustTimes: time zone and longitude
     const adj = tz - longitude / 15;
@@ -136,13 +202,27 @@
     };
     T.imsak = adjustHL(T.imsak, T.sunrise, 'ccw');
     T.fajr = adjustHL(T.fajr, T.sunrise, 'ccw');
-    T.isha = adjustHL(T.isha, T.sunset, '');
-    T.maghrib = adjustHL(T.maghrib, T.sunset, '');
+    if (M.seasonal) {
+      // the later of the angle and the seasonal time; from 55 degrees of latitude the last seventh of the night (Sab'u Lail)
+      const seasonal = T.sunrise - seasonalFajrMinutes(latitude, year, month, day) / 60;
+      T.fajr = Math.abs(latitude) <= 55 ? Math.max(T.fajr, seasonal) : Math.max(seasonal, T.sunrise - night / 7);
+    }
+    if (M.isha != null) T.isha = adjustHL(T.isha, T.sunset, '');
+    else if (M.ishaMin != null) {
+      // Umm al-Qura: a fixed time after Maghrib, longer in Ramadan (the 9th Hijri month)
+      T.isha = T.maghrib + (hijriMonth(year, month, day) === 9 ? 120 : M.ishaMin) / 60;
+    }
+    if (M.maghrib != null) T.maghrib = adjustHL(T.maghrib, T.sunset, '');
+    if (M.seasonal) {
+      // the earlier of the angle and the seasonal time (white twilight in summer, red in winter); Sab'u Lail from 55 degrees
+      const seasonalIsha = T.sunset + seasonalIshaMinutes(latitude, year, month, day) / 60;
+      T.isha = Math.abs(latitude) <= 55 ? Math.min(T.isha, seasonalIsha) : Math.min(seasonalIsha, T.sunset + night / 7);
+    }
 
     // imsak is "10 min" before fajr
     T.imsak = T.fajr - 10 / 60;
-    // midnight (Jafari): sunset + half of (sunset to fajr)
-    T.midnight = T.sunset + timeDiff(T.sunset, T.fajr) / 2;
+    // midnight: sunset + half of (sunset to fajr) for Jafari-style methods, else half of (sunset to sunrise)
+    T.midnight = T.sunset + timeDiff(T.sunset, M.jafariMid ? T.fajr : T.sunrise) / 2;
 
     return {
       imsak: noZero(formatTime(T.imsak)),
@@ -167,6 +247,8 @@
    * @param {number} o.year, o.month, o.day   calendar date at the location
    * @param {number} o.timeZoneOffsetHours    UTC offset in hours for that date
    * @param {number} [o.elevationMeters=0]
+   * @param {string} [o.method]  calculation method id (default: the one set with setMethod, AzanGoo at start)
+   * @param {number} [o.asrFactor]  1 standard Asr, 2 Hanafi (default: the one set with setAsrFactor, 1)
    * @returns the C# output keys plus nextfajr (fajr of the next day, same offset)
    */
   function calculatePrayerTimes(o) {
@@ -177,11 +259,14 @@
     if (!Number.isFinite(tz)) throw new Error('timeZoneOffsetHours is required');
 
     const y = Number(o.year), m = Number(o.month), d = Number(o.day);
-    const res = computeDay(lat, lng, elev, y, m, d, tz);
+    const method = o.method != null ? methodOf(o.method) : currentMethod;
+    const asrF = o.asrFactor != null ? o.asrFactor : currentAsr;
+    const res = computeDay(lat, lng, elev, y, m, d, tz, method, asrF);
     const next = new Date(Date.UTC(y, m - 1, d + 1));
-    const nextDay = computeDay(lat, lng, elev, next.getUTCFullYear(), next.getUTCMonth() + 1, next.getUTCDate(), tz);
+    const nextDay = computeDay(lat, lng, elev, next.getUTCFullYear(), next.getUTCMonth() + 1, next.getUTCDate(), tz, method, asrF);
     res.nextfajr = nextDay.fajr;
     res.localDate = y + '-' + pad2(m) + '-' + pad2(d);
+    res.method = method;
     return res;
   }
 
@@ -232,11 +317,14 @@
     }
     return calculatePrayerTimes({
       latitude: o.latitude, longitude: o.longitude, year: y, month: m, day: d,
-      timeZoneOffsetHours: tz, elevationMeters: o.elevationMeters || 0
+      timeZoneOffsetHours: tz, elevationMeters: o.elevationMeters || 0, method: o.method, asrFactor: o.asrFactor
     });
   }
 
-  const api = { calculatePrayerTimes, calculateForNow, fajrAngleForLatitude, offsetAt, baseOffset };
+  const api = {
+    calculatePrayerTimes, calculateForNow, fajrAngleForLatitude, offsetAt, baseOffset,
+    METHOD_IDS, METHODS, methodsFor, methodOf, setMethod, getMethod, setAsrFactor, seasonalFajrMinutes, seasonalIshaMinutes
+  };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.AzangooPrayerTimes = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

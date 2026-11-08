@@ -142,6 +142,7 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .img-card img{display:block;width:100%;height:100%}
 .img-card.broken{visibility:hidden}
 .img-cap{flex:none;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 10px;max-width:100%;padding:6px 14px;border-radius:999px;background:rgba(6,16,22,.74);color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.img-note{flex:none;max-width:min(100%,34em);padding:0 12px;text-align:center;font-size:.7rem;line-height:1.55;color:#fff;opacity:.9;text-shadow:0 1px 4px rgba(0,0,0,.85)}
 .img-date{padding:2px 11px;border-radius:999px;background:linear-gradient(var(--gold2),var(--gold));color:var(--ink);font-weight:700;font-size:.8rem;white-space:nowrap}
 .img-title{font-weight:700;font-size:.95rem;line-height:1.5}
 .slide.in{animation:slide-in .55s ease both}
@@ -191,6 +192,7 @@ html[dir="rtl"] .st-flip svg{transform:scaleX(-1)}
 .hint{font-size:.82rem;opacity:.8;margin-top:10px}
 .hint-more-btn{text-decoration:underline;font-size:inherit}
 .hint[hidden]{display:none}
+.qibla[hidden]{display:none}
 
 /* thin moving gold bar at the bottom of the screen: "tap the page once" so the automatic adhan can play.
    Shown while the automatic adhan is on and the page has not been touched yet; any tap, click or key removes it. */
@@ -454,6 +456,7 @@ img,select,input,button{max-width:100%}
   --i-speaker:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M4 9.5v5h4l5 4v-13l-5 4z%22/%3E%3Cpath d=%22M16 9.2a4 4 0 0 1 0 5.6M18.6 6.6a8 8 0 0 1 0 10.8%22/%3E%3C/svg%3E");
   --i-calendar:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%224%22 y=%225.5%22 width=%2216%22 height=%2214.5%22 rx=%222%22/%3E%3Cpath d=%22M4 10h16M8.5 3.5v4M15.5 3.5v4%22/%3E%3C/svg%3E");
   --i-compass:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Ccircle cx=%2212%22 cy=%2212%22 r=%229%22/%3E%3Cpath d=%22M15.8 8.2l-2 5.6-5.6 2 2-5.6z%22/%3E%3C/svg%3E");
+  --i-method:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M4 7h8M18 7h2M4 17h2M12 17h8%22/%3E%3Ccircle cx=%2215%22 cy=%227%22 r=%222.4%22/%3E%3Ccircle cx=%229%22 cy=%2217%22 r=%222.4%22/%3E%3C/svg%3E");
   --i-save:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M5 4h11l3 3v13H5z%22/%3E%3Cpath d=%22M8 4v5h7V4M8 20v-6h8v6%22/%3E%3C/svg%3E");
   --i-mail:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Crect x=%223%22 y=%225.5%22 width=%2218%22 height=%2213%22 rx=%222%22/%3E%3Cpath d=%22M3.5 7l8.5 6.2L20.5 7%22/%3E%3C/svg%3E");
   --i-heart:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23000%22 stroke-width=%221.8%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpath d=%22M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0 1 12 7.4a4.2 4.2 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z%22/%3E%3C/svg%3E");
@@ -480,6 +483,7 @@ img,select,input,button{max-width:100%}
 /* 2) card titles and qibla */
 #t-h::before{--ic:var(--i-clock)}
 #sv-h::before{--ic:var(--i-save)}
+#meth-h::before{--ic:var(--i-method)}
 #mo-h::before{--ic:var(--i-phase)}
 #a-h::before{--ic:var(--i-speaker)}
 #cal-h::before{--ic:var(--i-calendar)}
@@ -732,6 +736,7 @@ html.hadith-open{overflow:hidden}
   .grid>.main-col>.card:first-child{order:1}
   .grid>.right-col{order:2}
   .grid>.side>.card:first-child{order:3}
+  .grid>.main-col>.card[aria-labelledby="meth-h"],
   .grid>.main-col>.card[aria-labelledby="sv-h"]{order:4}
   .grid>.side>.card:not(:first-child){order:5}
 }
@@ -772,3 +777,28 @@ html.hadith-open{overflow:hidden}
 .hm-menu button:hover,.hm-menu button:focus-visible{background:var(--gold);color:var(--ink);outline:none}
 .hm-menu button[aria-selected="true"]{background:rgba(210,169,75,.22);color:var(--heading)}
 .hm-menu button[aria-selected="true"]:hover,.hm-menu button[aria-selected="true"]:focus-visible{background:var(--gold);color:var(--ink)}
+
+
+/* calculation method: AzanGoo is always shown, the other methods open under "Other methods" */
+.methods{display:grid;gap:8px;font-size:.92rem}
+.methods[hidden]{display:none}
+.method-row{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:10px;background:var(--panel);border:1px solid transparent;cursor:pointer}
+.method-row input{accent-color:var(--gold);margin-top:.4em;flex:none}
+.method-row.on{border-color:var(--gold)}
+.method-row:focus-within{outline:2px solid var(--gold2);outline-offset:1px}
+.method-text{min-width:0}
+.method-text b{display:block;font-weight:700}
+.method-text small{display:block;font-size:.8rem;line-height:1.75;opacity:.82}
+.method-details{text-decoration:underline;white-space:nowrap}
+.method-more{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;margin-top:8px;padding:9px 2px 4px;border:0;border-top:1px solid var(--line);background:none;color:var(--heading);font:inherit;font-weight:700;cursor:pointer}
+.method-more:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.method-more .chev{width:1.1em;height:1.1em;flex:none;transition:transform .2s}
+.method-more[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.method-more+.methods{margin-top:8px}
+.calc-with{font-size:.8rem;opacity:.9;margin:-2px 0 8px}
+.calc-with a{text-decoration:underline}
+.unsaved{display:inline-block;margin-inline-start:8px;padding:0 9px;border:1px solid var(--gold);border-radius:999px;font-size:.72rem;font-weight:400;color:var(--text);white-space:nowrap;vertical-align:middle}
+.unsaved[hidden]{display:none}
+.card.is-dirty{border-color:var(--gold)}
+@media(prefers-reduced-motion:reduce){.method-more .chev{transition:none}}
+@media(max-width:600px){.methods{gap:6px;font-size:.86rem}.method-row{padding:7px 9px}.method-text small{font-size:.74rem}}

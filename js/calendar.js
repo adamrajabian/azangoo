@@ -161,6 +161,7 @@
     renderAnnual();
   });
   window.addEventListener('azan:langchange', function () { if (annualBox && annualBox.innerHTML) renderAnnual(); });
+  window.addEventListener('azan:methodchange', refreshAnnual);                    /* the calculation method changed: the year table is calculated again */
   window.addEventListener('azan:langchange', syncLang);
   syncLang();
 })();

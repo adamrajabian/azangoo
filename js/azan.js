@@ -777,21 +777,40 @@
   var nextDuaPlayer=new Audio();
   nextDuaPlayer.preload="metadata";
 
-  /* Ramadan duas (flag "ramadan" per Hijri month in data/doa.json). There are two sets of files; each set plays one file after
-     another in letter order and its last file ends 1 second before the adhan:
-       sahar = Dua_for_Sahar-A..H before the fajr adhan,  iftar = Dua-Eftar-A..I before the maghrib adhan.
+  /* Ramadan duas (flag "ramadan" per Hijri month in data/doa.json). Each kind has a folder of files that are played one after
+     another in the order of their names, and the last file ends 1 second before the adhan:
+       sahar = before the fajr adhan,  iftar = before the maghrib adhan.
+     There is a folder for Persian pages (fa) and one for all other languages (ar):
+       audio/doa/ramadan/dua-sahar-fa, dua-sahar-ar, dua-eftar-fa, dua-eftar-ar
      Where the flag is on, the Ramadan dua replaces the daily dua before fajr and before maghrib (dhuhr keeps the daily dua).
+     The lengths (seconds) are listed here so that the start time is known before the browser has loaded the files; the real
+     length is used as soon as the browser reports it. When a file is added or replaced, its length must be changed here too.
      One player plays a whole set; the other audio objects only read the lengths (and warm the cache shortly before the start).
      A person who arrives in the middle hears the rest, from that point. */
-  function ramFiles(prefix,letters){return letters.split("").map(function(x){return "audio/doa/ramadan/"+prefix+x+".mp3"})}
+  var RAM_POOL={
+    sahar:{fa:{dir:"audio/doa/ramadan/dua-sahar-fa/",files:[["Dua-Sahar-A.mp3",317.44],["Dua-Sahar-B.mp3",292.467],["Dua-Sahar-C.mp3",234.005],["Dua-Sahar-D.mp3",334.472],["Dua-Sahar-E.mp3",298.58],["Dua-Sahar-F.mp3",5.695],["Dua-Sahar-G.mp3",319.425],["Dua-Sahar-H.mp3",404.01]]},
+           ar:{dir:"audio/doa/ramadan/dua-sahar-ar/",files:[["Dua-Sahar-ar-501.mp3",43.285],["Dua-Sahar-ar-502.mp3",181.29],["Dua-Sahar-ar-503.mp3",120.398],["Dua-Sahar-ar-504.mp3",120.895],["Dua-Sahar-ar-505.mp3",125.179],["Dua-Sahar-ar-506.mp3",126.798],["Dua-Sahar-ar-507.mp3",77.871]]}},
+    iftar:{fa:{dir:"audio/doa/ramadan/dua-eftar-fa/",files:[["Dua-Eftar-A.mp3",62.433],["Dua-Eftar-B.mp3",164.441],["Dua-Eftar-C.mp3",134.635],["Dua-Eftar-D.mp3",158.093],["Dua-Eftar-E.mp3",135.393],["Dua-Eftar-F.mp3",56.764],["Dua-Eftar-G.mp3",143.099],["Dua-Eftar-H.mp3",78.811],["Dua-Eftar-I.mp3",69.721]]},
+           ar:{dir:"audio/doa/ramadan/dua-eftar-ar/",files:[["Dua-Eftar-ar-601.mp3",159.843],["Dua-Eftar-ar-602.mp3",158.772],["Dua-Eftar-ar-603.mp3",164.376],["Dua-Eftar-ar-604.mp3",152.372],["Dua-Eftar-ar-605.mp3",133.277],["Dua-Eftar-ar-606.mp3",139.154],["Dua-Eftar-ar-607.mp3",78.89],["Dua-Eftar-ar-608.mp3",69.721]]}}
+  };
   var RAM_SETS={
-    sahar:{kind:"fajr",timerKey:"dua_timer_sahar",files:ramFiles("Dua_for_Sahar-","ABCDEFGH"),
-           fallback:[317.44,292.467,234.005,334.472,298.58,5.695,319.426,404.01]},          /* lengths in seconds, used until the browser reports the real ones */
-    iftar:{kind:"maghrib",timerKey:"dua_timer_iftar",files:ramFiles("Dua-Eftar-","ABCDEFGHI"),
-           fallback:[62.454,164.452,134.646,158.114,135.414,56.785,143.12,78.833,69.721]}
+    sahar:{name:"sahar",kind:"fajr",timerKey:"dua_timer_sahar",files:[],fallback:[]},
+    iftar:{name:"iftar",kind:"maghrib",timerKey:"dua_timer_iftar",files:[],fallback:[]}
   };
   var RAM_LIST=[RAM_SETS.sahar,RAM_SETS.iftar];
-  RAM_LIST.forEach(function(S){S.pre=null;S.warm=false;S.busy=false});
+  /* the files for the language of the page */
+  function ramPick(name){
+    var pool=RAM_POOL[name][window.AzanLang.current()==="fa"?"fa":"ar"];
+    return {files:pool.files.map(function(f){return pool.dir+f[0]}),durs:pool.files.map(function(f){return f[1]})};
+  }
+  function ramSelect(S){
+    if(ramCur===S&&ramChain)return;                          /* never change the files of a set that is playing */
+    var p=ramPick(S.name);
+    if(S.files.join("|")===p.files.join("|"))return;
+    S.files=p.files; S.fallback=p.durs;
+    S.pre=null; S.warm=false;                                /* other files: read their lengths again */
+  }
+  RAM_LIST.forEach(function(S){S.pre=null;S.warm=false;S.busy=false;ramSelect(S)});
   var ramPlayer=new Audio();
   ramPlayer.preload="auto";
   var ramLoadSec=0;                                          /* measured loading time of a file, used to plan the next one */
@@ -976,6 +995,7 @@
   }
   /* a Ramadan dua (set S) before its adhan: the files in a row; someone who arrives in the middle hears the rest */
   function checkRamSet(S,nowMs,day){
+    ramSelect(S);                                            /* the files for the language of the page */
     ramPrepare(S);
     var m=toMin(lastTimes[S.kind]);
     if(m===null)return;
@@ -1046,6 +1066,7 @@
     }
     if(ramOn){
       RAM_LIST.forEach(function(S){
+        ramSelect(S);
         ramPrepare(S);
         var mm=toMin(lastTimes[S.kind]);
         if(mm===null)return;
@@ -1058,6 +1079,7 @@
     var d2=new Date(d.getTime()+86400000), fn=toMin(lastTimes.fajrNext);
     if(fn===null){duaTimerEl.textContent="";return}
     if(ramadanOn(d2)){
+      ramSelect(RAM_SETS.sahar);
       ramPrepare(RAM_SETS.sahar);
       show(fn*60-1-ramTotal(RAM_SETS.sahar)+86400,RAM_SETS.sahar.timerKey,d2.getUTCDay(),"fajr");
       return;
@@ -1105,6 +1127,78 @@
   var defaults=null;
   try{defaults=JSON.parse(localStorage.getItem(DEF_KEY))}catch(e){defaults=null}
 
+  /* ---------- calculation method ----------
+     AzanGoo is chosen and shown first; the other methods of the language open under "Other methods". The choice is applied at once,
+     and the save button keeps it (defaults.method) like the other settings. Until it is saved a small "not saved" mark shows on the save card. */
+  var refreshMethodUi=function(){};
+  (function(){
+    var PT=window.AzangooPrayerTimes,A=window.AzanLang,card=document.getElementById("methodCard");
+    if(!PT||!card)return;
+    PT.setMethod(defaults&&defaults.method);                       /* before the first calculation */
+    var listEl=document.getElementById("methodList"),moreBtn=document.getElementById("methodMore"),othersEl=document.getElementById("methodOthers"),
+        moonNote=document.getElementById("methodMoonNote"),withEl=document.getElementById("calcWithName"),
+        unsavedEl=document.getElementById("unsaved"),changeLink=document.getElementById("calcChange");
+    var esc=function(x){return String(x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")};
+    var n=function(x){return A.num(x)};
+    function savedId(){try{var c=JSON.parse(localStorage.getItem(DEF_KEY));return PT.methodOf(c&&c.method)}catch(e){return "azangoo"}}
+    function hint(id){
+      var M=PT.METHODS[id];
+      if(id==="azangoo")return A.t("m_azangoo_hint",{1:n(18),2:n(12),3:n(4),4:n(15)});
+      if(M.seasonal)return A.t("m_hint_seasonal",{1:n(M.fajr),2:n(M.maghrib)});
+      if(M.ishaMin!=null)return A.t("m_hint_makkah",{1:n(M.fajr),2:n(M.ishaMin),3:n(120)});
+      if(M.maghrib!=null)return A.t("m_hint_angles",{1:n(M.fajr),2:n(M.maghrib),3:n(M.isha)});
+      return A.t("m_hint_sunset",{1:n(M.fajr),2:n(M.isha)});
+    }
+    function row(id){
+      var on=id===PT.getMethod();
+      return '<label class="method-row'+(on?' on':'')+'"><input type="radio" name="calcMethod" value="'+id+'"'+(on?' checked':'')+'>'+
+        '<span class="method-text"><b>'+esc(A.t("m_"+id))+'</b><small>'+esc(hint(id))+
+        (id==="azangoo"?' <a href="#" class="method-details">'+esc(A.t("m_more_details"))+'</a>':'')+'</small></span></label>';
+    }
+    function setMore(open){othersEl.hidden=!open;moreBtn.setAttribute("aria-expanded",open?"true":"false")}
+    function renderRows(){
+      var ids=PT.methodsFor(A.current()),cur=PT.getMethod();
+      if(ids.indexOf(cur)<0)ids.push(cur);                       /* a saved method that this language does not list stays visible: the choice is never lost */
+      listEl.innerHTML=row("azangoo");
+      othersEl.innerHTML=ids.filter(function(id){return id!=="azangoo"}).map(row).join("");
+      if(cur!=="azangoo")setMore(true);
+    }
+    function paintState(){
+      var cur=PT.getMethod();
+      withEl.textContent=A.t("m_"+cur);
+      moonNote.hidden=cur!=="moonsighting";
+      var dirty=cur!==savedId();
+      unsavedEl.hidden=!dirty;
+      var sv=unsavedEl.closest(".card");if(sv)sv.classList.toggle("is-dirty",dirty);
+    }
+    refreshMethodUi=paintState;
+    renderRows();setMore(PT.getMethod()!=="azangoo");paintState();
+    moreBtn.addEventListener("click",function(){setMore(othersEl.hidden)});
+    card.addEventListener("change",function(e){
+      var t=e.target;if(!t||t.name!=="calcMethod")return;
+      PT.setMethod(t.value);
+      Array.prototype.forEach.call(card.querySelectorAll(".method-row"),function(r){r.classList.toggle("on",r.querySelector("input").checked)});
+      paintState();
+      recalc();                                                  /* the times change at once */
+      window.dispatchEvent(new CustomEvent("azan:methodchange",{detail:{method:t.value}}));
+    });
+    card.addEventListener("click",function(e){
+      var d=e.target.closest&&e.target.closest(".method-details");
+      if(!d)return;
+      e.preventDefault();e.stopPropagation();
+      var dlg=document.getElementById("aboutDlg");
+      if(dlg){if(dlg.showModal)dlg.showModal();else dlg.setAttribute("open","")}
+    });
+    if(changeLink)changeLink.addEventListener("click",function(e){
+      e.preventDefault();
+      if(PT.getMethod()!=="azangoo")setMore(true);
+      var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      card.scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});
+      var cur=card.querySelector('input[name="calcMethod"]:checked');if(cur)cur.focus({preventScroll:true});
+    });
+    window.addEventListener("azan:langchange",function(){renderRows();paintState()});
+  })();
+
   /* voice and auto-play: saved values if there are any, otherwise the values in the page */
   if(defaults&&defaults.voice){
     var voiceExists=false;
@@ -1143,10 +1237,12 @@
     Array.prototype.forEach.call(voices,function(r){if(r.checked)voice=r.value});
     var ll=marker.getLatLng();
     var data={place:{lat:ll.lat,lng:ll.lng,city:cityEl.value||""},voice:voice,auto:autoEl.checked,lang:window.AzanLang.current(),theme:window.AzanTheme?window.AzanTheme.current():"dark"};
+    if(window.AzangooPrayerTimes)data.method=window.AzangooPrayerTimes.getMethod();
     try{
       localStorage.setItem(DEF_KEY,JSON.stringify(data));
       saveMsg.textContent=window.AzanLang.t("saved");
       refreshClear();
+      refreshMethodUi();
     }catch(e){saveMsg.textContent=window.AzanLang.t("save_fail");}
   }
   /* saving asks first, in a small pop-up */
@@ -1177,6 +1273,7 @@
       try{ localStorage.removeItem(DEF_KEY); }catch(e){}
       saveMsg.textContent=window.AzanLang.t("clear_done");
       refreshClear();
+      refreshMethodUi();
     });
     document.getElementById("clearNo").addEventListener("click",closeClearDlg);
   }

@@ -452,6 +452,7 @@
         dur: Math.max(0, Math.round(lastEv.lag))
       };
       out.cur = entry ? names[(+entry.hijriMonth - 1 + 12) % 12] : hijriName(start, off);
+      out.hijriMonth = names.indexOf(out.cur) + 1;                   /* 1 = Muharram ... 12 = Dhu al-Hijjah, for the other scripts of the site */
       out.next = entry ? names[(+entry.hijriMonth) % 12] : hijriName(nextStart, off);
       out.nextStart = nextStart;
       out.official = !!entry;
@@ -476,6 +477,7 @@
     try { o = compute(state.lat, state.lng, state.off, Date.now()); }
     catch (err) { return; }
     lastOut = o;
+    try { window.dispatchEvent(new CustomEvent("azan:hijri")); } catch (e) { /* old browser: the other scripts read MoonInfo.current() when they next run */ }
     put("mNow", root.AzanLang.percent(o.illumNow.toFixed(2)));
     put("mRise", o.rise ? hm(o.rise.t, state.off) : "—");
     put("mRiseDir", o.rise ? dirText(o.rise.az) : "");

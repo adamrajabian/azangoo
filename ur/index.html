@@ -48,7 +48,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&family=Amiri+Quran&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'">
-<link rel="stylesheet" href="css/azan.css?v=20261188">
+<link rel="stylesheet" href="css/azan.css?v=20261191">
 <link rel="stylesheet" href="css/moon.css?v=20261165">
 </head>
 <body>
@@ -91,6 +91,7 @@
       <section class="card" aria-labelledby="t-h">
       <h2 id="t-h"><span data-i18n="times_title">آج کے اوقات نماز</span></h2>
       <p class="place" id="place"></p>
+      <p class="calc-with"><span data-i18n="calc_with">حساب کا طریقہ</span>: <b id="calcWithName"></b> · <a href="#methodCard" id="calcChange" data-i18n="calc_change">تبدیل کریں</a></p>
       <ul class="times">
         <li><span><span data-i18n="fajr">فجر کی اذان</span></span><time data-t="fajr">6:09</time></li>
         <li><span><span data-i18n="sunrise">طلوع آفتاب</span></span><time data-t="sunrise">7:28</time></li>
@@ -149,9 +150,18 @@
       <p class="hint"><span data-i18n="map_hint">جگہ بدلنے کے لیے نقشے پر ڈبل کلک کریں یا نشان کو کھینچیں۔</span></p>
     </section>
 
+      <section class="card" id="methodCard" aria-labelledby="meth-h">
+        <h2 id="meth-h"><span data-i18n="method_title">اوقات کے حساب کا طریقہ</span></h2>
+        <div class="methods" id="methodList" role="radiogroup" aria-labelledby="meth-h"></div>
+        <button type="button" class="method-more" id="methodMore" aria-expanded="false" aria-controls="methodOthers"><span data-i18n="method_more">دوسرے طریقے</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="methods" id="methodOthers" role="radiogroup" aria-labelledby="meth-h" hidden></div>
+        <p class="hint" data-i18n="method_note">طریقہ بدلنے سے صرف فجر، مغرب، عشاء اور نصف شب بدلتے ہیں؛ ظہر، طلوع، غروب اور عصر ہر طریقے میں ایک جیسے ہیں۔ اذان کے اوقات بھی فوراً نئے طریقے کے مطابق ہو جاتے ہیں۔</p>
+        <p class="hint" id="methodMoonNote" data-i18n="m_moonsighting_note" hidden>Moonsighting.com کے شائع شدہ طریقے (خالد شوکت) پر مبنی: فجر کا زاویہ مقرر نہیں، یہ موسم اور عرض بلد کے ساتھ بدلتا ہے۔ عشاء بھی اسی طرح موسم کے ساتھ بدلتی ہے (عمومی شفق) اور ۱۸° کے وقت سے کبھی دیر سے نہیں ہوتی۔ سردیوں میں فجر عام طور پر مقررہ زاویے والے طریقوں (جیسے ۱۵°) سے چند منٹ پہلے ہوتا ہے۔ یہ ایپ اس سائٹ سے وابستہ نہیں ہے۔ اگر آپ کی مسجد یا مرجع کوئی اور طریقہ استعمال کرتا ہے تو وہی منتخب کریں۔</p>
+      </section>
+
       <section class="card" aria-labelledby="sv-h">
-        <h2 id="sv-h"><span data-i18n="save_title">مقام اور ترتیبات محفوظ کریں</span></h2>
-      <p class="hint save-sub" data-i18n="save_sub">نقشے پر مقام، اذان کی آواز، خودکار پلے، زبان اور گہرا/روشن تھیم اسی براؤزر میں محفوظ ہوتے ہیں۔</p>
+        <h2 id="sv-h"><span data-i18n="save_title">مقام اور ترتیبات محفوظ کریں</span> <span class="unsaved" id="unsaved" role="status" data-i18n="unsaved" hidden>● محفوظ نہیں</span></h2>
+      <p class="hint save-sub" data-i18n="save_sub">نقشے پر مقام، اذان کی آواز، حساب کا طریقہ، خودکار پلے، زبان اور گہرا/روشن تھیم اسی براؤزر میں محفوظ ہوتے ہیں۔</p>
       <button type="button" id="saveDefaults" class="btn save-btn save-wide"><span data-i18n="save_btn">اگلی بار کے لیے محفوظ کریں</span></button>
       <p class="msg" id="saveMsg" role="status"></p>
       <button type="button" class="link-btn clear-btn" id="clearDefaults" data-i18n="clear_btn" hidden>محفوظ شدہ ترتیبات حذف کریں</button>
@@ -238,7 +248,7 @@
       <a class="city-list-btn" id="cityListLink" href="ur/prayer-times/index.html" data-i18n="city_list_btn">شہروں کی فہرست</a>
     </div>
     <dialog class="contact-dlg save-dlg" id="saveDlg">
-      <p data-i18n="save_q">آپ کی موجودہ ترتیبات (نقشے پر مقام، اذان کی آواز، خودکار اذان اور دعا، زبان اور گہرا/روشن تھیم) اسی براؤزر میں محفوظ ہوں گی اور اگلی بار خودبخود لوڈ ہوں گی۔ پہلے سے محفوظ ترتیبات بدل جائیں گی۔ کیا محفوظ کریں؟</p>
+      <p data-i18n="save_q">آپ کی موجودہ ترتیبات (نقشے پر مقام، اذان کی آواز، حساب کا طریقہ، خودکار اذان اور دعا، زبان اور گہرا/روشن تھیم) اسی براؤزر میں محفوظ ہوں گی اور اگلی بار خودبخود لوڈ ہوں گی۔ پہلے سے محفوظ ترتیبات بدل جائیں گی۔ کیا محفوظ کریں؟</p>
       <div class="save-actions">
         <button type="button" class="btn save-yes" id="saveYes"><span data-i18n="yes">ہاں</span></button>
         <button type="button" class="btn save-no" id="saveNo"><span data-i18n="no">نہیں</span></button>
@@ -306,17 +316,17 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>window.L||document.write('<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"><\/script>')</script>
-<script src="js/lang.js?v=20261187"></script>
+<script src="js/lang.js?v=20261191"></script>
 <script src="js/official.js?v=20261120"></script>
-<script src="js/azangoo-prayer-times.js"></script>
-<script src="js/moon-info.js?v=20261161"></script>
+<script src="js/azangoo-prayer-times.js?v=20261190"></script>
+<script src="js/moon-info.js?v=20261189"></script>
 <script src="js/calendar-pdf.js?v=20261109"></script>
 <script src="js/contact.js?v=20261145"></script>
 <script src="js/theme.js"></script>
 <script src="js/header-menu.js?v=2"></script>
-<script src="js/calendar.js?v=20261102"></script>
-<script src="js/azan.js?v=20261187"></script>
+<script src="js/calendar.js?v=20261190"></script>
+<script src="js/azan.js?v=20261190"></script>
 <script src="js/hadith.js?v=20261173"></script>
-<script src="js/ayah.js?v=20261187"></script>
+<script src="js/ayah.js?v=20261192"></script>
 </body>
 </html>

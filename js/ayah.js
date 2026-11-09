@@ -21,7 +21,7 @@
 
   var IDLE_MS = 60 * 1000;            /* the slides return after this long without any use of the map */
   var TIERS = [[2.3, 1.28], [2.05, 1.16], [1.8, 1.08], [1.55, 1.0], [1.35, .95], [1.2, .9], [1.1, .86]];   /* font sizes in rem: [Arabic, translation] */
-  var SHOW_VERSE = true;              /* false: only the pictures (the verse is still shown if there are no pictures) */
+  var SHOW_VERSE = false;             /* false: only the pictures (the verse is still shown if there are no pictures); the verse of the day lives in the hadith bar (js/hadith.js) */
   var IMG_MS = 8000, IMG_DIR = "images/events/";
   var cache = {}, surahs = null;
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;

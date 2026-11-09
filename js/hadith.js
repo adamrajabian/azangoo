@@ -1,5 +1,6 @@
-/* Hadith of the day.
-   A thin ticker under the date tiles shows today's hadith in the page language; tapping it opens the full text
+/* Hadith of the day and verse of the day.
+   A thin ticker under the date tiles shows today's hadith in the page language, then (after the text has gone by once) the
+   verse of the day, then the hadith again; tapping it opens the full text
    (narrator, Arabic text, translation, source) in a dialog. The ticker pauses on hover and stops moving for people who
    asked their device for less motion (see the CSS).
    Data: data/hadith-<lang>.json, one file per language, 366 entries, each { n: narrator, a: Arabic text, t: translation,
@@ -10,41 +11,106 @@
   var track=document.getElementById("hadithTrack"),open=document.getElementById("hadithOpen"),
       modal=document.getElementById("hadithModal"),close=document.getElementById("hadithClose"),
       el={n:document.getElementById("hadithN"),a:document.getElementById("hadithA"),t:document.getElementById("hadithT"),s:document.getElementById("hadithS")};
-  var cache={},shownKey="",lastFocus=null;
+  var cache={},shownKey="",lastFocus=null,items=[],cur=0,rotT=0,reqId=0;
+  var tag=bar.querySelector(".hadith-tag"),modalT=document.getElementById("hadithModalT");
+  var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var QS=new URLSearchParams(location.search);
 
+  function p2(n){return (n<10?"0":"")+n}
   function dayIndex(){
     var d=new Date();
     var doy=Math.round((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(d.getFullYear(),0,0))/864e5);   /* 1..366 */
     return (doy-1)%366;
   }
-  function load(lang){
-    if(cache[lang])return cache[lang];
-    cache[lang]=fetch("data/hadith-"+lang+".json").then(function(r){
+  function getJson(url){
+    if(cache[url])return cache[url];
+    cache[url]=fetch(url).then(function(r){
       if(!r.ok)throw new Error(r.status);
       return r.json();
-    }).catch(function(){cache[lang]=null;return null});
-    return cache[lang];
+    }).catch(function(){cache[url]=null;return null});
+    return cache[url];
   }
-  function show(){
-    var lang=window.AzanLang?window.AzanLang.current():"fa",i=dayIndex(),key=lang+":"+i;
-    if(key===shownKey)return;
-    load(lang).then(function(list){
-      if(!list||!list.length){if(!alertOn)bar.hidden=true;return}
-      var h=list[i%list.length];
-      shownKey=key;
-      track.setAttribute("lang",lang);
-      track.textContent=h.n+(h.n?": ":"")+(h.t||h.a||"");
-      el.n.textContent=h.n||"";
-      el.a.textContent=h.a||"";
-      el.t.textContent=h.t||"";
-      el.s.textContent=h.s||"";
-      el.t.setAttribute("lang",lang);
-      if(!alertOn)bar.hidden=false;
-      /* about 50 pixels a second, whatever the length of the text */
-      requestAnimationFrame(function(){
-        var w=track.scrollWidth||800;
-        track.style.setProperty("--hadith-dur",Math.max(20,Math.min(150,Math.round(w/50)))+"s");
+  function load(lang){return getJson("data/hadith-"+lang+".json")}
+
+  /* ---- the verse of the day shares this bar: the bar shows the hadith, then the verse, one after the other ----
+     Data: data/ayah/<lang>-<MM>.json (days: { "MM-DD": [ entry per year ] }, an entry is a list of units { r, a, t, tl }),
+     surah names: data/surahs.json. ?date=2026-06-25 shows the verse of that date (test only). */
+  function testDate(){
+    var m=/^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(QS.get("date")||"");
+    return m?new Date(+m[1],+m[2]-1,+m[3]):null;
+  }
+  function refLabel(r,surahs,lang){
+    var A=window.AzanLang;
+    if(!r)return "";
+    var m=/^(\d+):(.+)$/.exec(r);
+    if(!m||r.indexOf(";")>-1||!surahs)return A.t("ayah_quran",{r:A.num(r)});
+    var names=lang==="fa"?surahs.fa:(lang==="en"?surahs.en:surahs.ar),c=+m[1];
+    return A.t(/[–-]/.test(m[2])?"ayah_ref_many":"ayah_ref_one",{s:names[c-1]||c,c:A.num(c),v:A.num(m[2])});
+  }
+  function ayahItem(lang,d){
+    var mm=p2(d.getMonth()+1);
+    return Promise.all([getJson("data/ayah/"+lang+"-"+mm+".json"),getJson("data/surahs.json")]).then(function(r){
+      var doc=r[0],e=doc&&doc.days&&doc.days[mm+"-"+p2(d.getDate())];
+      if(!e||!e.length||!window.AzanLang)return null;
+      var units=e[d.getFullYear()%e.length];
+      if(!units||!units.length)return null;
+      var refs=[],ar=[],tr=[],tl=lang;
+      units.forEach(function(u){
+        if(u.r)refs.push(refLabel(u.r,r[1],lang));
+        if(u.a)ar.push(u.a);
+        if(u.t)tr.push(u.t);
+        if(u.tl)tl=u.tl;
       });
+      return {tag:"ayah_title",n:refs.join(lang==="en"?", ":"، "),a:ar.join(" "),t:tr.join(" "),s:"",lang:tl};
+    });
+  }
+  /* put item number cur on the bar and in the dialog */
+  function render(){
+    var it=items[cur],A=window.AzanLang;
+    if(!it)return;
+    if(A){
+      var ti=A.t(it.tag);
+      tag.textContent=ti;bar.setAttribute("aria-label",ti);
+      if(modalT)modalT.textContent=ti;
+    }
+    track.setAttribute("lang",it.lang);
+    track.textContent=it.n+(it.n?": ":"")+(it.t||it.a||"");
+    el.n.textContent=it.n||"";
+    el.a.textContent=it.a||"";
+    el.t.textContent=it.t||"";
+    el.s.textContent=it.s||"";
+    el.t.setAttribute("lang",it.lang);
+    /* about 50 pixels a second, whatever the length of the text */
+    requestAnimationFrame(function(){
+      var w=track.scrollWidth||800;
+      track.style.setProperty("--hadith-dur",Math.max(20,Math.min(150,Math.round(w/50)))+"s");
+    });
+  }
+  function next(){
+    if(items.length<2||!modal.hidden)return;           /* never change the text under someone who is reading it */
+    cur=(cur+1)%items.length;
+    render();
+  }
+  /* the next text starts when the moving text has gone by once; with reduced motion nothing moves, so a timer is used */
+  track.addEventListener("animationiteration",function(){if(!reduce)next()});
+  function show(){
+    var A=window.AzanLang,lang=A?A.current():"fa",dt=testDate()||new Date(),i=dayIndex(),key=lang+":"+i+":"+dt.getMonth()+"-"+dt.getDate();
+    if(key===shownKey)return;
+    var tok=++reqId;
+    Promise.all([load(lang),ayahItem(lang,dt).catch(function(){return null})]).then(function(r){
+      if(tok!==reqId)return;
+      var list=r[0],out=[];
+      if(list&&list.length){
+        var h=list[i%list.length];
+        out.push({tag:"hadith_title",n:h.n||"",a:h.a||"",t:h.t||"",s:h.s||"",lang:lang});
+      }
+      if(r[1])out.push(r[1]);
+      if(!out.length){if(!alertOn)bar.hidden=true;return}
+      shownKey=key;items=out;cur=0;
+      render();
+      if(!alertOn)bar.hidden=false;
+      clearInterval(rotT);
+      if(reduce&&items.length>1)rotT=setInterval(next,12000);
     });
   }
   function openDialog(){

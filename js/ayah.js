@@ -106,7 +106,6 @@
   }
   /* occasions whose day depends on the start of a lunar month: their caption carries a small note that the date follows the
      lunar-month forecast of the site */
-  var MOON_DEPENDENT = { start_ramadan: 1, laylat_qadr: 1, eid_fitr: 1, arafah: 1, eid_qurban: 1, tasua_abbas: 1, ashura: 1, ashura_ziyarat: 1 };
   /* the picture slides of today: the occasion of the day, the Ramadan dua of the day, the occasions of the whole month,
      and the default pictures when there is nothing else */
   function imagePages(ev, h, lang) {
@@ -115,7 +114,7 @@
     function add(e, kind, extra) { var o = { img: e, kind: kind }; for (var k in extra) o[k] = extra[k]; out.push(o); }
     (ev.events[key + pad(h.d)] || []).forEach(function (e) {
       var ti = ev.titles && ev.titles[e.s];
-      add(e, "day", { title: ti ? (ti[lang] || ti.fa) : "", date: A.num(h.d) + " " + mName, note: !!MOON_DEPENDENT[e.s] });
+      add(e, "day", { title: ti ? (ti[lang] || ti.fa) : "", date: A.num(h.d) + " " + mName });
     });
     if (h.m === 9) {
       var dua = ev.dua && ev.dua[pad(h.d)];
@@ -178,8 +177,7 @@
   function fillImage(box, pg) {
     box.textContent = "";
     var w = pg.img.w, h = pg.img.h, hasCap = pg.kind === "day" && pg.title;
-    var hasNote = hasCap && pg.note;
-    var aw = el.body.clientWidth - 6, ah = el.body.clientHeight - (hasCap ? 54 : 6) - (hasNote ? 52 : 0);
+    var aw = el.body.clientWidth - 6, ah = el.body.clientHeight - (hasCap ? 54 : 6);
     var sc = Math.max(0.1, Math.min(aw / w, ah / h, 1.6));              /* small pictures are enlarged a little, never stretched to fill */
     var card = document.createElement("figure"), im = document.createElement("img");
     card.className = "img-card"; card.style.width = Math.round(w * sc) + "px"; card.style.height = Math.round(h * sc) + "px";
@@ -191,7 +189,6 @@
       var d1 = document.createElement("span"); d1.className = "img-date"; d1.textContent = pg.date;
       var d2 = document.createElement("span"); d2.className = "img-title"; d2.textContent = pg.title;
       cap.appendChild(d1); cap.appendChild(d2); box.appendChild(cap);
-      if (hasNote) { var nt = document.createElement("div"); nt.className = "img-note"; nt.textContent = t("ev_note"); box.appendChild(nt); }
     }
   }
   function fill(box, pg) {
@@ -334,6 +331,9 @@
     var slides = !stage.hidden && !S.mapMode;
     if (qiblaNote) qiblaNote.hidden = slides;
     if (mapHint && mapHint.classList.contains("hint")) mapHint.hidden = slides;
+    /* one general sentence under the frame for all the occasion slides (dates follow the lunar-month forecast) */
+    var evNote = document.getElementById("slidesNote");
+    if (evNote) evNote.hidden = !(slides && S.doc && S.doc.imgs.some(function (p) { return p.kind !== "default"; }));
   }
   function setInert(node, on) {
     if (!node) return;

@@ -142,7 +142,6 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .img-card img{display:block;width:100%;height:100%}
 .img-card.broken{visibility:hidden}
 .img-cap{flex:none;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 10px;max-width:100%;padding:6px 14px;border-radius:999px;background:rgba(6,16,22,.74);color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.img-note{flex:none;max-width:min(100%,34em);padding:0 12px;text-align:center;font-size:.7rem;line-height:1.55;color:#fff;opacity:.9;text-shadow:0 1px 4px rgba(0,0,0,.85)}
 .img-date{padding:2px 11px;border-radius:999px;background:linear-gradient(var(--gold2),var(--gold));color:var(--ink);font-weight:700;font-size:.8rem;white-space:nowrap}
 .img-title{font-weight:700;font-size:.95rem;line-height:1.5}
 .slide.in{animation:slide-in .55s ease both}
@@ -192,6 +191,8 @@ html[dir="rtl"] .st-flip svg{transform:scaleX(-1)}
 .hint{font-size:.82rem;opacity:.8;margin-top:10px}
 .hint-more-btn{text-decoration:underline;font-size:inherit}
 .hint[hidden]{display:none}
+.slides-note{margin:8px 4px 0;text-align:center;font-size:.74rem;line-height:1.7;color:var(--muted);opacity:.9}
+.slides-note[hidden]{display:none}
 .qibla[hidden]{display:none}
 
 /* thin moving gold bar at the bottom of the screen: "tap the page once" so the automatic adhan can play.

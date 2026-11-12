@@ -205,7 +205,9 @@
           if (!units.length) units = null;
         }
         var lm = r[3] && r[3].days ? r[3] : null;
-        var imgs = imagePages(r[2], h, lang, !!lm);
+        /* the pictures carry Persian writing, and the verse lives in the hadith bar: other languages show only the event cards */
+        var pics = lang === "fa", imgs = pics ? imagePages(r[2], h, lang, !!lm) : [];
+        if (!pics) units = null;
         return evPages(lm, h, lang).then(function (evt) {
           if (!units && !imgs.length && !evt.length) return null;
           return { units: units || [], imgs: imgs, evt: evt, aboutShown: aboutShown, key: lang + ":" + dayKey(d) + ":" + h.m + "-" + h.d + (lm ? ":ev" : "") };
@@ -438,9 +440,19 @@
     drawDots();
     go(start);
   }
+  /* nothing to show for this language and day: the slideshow goes away and the map is there as it was */
+  function hideStage() {
+    S.doc = null; S.pages = [];
+    clearTimeout(S.timer); clearTimeout(S.idle);
+    S.mapMode = false; frame.classList.remove("is-map");
+    setInert(stage, false); if (hasMap()) setInert(mapEl, false);
+    closeDlg();
+    stage.hidden = true;
+    syncNotes();
+  }
   function refresh(keepUnit) {
     return load().then(function (r) {
-      if (!r) return;
+      if (!r) { hideStage(); return; }
       var changed = !S.doc || S.doc.key !== r.key;
       S.doc = r;
       if (stage.hidden) { stage.hidden = false; stage.classList.add("fade-in"); }

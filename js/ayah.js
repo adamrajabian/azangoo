@@ -141,8 +141,8 @@
   function evCard(id, it, date, items) {
     return { ev: id, date: date, title: it.title, excerpt: excerpt(it.text), items: items, more: it.text.length > 110 || it.sources.length > 0 };
   }
-  function evItems(list, date) {
-    return list.map(function (e) { return { title: e.title || "", text: e.text || "", sources: e.sources || [], date: date }; });
+  function evItems(list, date, doc) {
+    return list.map(function (e) { return { title: e.title || "", text: e.text || "", sources: e.sources || [], date: date, hon: (doc && doc.honorifics) || null }; });
   }
   function nextDay(doc, d) {
     var best = 0;
@@ -154,7 +154,7 @@
   }
   function nextCard(doc, day, h, date, m2) {
     var m = m2 || h.m, label = A.num(day) + " " + A.names("hijri")[m - 1];
-    var it = evItems(evOf(doc, String(day)), label)[0];
+    var it = evItems(evOf(doc, String(day)), label, doc)[0];
     var c = evCard("n" + m + "-" + day, it, date, [it]);
     c.next = true;
     c.when = m2 ? t("ev_on_date", { d: label }) : (day - h.d === 1 ? t("ev_tomorrow", { d: label }) : t("ev_in_days", { n: A.num(day - h.d), d: label }));
@@ -164,7 +164,7 @@
     if (!doc) return Promise.resolve([]);
     var date = A.num(h.d) + " " + A.names("hijri")[h.m - 1], list = evOf(doc, String(h.d));
     if (list.length) {
-      var items = evItems(list, date), out = items.slice(0, EV_MAX).map(function (it, i) { return evCard("e" + h.m + "-" + h.d + "-" + i, it, date, [it]); });
+      var items = evItems(list, date, doc), out = items.slice(0, EV_MAX).map(function (it, i) { return evCard("e" + h.m + "-" + h.d + "-" + i, it, date, [it]); });
       if (items.length > EV_MAX) out.push({ ev: "all" + h.m + "-" + h.d, all: true, date: date, count: items.length, items: items, more: true,
         title: t("ev_list_title", { d: date }), excerpt: items.slice(EV_MAX).map(function (x) { return x.title; }).join(" • ") });
       return Promise.resolve(out);
@@ -296,10 +296,17 @@
       });
     } else {
       var it = pg.items[idx];
-      title.textContent = it.title;
+      title.textContent = it.title || it.date;
       body.appendChild(mk("p", "ev-dateline", it.date));
       body.appendChild(mk("p", "ev-full", it.text));
       if (it.sources.length) body.appendChild(mk("p", "hadith-src", t("ev_src") + ": " + it.sources.join(" ")));
+      /* what the abbreviations used in this text mean, e.g. (PBUH) */
+      var used = it.hon ? Object.keys(it.hon).filter(function (k) { return it.text.indexOf(k) > -1; }) : [];
+      if (used.length) {
+        var lg = mk("div", "ev-legend", "");
+        used.forEach(function (k) { lg.appendChild(mk("p", "", k + " — " + it.hon[k])); });
+        body.appendChild(lg);
+      }
     }
     dlg.querySelector(".hadith-card").scrollTop = 0;
   }

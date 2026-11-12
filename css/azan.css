@@ -154,6 +154,7 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .slide-ar:empty,.slide-tr:empty,.slide-ref:empty,.slide-ar:empty+.slide-orn{display:none}
 /* event cards of the Hijri day */
 .ev-dateline{flex:none;margin:0;color:var(--heading);font-weight:700;font-size:.95rem}
+.ev-title:empty,.ev-full:empty,.ev-row p:empty{display:none}
 .ev-title{margin:0;font-size:1.1rem;line-height:1.55;font-weight:800;color:var(--heading);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .ev-text{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:1rem;line-height:1.8}
 @media(min-width:480px){.ev-text{-webkit-line-clamp:4}}
@@ -168,6 +169,8 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .ev-dlg h3{margin:0 0 8px;color:var(--heading);font-size:1.1rem;line-height:1.7;padding-inline-end:34px}
 .ev-date{display:inline-block}
 .ev-full{margin:10px 0;line-height:2.05;white-space:pre-line}
+.ev-legend{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:.8rem;line-height:1.7;color:var(--muted)}
+.ev-legend p{margin:0 0 4px}
 .ev-row{padding:12px 0;border-top:1px solid var(--line)}
 .ev-row h4{margin:0 0 4px;font-size:1rem}
 .ev-row p{margin:0 0 6px;font-size:.9rem;line-height:1.9;color:var(--muted)}

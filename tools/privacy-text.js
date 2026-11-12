@@ -20,7 +20,7 @@ module.exports = {
         'کتابخانهٔ نقشه (Leaflet) از unpkg.com (و در صورت در دسترس نبودن، از jsDelivr) و فونت از Google Fonts بارگذاری می‌شود. این سرویس‌ها سیاست حریم خصوصی خودشان را دارند و اذان گو آن‌ها را کنترل نمی‌کند.'
       ] },
       { h: 'تماس', p: [
-        'برای پرسش دربارهٔ حریم خصوصی: info.azangoo@gmail.com'
+        'برای پرسش دربارهٔ حریم خصوصی: info@azangoo.com'
       ] }
     ],
     updated: 'آخرین به‌روزرسانی: اکتبر ۲۰۲۶'
@@ -42,7 +42,7 @@ module.exports = {
         'The map library (Leaflet) is loaded from unpkg.com (or from jsDelivr if unpkg is not available) and the fonts from Google Fonts. These services have their own privacy policies and are not controlled by Azangoo.'
       ] },
       { h: 'Contact', p: [
-        'Questions about privacy: info.azangoo@gmail.com'
+        'Questions about privacy: info@azangoo.com'
       ] }
     ],
     updated: 'Last updated: October 2026'
@@ -64,7 +64,7 @@ module.exports = {
         'نقشے کی لائبریری (Leaflet) unpkg.com سے (اور دستیاب نہ ہونے پر jsDelivr سے) اور فونٹ Google Fonts سے لوڈ ہوتے ہیں۔ ان خدمات کی اپنی رازداری کی پالیسی ہے اور اذان گو انہیں کنٹرول نہیں کرتا۔'
       ] },
       { h: 'رابطہ', p: [
-        'رازداری سے متعلق سوالات: info.azangoo@gmail.com'
+        'رازداری سے متعلق سوالات: info@azangoo.com'
       ] }
     ],
     updated: 'آخری اپ ڈیٹ: اکتوبر 2026'
@@ -86,7 +86,7 @@ module.exports = {
         'تُحمَّل مكتبة الخريطة (Leaflet) من unpkg.com (أو من jsDelivr إن لم يكن متاحًا) والخطوط من Google Fonts. ولهذه الخدمات سياسات خصوصية خاصة بها ولا يتحكم بها أذان گو.'
       ] },
       { h: 'التواصل', p: [
-        'للأسئلة حول الخصوصية: info.azangoo@gmail.com'
+        'للأسئلة حول الخصوصية: info@azangoo.com'
       ] }
     ],
     updated: 'آخر تحديث: أكتوبر 2026'

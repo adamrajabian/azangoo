@@ -33,7 +33,7 @@ module.exports = {
       { h: 'کمک مالی', p: ['کمک مالی داوطلبانه است و برای هزینه‌های نگهداری سایت به کار می‌رود. کمک مالی به‌معنای داشتن حق مالکیت یا مشاوره نیست.'] },
       { h: 'مسئولیت', p: ['این سایت «همان‌گونه که هست» ارائه می‌شود. اذان گو مسئول تصمیم‌هایی که بر اساس اوقات یا تقویم گرفته می‌شود، نیست. خدمات ممکن است بدون اطلاع قبلی تغییر یا قطع شوند.'] },
       { h: 'تغییر شرایط', p: ['این شرایط ممکن است به‌روز شود. تاریخ آخرین تغییر را در همین صفحه ببینید. ادامهٔ استفاده از سایت یعنی پذیرش تغییرات.'] },
-      { h: 'تماس', p: ['برای پرسش یا درخواست اجازهٔ استفاده: info.azangoo@gmail.com'] }
+      { h: 'تماس', p: ['برای پرسش یا درخواست اجازهٔ استفاده: info@azangoo.com'] }
     ],
     updated: 'آخرین به‌روزرسانی: اکتبر ۲۰۲۶'
   },
@@ -67,7 +67,7 @@ module.exports = {
       { h: 'Donations', p: ['Donations are voluntary and go towards the costs of running the site. A donation does not give any ownership or advisory right.'] },
       { h: 'Liability', p: ['The site is provided "as is". Azangoo is not responsible for decisions taken on the basis of the times or the calendar. The service may change or stop without notice.'] },
       { h: 'Changes', p: ['These terms may be updated. See the last update date on this page. Continuing to use the site means accepting the changes.'] },
-      { h: 'Contact', p: ['For questions or permission requests: info.azangoo@gmail.com'] }
+      { h: 'Contact', p: ['For questions or permission requests: info@azangoo.com'] }
     ],
     updated: 'Last updated: October 2026'
   },
@@ -101,7 +101,7 @@ module.exports = {
       { h: 'عطیات', p: ['عطیات رضاکارانہ ہیں اور سائٹ کے اخراجات میں استعمال ہوتے ہیں۔ عطیہ کسی ملکیت یا مشاورتی حق کا باعث نہیں۔'] },
       { h: 'ذمہ داری', p: ['یہ سائٹ "جیسی ہے" کی بنیاد پر فراہم کی جاتی ہے۔ اوقات یا کیلنڈر کی بنیاد پر کیے گئے فیصلوں کی ذمہ داری اذان گو پر نہیں۔ سروس بغیر اطلاع کے بدل یا بند ہو سکتی ہے۔'] },
       { h: 'تبدیلی', p: ['یہ شرائط اپ ڈیٹ ہو سکتی ہیں۔ آخری تاریخ اسی صفحے پر دیکھیں۔ سائٹ کا استعمال جاری رکھنا تبدیلیوں کو قبول کرنا ہے۔'] },
-      { h: 'رابطہ', p: ['سوالات یا اجازت کی درخواست: info.azangoo@gmail.com'] }
+      { h: 'رابطہ', p: ['سوالات یا اجازت کی درخواست: info@azangoo.com'] }
     ],
     updated: 'آخری اپ ڈیٹ: اکتوبر 2026'
   },
@@ -135,7 +135,7 @@ module.exports = {
       { h: 'التبرعات', p: ['التبرعات طوعية وتُستخدم في تكاليف تشغيل الموقع. التبرع لا يمنح أي ملكية أو حق استشاري.'] },
       { h: 'المسؤولية', p: ['يُقدَّم الموقع "كما هو". ولا تتحمل أذان گو مسؤولية القرارات المتخذة بناءً على الأوقات أو التقويم. قد تتغير الخدمة أو تتوقف دون إشعار.'] },
       { h: 'التغييرات', p: ['قد تُحدَّث هذه الشروط. راجع تاريخ آخر تحديث في هذه الصفحة. استمرار استخدام الموقع يعني قبول التغييرات.'] },
-      { h: 'التواصل', p: ['للأسئلة أو طلبات الإذن: info.azangoo@gmail.com'] }
+      { h: 'التواصل', p: ['للأسئلة أو طلبات الإذن: info@azangoo.com'] }
     ],
     updated: 'آخر تحديث: أكتوبر 2026'
   }

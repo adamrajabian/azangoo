@@ -152,6 +152,25 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .slide-orn::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;background:var(--gold);transform:translate(-50%,-50%) rotate(45deg)}
 .slide-tr{font-size:var(--tr,1.05rem);line-height:1.9;color:var(--text);margin:0}
 .slide-ar:empty,.slide-tr:empty,.slide-ref:empty,.slide-ar:empty+.slide-orn{display:none}
+/* event cards of the Hijri day */
+.ev-when{flex:none;color:var(--heading);font-weight:700;font-size:.95rem}
+.ev-title{margin:0;font-size:1.1rem;line-height:1.55;font-weight:800;color:var(--heading);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.ev-text{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:1rem;line-height:1.8}
+@media(min-width:480px){.ev-text{-webkit-line-clamp:4}}
+@media(min-width:640px){.ev-text{-webkit-line-clamp:7}}
+.slide-box.ev-box{gap:8px}
+.ev-more{flex:none;min-height:38px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--panel-soft);color:var(--heading);font:inherit;font-weight:700;cursor:pointer}
+.ev-more:hover{background:var(--panel)}
+.ev-more:focus-visible,.ev-back:focus-visible{outline:2px solid var(--turq);outline-offset:2px}
+.ev-dlg .hadith-card{max-width:600px}
+.ev-dlg h3{margin:0 0 8px;color:var(--heading);font-size:1.1rem;line-height:1.7;padding-inline-end:34px}
+.ev-date{display:inline-block}
+.ev-full{margin:10px 0;line-height:2.05;white-space:pre-line}
+.ev-row{padding:12px 0;border-top:1px solid var(--line)}
+.ev-row h4{margin:0 0 4px;font-size:1rem}
+.ev-row p{margin:0 0 6px;font-size:.9rem;line-height:1.9;color:var(--muted)}
+.ev-back{margin:0 0 6px;padding:0;border:0;background:none;color:var(--turq);font:inherit;font-weight:700;cursor:pointer}
+.ev-back[hidden]{display:none}
 .st-prog{flex:none;height:2px;margin:0 22px;background:rgba(210,169,75,.22);overflow:hidden;border-radius:2px}
 .st-prog i{display:block;height:100%;background:var(--gold);transform:scaleX(0);transform-origin:left center}
 html[dir="rtl"] .st-prog i{transform-origin:right center}
@@ -369,6 +388,8 @@ html[dir="ltr"] .search{flex-direction:row}
 .about-dlg .save-actions{position:sticky;bottom:-18px;background:var(--night2);padding:10px 0 4px;margin-top:6px}
 .about-body .about-dua{text-align:center;font-weight:700;color:var(--heading);font-size:1.15rem;margin:16px 0 6px}
 .about-body .about-dua-tr{text-align:center;margin:0 0 4px}
+.about-body .about-contact .link-btn,.about-body .about-mail{text-decoration:underline;text-underline-offset:3px}
+.about-body .about-mail{direction:ltr;unicode-bidi:isolate;font-weight:700}
 .about-body .about-dua-src{text-align:center;color:var(--muted);font-size:.85rem;margin:0 0 16px}
 .about-body .about-dua-tr:empty,.about-body .about-dua-src:empty{display:none}
 .contact-mail{text-align:center;direction:ltr;font-weight:700}

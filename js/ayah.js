@@ -1,4 +1,4 @@
-/* The slideshow in the middle of the page: pictures of the Hijri day's occasion (data/events.json, images/events/), the daily
+/* The slideshow in the middle of the page: the events of the Hijri day as cards (data/lunar-events/, see evPages), pictures of the Hijri day's occasion (data/events.json, images/events/), the daily
    Ramadan dua picture, or the default pictures, followed by the verse of the day. What follows describes the verse part.
    Verse of the day.
    In the middle of the page a slideshow sits over the map, in the same frame (so it has the same size and the map is never
@@ -25,7 +25,7 @@
   var IMG_MS = 8000, IMG_DIR = "images/events/";
   var cache = {}, surahs = null;
   var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var S = { doc: null, key: "", pages: [], i: 0, userPaused: reduce, hover: false, mapMode: false, timer: 0, idle: 0, resizeT: 0 };
+  var S = { doc: null, key: "", pages: [], i: 0, userPaused: reduce, hover: false, mapMode: false, timer: 0, idle: 0, resizeT: 0, dlg: false };
 
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function t(k, v) { return A.t(k, v); }
@@ -108,7 +108,7 @@
      lunar-month forecast of the site */
   /* the picture slides of today: the occasion of the day, the Ramadan dua of the day, the occasions of the whole month,
      and the default pictures when there is nothing else */
-  function imagePages(ev, h, lang) {
+  function imagePages(ev, h, lang, noDefaults) {
     if (!ev) return [];
     var out = [], mName = A.names("hijri")[h.m - 1], key = pad(h.m) + "-";
     function add(e, kind, extra) { var o = { img: e, kind: kind }; for (var k in extra) o[k] = extra[k]; out.push(o); }
@@ -122,8 +122,60 @@
       if (di) add(di, "dua", { n: h.d });
     }
     (ev.events[key + "00"] || []).forEach(function (e) { add(e, "month", { m: mName }); });
-    if (!out.length) (ev.defaults || []).forEach(function (e) { add(e, "default", {}); });
+    if (!out.length && !noDefaults) (ev.defaults || []).forEach(function (e) { add(e, "default", {}); });
     return out;
+  }
+  /* ---------- events of the Hijri day (data/lunar-events/<lang>-<M>.json, made by tools/split-lunar-events.js) ----------
+     One card per event of today; more than EV_MAX events: the first EV_MAX and a last card that opens the whole list.
+     A day without events shows the next event of the month (or of the next month). A language without these files keeps the
+     default pictures. The events "last" (last day of the month) and "extra" (no fixed day) of the files are not used yet. */
+  var EV_MAX = 5;
+  function evOf(doc, k) { var x = doc && doc.days && doc.days[k]; return (x && x.events) || []; }
+  function monthEvents(lang, m) { return getJson("data/lunar-events/" + lang + "-" + m + ".json"); }
+  function excerpt(s) {
+    s = (s || "").replace(/\s+/g, " ").trim();
+    if (s.length <= 260) return s;
+    var cut = s.slice(0, 260), p = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("؟ "), cut.lastIndexOf("۔ "), cut.lastIndexOf("! "));
+    return (p > 120 ? cut.slice(0, p + 1) : cut.replace(/\s+\S*$/, "")) + "…";
+  }
+  function evCard(id, it, date, items) {
+    return { ev: id, date: date, title: it.title, excerpt: excerpt(it.text), items: items, more: it.text.length > 110 || it.sources.length > 0 };
+  }
+  function evItems(list, date) {
+    return list.map(function (e) { return { title: e.title || "", text: e.text || "", sources: e.sources || [], date: date }; });
+  }
+  function nextDay(doc, d) {
+    var best = 0;
+    Object.keys((doc && doc.days) || {}).forEach(function (k) {
+      var n = /^\d+$/.test(k) ? +k : 0;
+      if (n > d && (!best || n < best) && evOf(doc, k).length) best = n;
+    });
+    return best;
+  }
+  function nextCard(doc, day, h, date, m2) {
+    var m = m2 || h.m, label = A.num(day) + " " + A.names("hijri")[m - 1];
+    var it = evItems(evOf(doc, String(day)), label)[0];
+    var c = evCard("n" + m + "-" + day, it, date, [it]);
+    c.next = true;
+    c.when = m2 ? t("ev_on_date", { d: label }) : (day - h.d === 1 ? t("ev_tomorrow", { d: label }) : t("ev_in_days", { n: A.num(day - h.d), d: label }));
+    return c;
+  }
+  function evPages(doc, h, lang) {
+    if (!doc) return Promise.resolve([]);
+    var date = A.num(h.d) + " " + A.names("hijri")[h.m - 1], list = evOf(doc, String(h.d));
+    if (list.length) {
+      var items = evItems(list, date), out = items.slice(0, EV_MAX).map(function (it, i) { return evCard("e" + h.m + "-" + h.d + "-" + i, it, date, [it]); });
+      if (items.length > EV_MAX) out.push({ ev: "all" + h.m + "-" + h.d, all: true, date: date, count: items.length, items: items, more: true,
+        title: t("ev_list_title", { d: date }), excerpt: items.slice(EV_MAX).map(function (x) { return x.title; }).join(" • ") });
+      return Promise.resolve(out);
+    }
+    var day = nextDay(doc, h.d);
+    if (day) return Promise.resolve([nextCard(doc, day, h, date, 0)]);
+    var m2 = h.m % 12 + 1;
+    return monthEvents(lang, m2).then(function (n) {
+      var d2 = n && n.days ? nextDay(n, 0) : 0;
+      return d2 ? [nextCard(n, d2, h, date, m2)] : [];
+    });
   }
   /* test mode, only for the person who opens such a link (nothing is stored, other visitors are not affected):
        ?hijri=1-10          shows the pictures of 10 Muharram (month-day, month 1 = Muharram ... 12 = Dhu al-Hijjah)
@@ -142,7 +194,7 @@
     var td = testDate(), th = testHijri();
     var d = td || new Date(), lang = A.current(), h = th || hijriToday(d);
     TEST = (td || th) ? ("TEST " + (td ? pad(td.getMonth() + 1) + "/" + pad(td.getDate()) + " " : "") + (th ? "hijri " + th.m + "-" + th.d : "")) : "";
-    return Promise.all([getJson("data/ayah/" + lang + "-" + pad(d.getMonth() + 1) + ".json"), surahs ? 0 : getJson("data/surahs.json"), getJson("data/events.json")])
+    return Promise.all([getJson("data/ayah/" + lang + "-" + pad(d.getMonth() + 1) + ".json"), surahs ? 0 : getJson("data/surahs.json"), getJson("data/events.json"), monthEvents(lang, h.m)])
       .then(function (r) {
         if (r[1]) surahs = r[1];
         var doc = r[0], units = null, aboutShown = false;
@@ -152,9 +204,12 @@
           else { units = doc.about || []; aboutShown = !!(units[0] && !units[0].a); }
           if (!units.length) units = null;
         }
-        var imgs = imagePages(r[2], h, lang);
-        if (!units && !imgs.length) return null;
-        return { units: units || [], imgs: imgs, aboutShown: aboutShown, key: lang + ":" + dayKey(d) + ":" + h.m + "-" + h.d };
+        var lm = r[3] && r[3].days ? r[3] : null;
+        var imgs = imagePages(r[2], h, lang, !!lm);
+        return evPages(lm, h, lang).then(function (evt) {
+          if (!units && !imgs.length && !evt.length) return null;
+          return { units: units || [], imgs: imgs, evt: evt, aboutShown: aboutShown, key: lang + ":" + dayKey(d) + ":" + h.m + "-" + h.d + (lm ? ":ev" : "") };
+        });
       });
   }
 
@@ -168,6 +223,7 @@
   }
   /* the head line, caption and alt text of a slide */
   function headOf(pg) {
+    if (pg.ev) return t(pg.next ? "ev_next_head" : "ev_today");
     if (!pg.img) return t(pg.about ? "ayah_about_title" : "ayah_title");
     if (pg.kind === "day") return t("ev_today");
     if (pg.kind === "dua") return t("ev_dua", { n: A.num(pg.n) });
@@ -191,7 +247,75 @@
       cap.appendChild(d1); cap.appendChild(d2); box.appendChild(cap);
     }
   }
+  /* an event card: the date, the title and the first lines of the text; the button opens the whole text */
+  function mk(tag, cls, text) { var n = document.createElement(tag); n.className = cls; n.textContent = text; return n; }
+  function fillEvent(box, pg) {
+    box.textContent = "";
+    box.classList.add("ev-box");
+    box.appendChild(mk("span", "slide-ref", pg.when || pg.date));      /* the next-event card shows only when it happens, not today's date */
+    var ti = mk("div", "ev-title", pg.title); ti.setAttribute("role", "heading"); ti.setAttribute("aria-level", "2"); box.appendChild(ti);   /* not an h2: the site gives every h2 inside a card an icon */
+    box.appendChild(mk("p", "slide-tr ev-text", pg.excerpt));
+    if (pg.more) {
+      var b = mk("button", "ev-more", pg.all ? t("ev_all_btn", { n: A.num(pg.count) }) : t("ev_more"));
+      b.type = "button";
+      b.addEventListener("click", function () { openDlg(pg); });
+      box.appendChild(b);
+    }
+  }
+  /* the window with the whole text (or the list of all the events of the day) */
+  var dlg = null, dlgPg = null, dlgFocus = null;
+  function ensureDlg() {
+    if (dlg) return dlg;
+    dlg = document.createElement("div"); dlg.className = "hadith-modal ev-dlg"; dlg.hidden = true;
+    dlg.setAttribute("role", "dialog"); dlg.setAttribute("aria-modal", "true"); dlg.setAttribute("aria-labelledby", "evDlgT");
+    dlg.innerHTML = '<div class="hadith-card"><button type="button" class="hadith-x" id="evDlgX">×</button>' +
+      '<button type="button" class="ev-back" id="evDlgBack" hidden></button><h3 id="evDlgT"></h3><div id="evDlgBody"></div></div>';
+    document.body.appendChild(dlg);
+    dlg.addEventListener("click", function (e) { if (e.target === dlg) closeDlg(); });
+    dlg.querySelector("#evDlgX").addEventListener("click", closeDlg);
+    dlg.querySelector("#evDlgBack").addEventListener("click", function () { renderDlg(dlgPg, -1); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape" && dlg && !dlg.hidden) closeDlg(); });
+    return dlg;
+  }
+  function renderDlg(pg, idx) {
+    var title = dlg.querySelector("#evDlgT"), body = dlg.querySelector("#evDlgBody"), back = dlg.querySelector("#evDlgBack");
+    body.textContent = "";
+    back.hidden = !(pg.all && idx >= 0); back.textContent = t("ev_back");
+    dlg.querySelector("#evDlgX").setAttribute("aria-label", t("hadith_close"));
+    if (idx < 0) {
+      title.textContent = t("ev_list_title", { d: pg.date });
+      pg.items.forEach(function (it, i) {
+        var row = mk("div", "ev-row", "");
+        row.appendChild(mk("h4", "", it.title));
+        row.appendChild(mk("p", "", excerpt(it.text)));
+        var b = mk("button", "ev-more", t("ev_more")); b.type = "button";
+        b.addEventListener("click", function () { renderDlg(pg, i); });
+        row.appendChild(b); body.appendChild(row);
+      });
+    } else {
+      var it = pg.items[idx];
+      title.textContent = it.title;
+      body.appendChild(mk("span", "slide-ref ev-date", it.date));
+      body.appendChild(mk("p", "ev-full", it.text));
+      if (it.sources.length) body.appendChild(mk("p", "hadith-src", t("ev_src") + ": " + it.sources.join(" ")));
+    }
+    dlg.querySelector(".hadith-card").scrollTop = 0;
+  }
+  function openDlg(pg) {
+    ensureDlg(); dlgPg = pg; dlgFocus = document.activeElement;
+    renderDlg(pg, pg.all ? -1 : 0);
+    dlg.hidden = false; document.documentElement.classList.add("hadith-open");
+    S.dlg = true; schedule();
+    dlg.querySelector("#evDlgX").focus();
+  }
+  function closeDlg() {
+    if (!dlg || dlg.hidden) return;
+    dlg.hidden = true; document.documentElement.classList.remove("hadith-open");
+    S.dlg = false; schedule();
+    if (dlgFocus && dlgFocus.focus) dlgFocus.focus();
+  }
   function fill(box, pg) {
+    if (pg.ev) { fillEvent(box, pg); return; }
     if (pg.img) { fillImage(box, pg); return; }
     box.textContent = "";
     function add(tag, cls, text, lang, dir) {
@@ -243,11 +367,12 @@
 
   /* ---------- showing the slides ---------- */
   function dur(pg) {
+    if (pg.ev) return 14000;
     if (pg.img) return IMG_MS;
     var n = (pg.a ? pg.a.length * 0.8 : 0) + (pg.t ? pg.t.length : 0);
     return Math.max(7000, Math.min(20000, 5000 + n * 40));
   }
-  function canPlay() { return !S.userPaused && !S.hover && !S.mapMode && !document.hidden && S.pages.length > 1; }
+  function canPlay() { return !S.userPaused && !S.hover && !S.dlg && !S.mapMode && !document.hidden && S.pages.length > 1; }
   function schedule() {
     clearTimeout(S.timer);
     el.prog.classList.remove("run");
@@ -299,13 +424,13 @@
     labels();
     el.test.hidden = !TEST; el.test.textContent = TEST;
     var cur = S.pages[S.i], verse = [];
-    if (SHOW_VERSE || !S.doc.imgs.length) {
+    if (SHOW_VERSE || (!S.doc.imgs.length && !(S.doc.evt && S.doc.evt.length))) {
       verse = paginate(S.doc.units);
       verse.forEach(function (v) { v.about = S.doc.aboutShown; });
     }
-    S.pages = S.doc.imgs.concat(verse);
+    S.pages = S.doc.imgs.concat(S.doc.evt || [], verse);
     var start = 0;
-    function same(a, b) { return a.img ? (b.img && a.img.f === b.img.f) : (!b.img && a.r === b.r && (a.a || "").slice(0, 8) === (b.a || "").slice(0, 8) && (a.t || "").slice(0, 8) === (b.t || "").slice(0, 8)); }
+    function same(a, b) { if (a.ev || b.ev) return a.ev === b.ev; return a.img ? (b.img && a.img.f === b.img.f) : (!b.img && a.r === b.r && (a.a || "").slice(0, 8) === (b.a || "").slice(0, 8) && (a.t || "").slice(0, 8) === (b.t || "").slice(0, 8)); }
     if (keepUnit && cur) for (var k = 0; k < S.pages.length; k++) if (same(S.pages[k], cur)) { start = k; break; }
     var multi = S.pages.length > 1;
     el.prev.hidden = el.next.hidden = el.pause.hidden = el.dots.hidden = !multi;
@@ -333,7 +458,7 @@
     if (mapHint && mapHint.classList.contains("hint")) mapHint.hidden = slides;
     /* one general sentence under the frame for all the occasion slides (dates follow the lunar-month forecast) */
     var evNote = document.getElementById("slidesNote");
-    if (evNote) evNote.hidden = !(slides && S.doc && S.doc.imgs.some(function (p) { return p.kind !== "default"; }));
+    if (evNote) evNote.hidden = !(slides && S.doc && (S.doc.imgs.some(function (p) { return p.kind !== "default"; }) || (S.doc.evt && S.doc.evt.length)));
   }
   function setInert(node, on) {
     if (!node) return;

@@ -254,7 +254,7 @@
   function fillEvent(box, pg) {
     box.textContent = "";
     box.classList.add("ev-box");
-    box.appendChild(mk("span", "slide-ref", pg.when || pg.date));      /* the next-event card shows only when it happens, not today's date */
+    box.appendChild(mk("div", "ev-dateline", pg.when ? t("ev_next_when", { w: pg.when }) : pg.date));      /* plain text: a pill shape looks like a button */
     var ti = mk("div", "ev-title", pg.title); ti.setAttribute("role", "heading"); ti.setAttribute("aria-level", "2"); box.appendChild(ti);   /* not an h2: the site gives every h2 inside a card an icon */
     box.appendChild(mk("p", "slide-tr ev-text", pg.excerpt));
     if (pg.more) {
@@ -297,7 +297,7 @@
     } else {
       var it = pg.items[idx];
       title.textContent = it.title;
-      body.appendChild(mk("span", "slide-ref ev-date", it.date));
+      body.appendChild(mk("p", "ev-dateline", it.date));
       body.appendChild(mk("p", "ev-full", it.text));
       if (it.sources.length) body.appendChild(mk("p", "hadith-src", t("ev_src") + ": " + it.sources.join(" ")));
     }

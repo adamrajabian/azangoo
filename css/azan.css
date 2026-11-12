@@ -153,7 +153,7 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .slide-tr{font-size:var(--tr,1.05rem);line-height:1.9;color:var(--text);margin:0}
 .slide-ar:empty,.slide-tr:empty,.slide-ref:empty,.slide-ar:empty+.slide-orn{display:none}
 /* event cards of the Hijri day */
-.ev-when{flex:none;color:var(--heading);font-weight:700;font-size:.95rem}
+.ev-dateline{flex:none;margin:0;color:var(--heading);font-weight:700;font-size:.95rem}
 .ev-title{margin:0;font-size:1.1rem;line-height:1.55;font-weight:800;color:var(--heading);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .ev-text{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:1rem;line-height:1.8}
 @media(min-width:480px){.ev-text{-webkit-line-clamp:4}}
@@ -161,6 +161,8 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .slide-box.ev-box{gap:8px}
 .ev-more{flex:none;min-height:38px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--panel-soft);color:var(--heading);font:inherit;font-weight:700;cursor:pointer}
 .ev-more:hover{background:var(--panel)}
+.ev-more::after{content:"‹";margin-inline-start:.5em;font-size:1.2em;line-height:1}
+[dir="ltr"] .ev-more::after{content:"›"}
 .ev-more:focus-visible,.ev-back:focus-visible{outline:2px solid var(--turq);outline-offset:2px}
 .ev-dlg .hadith-card{max-width:600px}
 .ev-dlg h3{margin:0 0 8px;color:var(--heading);font-size:1.1rem;line-height:1.7;padding-inline-end:34px}

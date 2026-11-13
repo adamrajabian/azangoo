@@ -129,21 +129,6 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .stage.fade-in{animation:slide-in .6s ease both}
 /* picture slides: the picture is shown whole, in a gold frame, over a blurred copy of itself */
 .stage-bg{position:absolute;inset:-24px;background-size:cover;background-position:center;opacity:0;transition:opacity .7s ease;filter:blur(24px) brightness(.5) saturate(1.25)}
-.stage.has-img .stage-bg{opacity:1}
-.stage.has-img .stage-pattern{opacity:0}
-.stage.has-img{color:#fff}
-.stage.has-img::before{border-color:rgba(210,169,75,.55)}
-.stage.has-img .st-head{color:#f3d98e;text-shadow:0 1px 6px rgba(0,0,0,.6)}
-.stage.has-img .st-btn{background:rgba(6,16,22,.62);color:#f3d98e;border-color:rgba(210,169,75,.5)}
-.stage.has-img .st-dot::before{background:#fff}
-.stage.has-img .st-dot[aria-current="true"]::before{background:var(--gold)}
-.stage.has-img .st-prog{background:rgba(255,255,255,.22)}
-.img-card{position:relative;flex:none;margin:0;overflow:hidden;border-radius:8px;border:2px solid var(--gold);background:#000;box-shadow:0 12px 32px rgba(0,0,0,.6),0 0 0 5px rgba(0,0,0,.28)}
-.img-card img{display:block;width:100%;height:100%}
-.img-card.broken{visibility:hidden}
-.img-cap{flex:none;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 10px;max-width:100%;padding:6px 14px;border-radius:999px;background:rgba(6,16,22,.74);color:#fff;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.img-date{padding:2px 11px;border-radius:999px;background:linear-gradient(var(--gold2),var(--gold));color:var(--ink);font-weight:700;font-size:.8rem;white-space:nowrap}
-.img-title{font-weight:700;font-size:.95rem;line-height:1.5}
 .slide.in{animation:slide-in .55s ease both}
 @keyframes slide-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .slide-ref{flex:none;padding:3px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel-soft);color:var(--heading);font-size:.8rem;font-weight:700}
@@ -176,6 +161,50 @@ html:not([lang="fa"]) .date-shamsi{display:none}
 .ev-row p{margin:0 0 6px;font-size:.9rem;line-height:1.9;color:var(--muted)}
 .ev-back{margin:0 0 6px;padding:0;border:0;background:none;color:var(--turq);font:inherit;font-weight:700;cursor:pointer}
 .ev-back[hidden]{display:none}
+/* ---- event cards and pictures: dark card, colour by mood (data-tone: mourn / joy / none), picture edge to edge ---- */
+.stage.is-card,.ev-dlg{--t1:#0e3038;--t2:#08161c;--tg:rgba(47,167,160,.26);--ta:#f3d98e;--tb1:#f3d98e;--tb2:#d2a94b;--tk:#2a1c00}
+.stage.is-card{color:#fff;background:radial-gradient(100% 60% at 50% 0%,var(--tg),transparent 70%),linear-gradient(165deg,var(--t1),var(--t2))}
+.stage.is-card[data-tone="mourn"],.ev-dlg[data-tone="mourn"]{--t1:#1d1f29;--t2:#0b0c10;--tg:rgba(190,60,75,.34);--ta:#eeaab1;--tb1:#f2d3d6;--tb2:#b9515c;--tk:#2b0a0e}
+.stage.is-card[data-tone="joy"],.ev-dlg[data-tone="joy"]{--t1:#0d3d2f;--t2:#06211a;--tg:rgba(243,217,142,.30);--ta:#f3d98e;--tb1:#fbe8a8;--tb2:#d9a93a;--tk:#2a1c00}
+.stage.is-card .st-head,.stage.is-card::before{display:none}
+.stage.is-card .stage-pattern{opacity:.05}
+.stage.is-card .st-body{margin:0}
+.stage.is-card .slide{padding:0;gap:0;align-items:stretch;justify-content:stretch}
+.stage.is-card .st-prog{margin:0 16px;background:rgba(255,255,255,.18)}
+.stage.is-card .st-prog i{background:var(--ta)}
+.stage.is-card .st-btn{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.28)}
+.stage.is-card .st-btn:hover{background:rgba(255,255,255,.2)}
+.stage.is-card .st-dots{color:#fff}
+.stage.is-card .st-dot::before{background:#fff}
+.stage.is-card .st-dot[aria-current="true"]::before{background:var(--ta)}
+.slide-box.cv{height:100%;gap:0;align-items:stretch;overflow:hidden}
+.cv-hero{position:relative;flex:0 0 52%;min-height:0;overflow:hidden;background:#000;border-bottom:2px solid var(--tb2)}
+.cv-shot .cv-hero{flex:1 1 auto}
+.cv-hero.broken{visibility:hidden}
+.cv-hero-bg{position:absolute;inset:-24px;background-size:cover;background-position:center;filter:blur(22px) brightness(.5) saturate(1.2)}
+.cv-hero img{position:relative;display:block;width:100%;height:100%;object-fit:contain}
+.cv-meta{flex:none;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 8px}
+.cv-chip{padding:2px 11px;border-radius:999px;background:linear-gradient(var(--tb1),var(--tb2));color:var(--tk);font-weight:800;font-size:.8rem;white-space:nowrap}
+.cv-kicker{color:var(--ta);font-weight:700;font-size:.8rem}
+.cv-cap{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 14px 6px;text-align:center}
+.cv-title{margin:0;font-size:1.12rem;line-height:1.55;font-weight:800;color:#fff;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.cv-panel{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:8px 18px 4px;text-align:center;overflow:hidden}
+.cv-pic .cv-text{display:none}
+.cv-plain{justify-content:center}
+.cv-top{flex:none;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 18px 2px}
+.cv-badge{position:relative;width:58px;height:58px;display:grid;place-items:center;background:linear-gradient(var(--tb1),var(--tb2));clip-path:polygon(50.0% 0.0%,61.1% 8.5%,75.0% 6.7%,80.4% 19.6%,93.3% 25.0%,91.5% 38.9%,100.0% 50.0%,91.5% 61.1%,93.3% 75.0%,80.4% 80.4%,75.0% 93.3%,61.1% 91.5%,50.0% 100.0%,38.9% 91.5%,25.0% 93.3%,19.6% 80.4%,6.7% 75.0%,8.5% 61.1%,0.0% 50.0%,8.5% 38.9%,6.7% 25.0%,19.6% 19.6%,25.0% 6.7%,38.9% 8.5%);color:var(--tk)}
+.cv-badge::before{content:"";position:absolute;inset:10px;border-radius:50%;border:1.5px solid rgba(0,0,0,.28)}
+.cv-badge b{position:relative;font-size:1.45rem;font-weight:800;line-height:1}
+.cv-month{color:var(--ta);font-weight:800;font-size:.95rem}
+.cv-rule{flex:none;position:relative;width:55%;max-width:220px;height:1px;background:linear-gradient(90deg,transparent,var(--tb2),transparent)}
+.cv-rule::after{content:"";position:absolute;left:50%;top:50%;width:7px;height:7px;background:var(--tb2);transform:translate(-50%,-50%) rotate(45deg)}
+.cv-plain .cv-title{font-size:1.15rem}
+.cv-plain .cv-text{margin:0;color:rgba(255,255,255,.88);font-size:.95rem;line-height:1.85;-webkit-line-clamp:2}
+.stage.is-card .ev-more{background:linear-gradient(var(--tb1),var(--tb2));color:var(--tk);border:0;font-weight:800}
+.stage.is-card .ev-more:hover{filter:brightness(1.08)}
+@media(min-width:400px){.cv-plain .cv-text{-webkit-line-clamp:3}}
+@media(min-width:640px){.cv-badge{width:70px;height:70px}.cv-badge b{font-size:1.7rem}.cv-plain .cv-title{font-size:1.3rem}}
+@media(min-width:980px){.cv-plain .cv-text{-webkit-line-clamp:5;font-size:1rem}.cv-pic .cv-text{display:-webkit-box;margin:0;color:rgba(255,255,255,.85);-webkit-line-clamp:2;font-size:.95rem;line-height:1.8}}
 .st-prog{flex:none;height:2px;margin:0 22px;background:rgba(210,169,75,.22);overflow:hidden;border-radius:2px}
 .st-prog i{display:block;height:100%;background:var(--gold);transform:scaleX(0);transform-origin:left center}
 html[dir="rtl"] .st-prog i{transform-origin:right center}
@@ -567,6 +596,20 @@ html[dir="rtl"] .hadith-track{animation-name:hadith-move-rtl}
 .hadith-x{position:absolute;top:8px;inset-inline-end:10px;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--text);font-size:1.5rem;line-height:1;cursor:pointer}
 .hadith-x:hover{background:rgba(47,167,160,.25)}
 html.hadith-open{overflow:hidden}
+/* the "read more" window: the same colours as the card it was opened from */
+.ev-dlg .hadith-card{color:rgba(255,255,255,.92);border-color:var(--tb2);background:radial-gradient(100% 38% at 50% 0%,var(--tg),transparent 75%),linear-gradient(165deg,var(--t1),var(--t2))}
+.ev-dlg h3,.ev-dlg .ev-row h4{color:#fff}
+.ev-dlg .ev-dateline{color:var(--ta)}
+.ev-dlg .hadith-src{color:rgba(255,255,255,.62)}
+.ev-dlg .ev-legend{border-top-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7)}
+.ev-dlg .ev-row{border-top-color:rgba(255,255,255,.16)}
+.ev-dlg .ev-row p{color:rgba(255,255,255,.78)}
+.ev-dlg .ev-back{color:var(--ta)}
+.ev-dlg .ev-more{background:linear-gradient(var(--tb1),var(--tb2));color:var(--tk);border:0;font-weight:800}
+.ev-dlg .ev-more:hover{filter:brightness(1.08)}
+.ev-dlg .hadith-x{color:#fff}
+.ev-dlg .hadith-x:hover{background:rgba(255,255,255,.18)}
+.ev-dlg .ev-more:focus-visible,.ev-dlg .ev-back:focus-visible,.ev-dlg .hadith-x:focus-visible{outline:2px solid var(--ta);outline-offset:2px}
 
 /* date tiles, a little smaller: the prayer times and the map should be what the eye sees first */
 .date{padding:8px 6px}

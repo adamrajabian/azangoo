@@ -2,12 +2,12 @@
    Copying, reuse, modification or redistribution of this code, or of its calculations,
    is prohibited without written permission. See the Terms and conditions page. */
 /* Moon card (رؤیت ماه)
-   Images: images/moon/MoonL01..99.gif (lit on left), MoonR01..99.gif (lit on right),
-   Moon00.gif (new moon), Moon100.gif (full moon). The number is the illumination percent. */
+   Images: images/moon/MoonL31_5.webp (31.5 % lit on the left), MoonR..._.webp (lit on the right), Moon00.webp (new moon),
+   Moon100.webp (full moon). The number is the illumination percent: 0.2 % steps below 10 % and above 90 %, 0.5 % steps in between. */
 
 /* the moon picture sits in a rectangular "night sky" box: stars as background, the moon (round) in the middle */
 .moon{
-  display:flex;justify-content:center;align-items:center;padding:18px;border-radius:14px;overflow:hidden;
+  position:relative;display:flex;justify-content:center;align-items:center;padding:18px;border-radius:14px;overflow:hidden;
   background:#0a1530 url("../images/moon-bg.webp") center/cover no-repeat;
   border:1px solid rgba(240,213,138,.45);box-shadow:inset 0 0 30px rgba(0,0,0,.35)
 }
@@ -117,3 +117,31 @@
 .moon-toggle[hidden]{display:none}
 .moon-toggle:hover,.moon-toggle[aria-expanded="true"]:hover{background:var(--gold);color:var(--ink)}
 .moon-toggle:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* the large moon (js/moon-info.js): magnifier button on the picture, and the pop-up with an always-night starry sky */
+.moon .moon-img{cursor:zoom-in}
+.moon-zoom{position:absolute;left:10px;bottom:10px;z-index:2;width:38px;height:38px;padding:0;display:grid;place-items:center;border-radius:50%;
+  border:1px solid rgba(243,217,142,.75);background:rgba(8,18,44,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#f3d98e;cursor:pointer;
+  box-shadow:0 0 0 3px rgba(243,217,142,.10),0 4px 14px rgba(0,0,0,.45),0 0 16px rgba(243,217,142,.28);
+  transition:transform .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
+.moon-zoom:hover,.moon-zoom:active{transform:scale(1.1);background:linear-gradient(#fbe8a8,#d9a93a);color:#2a1c00;border-color:#fff3c4;
+  box-shadow:0 0 0 4px rgba(243,217,142,.22),0 6px 18px rgba(0,0,0,.5),0 0 22px rgba(243,217,142,.55)}
+.moon-zoom:focus-visible,.moon-pop-x:focus-visible{outline:2px solid #fff;outline-offset:2px}
+html.moon-pop-open{overflow:hidden}
+.moon-pop{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;cursor:zoom-out;color:#fff;
+  background:radial-gradient(ellipse at 50% 38%,#17306a 0%,#0a1433 46%,#03060f 100%);animation:moon-pop-in .3s ease both}
+.moon-pop[hidden]{display:none}
+.moon-pop::before,.moon-pop::after{content:"";position:absolute;inset:0;pointer-events:none;background-repeat:repeat}
+.moon-pop::before{background-image:radial-gradient(circle 1.1px at 235px 290px,rgba(210,225,255,0.75),transparent),radial-gradient(circle 0.9px at 304px 101px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 1.1px at 99px 52px,rgba(255,255,255,0.75),transparent),radial-gradient(circle 1.3px at 50px 279px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 1.1px at 308px 206px,rgba(210,225,255,0.90),transparent),radial-gradient(circle 1.3px at 84px 11px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 0.9px at 22px 101px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 1.1px at 241px 171px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 1.3px at 269px 123px,rgba(255,255,255,0.75),transparent),radial-gradient(circle 1.1px at 6px 47px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 0.9px at 212px 286px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 1.3px at 165px 121px,rgba(255,255,255,0.75),transparent),radial-gradient(circle 0.9px at 39px 292px,rgba(255,255,255,0.75),transparent),radial-gradient(circle 0.9px at 152px 201px,rgba(210,225,255,0.55),transparent),radial-gradient(circle 0.9px at 4px 113px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 1.1px at 196px 207px,rgba(210,225,255,0.55),transparent),radial-gradient(circle 1.1px at 105px 142px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 1.1px at 174px 11px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 0.9px at 130px 55px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 1.3px at 253px 94px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 0.9px at 233px 264px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 0.9px at 218px 200px,rgba(255,255,255,0.75),transparent),radial-gradient(circle 1.1px at 112px 4px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 0.9px at 14px 111px,rgba(210,225,255,0.75),transparent),radial-gradient(circle 0.9px at 299px 55px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 0.9px at 230px 136px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 0.9px at 155px 201px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 1.3px at 110px 302px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 1.1px at 311px 192px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 1.1px at 69px 304px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 1.3px at 201px 97px,rgba(255,255,255,0.55),transparent),radial-gradient(circle 0.9px at 120px 316px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 0.9px at 85px 287px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 0.9px at 251px 313px,rgba(255,255,255,0.75),transparent),radial-gradient(circle 0.9px at 57px 59px,rgba(255,255,255,0.90),transparent),radial-gradient(circle 1.1px at 126px 204px,rgba(210,225,255,0.75),transparent),radial-gradient(circle 1.3px at 255px 154px,rgba(210,225,255,0.55),transparent),radial-gradient(circle 0.9px at 39px 68px,rgba(210,225,255,0.75),transparent),radial-gradient(circle 0.9px at 41px 147px,rgba(210,225,255,0.55),transparent),radial-gradient(circle 1.1px at 12px 39px,rgba(255,255,255,0.75),transparent);background-size:320px 320px}
+.moon-pop::after{background-image:radial-gradient(circle 1.5px at 259px 65px,rgba(255,238,205,0.70),transparent),radial-gradient(circle 1.5px at 381px 138px,rgba(255,255,255,0.85),transparent),radial-gradient(circle 2.2px at 465px 342px,rgba(200,220,255,1.00),transparent),radial-gradient(circle 1.5px at 147px 39px,rgba(255,238,205,0.85),transparent),radial-gradient(circle 1.5px at 323px 38px,rgba(200,220,255,1.00),transparent),radial-gradient(circle 1.5px at 80px 497px,rgba(255,238,205,1.00),transparent),radial-gradient(circle 1.5px at 330px 143px,rgba(255,238,205,0.70),transparent),radial-gradient(circle 2.2px at 380px 49px,rgba(200,220,255,1.00),transparent),radial-gradient(circle 1.8px at 136px 353px,rgba(200,220,255,0.70),transparent),radial-gradient(circle 1.8px at 488px 83px,rgba(255,238,205,0.70),transparent),radial-gradient(circle 1.8px at 18px 395px,rgba(255,255,255,1.00),transparent),radial-gradient(circle 1.5px at 77px 86px,rgba(255,255,255,1.00),transparent),radial-gradient(circle 2.2px at 267px 430px,rgba(255,238,205,0.85),transparent),radial-gradient(circle 1.8px at 472px 455px,rgba(255,255,255,1.00),transparent),radial-gradient(circle 2.2px at 34px 321px,rgba(255,238,205,0.70),transparent),radial-gradient(circle 2.2px at 26px 239px,rgba(255,238,205,0.70),transparent),radial-gradient(circle 1.5px at 501px 265px,rgba(255,238,205,0.85),transparent),radial-gradient(circle 2.2px at 150px 211px,rgba(255,238,205,0.70),transparent),radial-gradient(circle 1.5px at 456px 514px,rgba(255,238,205,0.85),transparent),radial-gradient(circle 2.2px at 260px 207px,rgba(255,255,255,0.85),transparent),radial-gradient(circle 1.5px at 223px 397px,rgba(255,238,205,1.00),transparent),radial-gradient(circle 1.5px at 218px 143px,rgba(255,238,205,0.85),transparent);background-size:520px 520px;animation:moon-twinkle 4.5s ease-in-out infinite alternate}
+.moon-pop-body{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:100%}
+.moon-pop-img{display:block;width:min(86vw,62vh,560px);height:auto;aspect-ratio:1;border-radius:50%;
+  box-shadow:0 0 0 1px rgba(255,255,255,.14),0 0 60px rgba(255,244,214,.22),0 0 150px rgba(255,244,214,.10)}
+.moon-pop-pct{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;font-weight:700}
+.moon-pop-pct span{opacity:.82;font-size:.9rem}
+.moon-pop-pct b{font-size:1.9rem;line-height:1.3;direction:ltr;color:#f3d98e}
+.moon-pop-x{position:absolute;top:max(12px,env(safe-area-inset-top));inset-inline-end:12px;z-index:1;width:42px;height:42px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.1);color:#fff;font:400 1.8rem/1 sans-serif;cursor:pointer}
+.moon-pop-x:hover{background:rgba(255,255,255,.22)}
+@keyframes moon-pop-in{from{opacity:0}to{opacity:1}}
+@keyframes moon-twinkle{from{opacity:.45}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.moon-pop,.moon-pop::after{animation:none!important}}

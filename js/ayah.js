@@ -104,6 +104,50 @@
     fHijri.formatToParts(new Date(u)).forEach(function (x) { if (x.type !== "literal") o[x.type] = +x.value; });
     return { m: o.month, d: o.day };
   }
+  /* ---------- mood of an occasion: mourning (martyrdom, passing away ...), joy (birth, Eid ...) or neither ----------
+     it decides the colours of the card. The words are searched in the title; a title without any of them follows the month
+     (Muharram and Safar are months of mourning). Mourning wins when a title has both kinds of words. */
+  var TONE_RE = {
+    fa: [/شهادت|رحلت|وفات|ضربت|عزا|سوگ|درگذشت|مصیبت|هجوم|عاشورا|تاسوعا|اربعین|مسموم|دفن|ماتم|اسارت|کربلا/, /ولادت|میلاد|عید|مبعث|بعثت|غدیر|مباهله|جشن|فتح|هجرت|ازدواج|عقد|بیعت|شب قدر|نزول|نیمه|پیروزی/],
+    en: [/martyr|demise|passing away|passed away|funeral|mourning|tragedy|assassinat|poison|ashura|tasu|arbaeen|karbala|captiv|burial|wafat|calamity/i, /birth|born|eid|mab.?ath|prophethood|ghadir|mubahala|celebrat|victory|conquest|hijra|marriage|wedding|pledge|qadr|revelation|nisf/i],
+    ur: [/شہادت|وفات|رحلت|ضربت|سوگ|عزا|مصیبت|عاشور|تاسوعا|اربعین|زہر|دفن|کربلا|اسیر/, /ولادت|میلاد|عید|مبعث|بعثت|غدیر|مباہلہ|جشن|فتح|ہجرت|شادی|نکاح|بیعت|قدر|نزول|نیمہ/],
+    ar: [/استشهاد|شهادة|وفاة|رحيل|ضربة|مصاب|عاشوراء|تاسوعاء|الأربعين|كربلاء|سبي|دفن/, /ولادة|مولد|ميلاد|عيد|مبعث|بعثة|غدير|مباهلة|فتح|هجرة|زواج|عقد|بيعة|قدر|نزول|نصف|انتصار/]
+  };
+  function toneOf(title, m) {
+    var r = TONE_RE[A.current()] || TONE_RE.fa, s = title || "";
+    if (r[0].test(s)) return "mourn";
+    if (r[1].test(s)) return "joy";
+    return (m === 1 || m === 2) ? "mourn" : "";
+  }
+  /* which picture belongs to which event card: the words of the two titles are compared (the words every title has, like
+     "birth" or "Imam", do not count); a picture without a card keeps its own slide */
+  var STOP = {};
+  "ولادت شهادت رحلت وفات امام حضرت علیه علیها علیهم السلام صلی الله آله وسلم بن ابن عید سعید روز شب ماه مبارک اکرم".split(" ").forEach(function (w) { STOP[w] = 1; });
+  function toks(s) {
+    var o = {};
+    (s || "").replace(/[\u064B-\u065F\u0670\u200C\u200D\u200E\u200F]/g, " ").replace(/ي/g, "ی").replace(/ك/g, "ک").replace(/ة/g, "ه")
+      .replace(/[()«»\-–—،,.:؛]/g, " ").split(/\s+/).forEach(function (w) { if (w.length > 1 && !STOP[w]) o[w] = 1; });
+    if (o["عاشورا"]) o["حسین"] = 1;
+    return o;
+  }
+  function pairPictures(imgs, evt) {
+    if (!imgs.length || !evt.length) return imgs;
+    var left = imgs.slice();
+    evt.forEach(function (c) {
+      if (c.all || c.next) return;
+      var tc = toks(c.title), tcn = Object.keys(tc).length, best = -1, bs = 0;
+      if (!tcn) return;
+      left.forEach(function (p, i) {
+        if (p.kind !== "day") return;
+        var tp = toks(p.title), n = 0, un = tcn + Object.keys(tp).length;
+        Object.keys(tp).forEach(function (w) { if (tc[w]) n++; });
+        var sc = n / (un - n);
+        if (n && sc > bs) { bs = sc; best = i; }
+      });
+      if (best > -1) { c.pic = left[best].img; left.splice(best, 1); }
+    });
+    return left;
+  }
   /* occasions whose day depends on the start of a lunar month: their caption carries a small note that the date follows the
      lunar-month forecast of the site */
   /* the picture slides of today: the occasion of the day, the Ramadan dua of the day, the occasions of the whole month,
@@ -114,14 +158,15 @@
     function add(e, kind, extra) { var o = { img: e, kind: kind }; for (var k in extra) o[k] = extra[k]; out.push(o); }
     (ev.events[key + pad(h.d)] || []).forEach(function (e) {
       var ti = ev.titles && ev.titles[e.s];
-      add(e, "day", { title: ti ? (ti[lang] || ti.fa) : "", date: A.num(h.d) + " " + mName });
+      var tt = ti ? (ti[lang] || ti.fa) : "";
+      add(e, "day", { title: tt, date: A.num(h.d) + " " + mName, tone: toneOf(tt, h.m) });
     });
     if (h.m === 9) {
       var dua = ev.dua && ev.dua[pad(h.d)];
       var di = dua && (dua[lang === "fa" ? "fa" : "en"] || dua.fa || dua.en);
-      if (di) add(di, "dua", { n: h.d });
+      if (di) add(di, "dua", { n: h.d, tone: "joy" });
     }
-    (ev.events[key + "00"] || []).forEach(function (e) { add(e, "month", { m: mName }); });
+    (ev.events[key + "00"] || []).forEach(function (e) { add(e, "month", { m: mName, tone: toneOf("", h.m) }); });
     if (!out.length && !noDefaults) (ev.defaults || []).forEach(function (e) { add(e, "default", {}); });
     return out;
   }
@@ -138,8 +183,9 @@
     var cut = s.slice(0, 260), p = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("؟ "), cut.lastIndexOf("۔ "), cut.lastIndexOf("! "));
     return (p > 120 ? cut.slice(0, p + 1) : cut.replace(/\s+\S*$/, "")) + "…";
   }
-  function evCard(id, it, date, items) {
-    return { ev: id, date: date, title: it.title, excerpt: excerpt(it.text), items: items, more: it.text.length > 110 || it.sources.length > 0 };
+  function evCard(id, it, date, items, d, m) {
+    return { ev: id, date: date, m: m, dn: A.num(d), mn: A.names("hijri")[m - 1], tone: toneOf(it.title, m), title: it.title, excerpt: excerpt(it.text), items: items,
+      more: it.text.length > 110 || it.sources.length > 0 };
   }
   function evItems(list, date, doc) {
     return list.map(function (e) { return { title: e.title || "", text: e.text || "", sources: e.sources || [], date: date, hon: (doc && doc.honorifics) || null }; });
@@ -155,7 +201,7 @@
   function nextCard(doc, day, h, date, m2) {
     var m = m2 || h.m, label = A.num(day) + " " + A.names("hijri")[m - 1];
     var it = evItems(evOf(doc, String(day)), label, doc)[0];
-    var c = evCard("n" + m + "-" + day, it, date, [it]);
+    var c = evCard("n" + m + "-" + day, it, date, [it], day, m);
     c.next = true;
     c.when = m2 ? t("ev_on_date", { d: label }) : (day - h.d === 1 ? t("ev_tomorrow", { d: label }) : t("ev_in_days", { n: A.num(day - h.d), d: label }));
     return c;
@@ -164,8 +210,8 @@
     if (!doc) return Promise.resolve([]);
     var date = A.num(h.d) + " " + A.names("hijri")[h.m - 1], list = evOf(doc, String(h.d));
     if (list.length) {
-      var items = evItems(list, date, doc), out = items.slice(0, EV_MAX).map(function (it, i) { return evCard("e" + h.m + "-" + h.d + "-" + i, it, date, [it]); });
-      if (items.length > EV_MAX) out.push({ ev: "all" + h.m + "-" + h.d, all: true, date: date, count: items.length, items: items, more: true,
+      var items = evItems(list, date, doc), out = items.slice(0, EV_MAX).map(function (it, i) { return evCard("e" + h.m + "-" + h.d + "-" + i, it, date, [it], h.d, h.m); });
+      if (items.length > EV_MAX) out.push({ ev: "all" + h.m + "-" + h.d, all: true, date: date, m: h.m, dn: A.num(h.d), mn: A.names("hijri")[h.m - 1], tone: toneOf("", h.m), count: items.length, items: items, more: true,
         title: t("ev_list_title", { d: date }), excerpt: items.slice(EV_MAX).map(function (x) { return x.title; }).join(" • ") });
       return Promise.resolve(out);
     }
@@ -209,6 +255,7 @@
         var pics = lang === "fa", imgs = pics ? imagePages(r[2], h, lang, !!lm) : [];
         if (!pics) units = null;
         return evPages(lm, h, lang).then(function (evt) {
+          imgs = pairPictures(imgs, evt);
           if (!units && !imgs.length && !evt.length) return null;
           return { units: units || [], imgs: imgs, evt: evt, aboutShown: aboutShown, key: lang + ":" + dayKey(d) + ":" + h.m + "-" + h.d + (lm ? ":ev" : "") };
         });
@@ -232,36 +279,62 @@
     if (pg.kind === "month") return t("ev_month", { m: pg.m });
     return t("ev_default");
   }
+  /* a picture over its own blurred copy: the picture is never cropped (it carries writing) */
+  function hero(pic, alt) {
+    var h = document.createElement("div"), bg = document.createElement("div"), im = document.createElement("img");
+    h.className = "cv-hero"; bg.className = "cv-hero-bg"; bg.style.backgroundImage = "url(" + IMG_DIR + pic.f + ")";
+    im.src = IMG_DIR + pic.f; im.width = pic.w; im.height = pic.h; im.alt = alt; im.decoding = "async";
+    im.addEventListener("error", function () { h.classList.add("broken"); });
+    h.appendChild(bg); h.appendChild(im);
+    return h;
+  }
+  /* the line "date + kind of slide", e.g. "3 Jumada II · Occasion of the Day" */
+  function meta(date, head) {
+    var m = mk("div", "cv-meta", "");
+    if (date) m.appendChild(mk("span", "cv-chip", date));
+    if (head) m.appendChild(mk("span", "cv-kicker", head));
+    return m;
+  }
   function fillImage(box, pg) {
     box.textContent = "";
-    var w = pg.img.w, h = pg.img.h, hasCap = pg.kind === "day" && pg.title;
-    var aw = el.body.clientWidth - 6, ah = el.body.clientHeight - (hasCap ? 54 : 6);
-    var sc = Math.max(0.1, Math.min(aw / w, ah / h, 1.6));              /* small pictures are enlarged a little, never stretched to fill */
-    var card = document.createElement("figure"), im = document.createElement("img");
-    card.className = "img-card"; card.style.width = Math.round(w * sc) + "px"; card.style.height = Math.round(h * sc) + "px";
-    im.src = IMG_DIR + pg.img.f; im.width = w; im.height = h; im.alt = pg.title || headOf(pg); im.decoding = "async";
-    im.addEventListener("error", function () { card.classList.add("broken"); });
-    card.appendChild(im); box.appendChild(card);
-    if (hasCap) {
-      var cap = document.createElement("div"); cap.className = "img-cap";
-      var d1 = document.createElement("span"); d1.className = "img-date"; d1.textContent = pg.date;
-      var d2 = document.createElement("span"); d2.className = "img-title"; d2.textContent = pg.title;
-      cap.appendChild(d1); cap.appendChild(d2); box.appendChild(cap);
-    }
+    box.classList.add("cv", "cv-shot");
+    box.appendChild(hero(pg.img, pg.title || headOf(pg)));
+    var cap = mk("div", "cv-cap", "");
+    if (pg.kind === "day" && pg.title) {
+      cap.appendChild(meta(pg.date, headOf(pg)));
+      cap.appendChild(mk("div", "cv-title", pg.title));
+    } else cap.appendChild(mk("div", "cv-kicker cv-solo", headOf(pg)));
+    box.appendChild(cap);
   }
-  /* an event card: the date, the title and the first lines of the text; the button opens the whole text */
+  /* an event card: the date, the title and the first lines of the text; the button opens the whole text.
+     With a picture of the event: the picture on top, the date and the title below it. */
   function mk(tag, cls, text) { var n = document.createElement(tag); n.className = cls; n.textContent = text; return n; }
   function fillEvent(box, pg) {
     box.textContent = "";
-    box.classList.add("ev-box");
-    box.appendChild(mk("div", "ev-dateline", pg.when ? t("ev_next_when", { w: pg.when }) : pg.date));      /* plain text: a pill shape looks like a button */
-    var ti = mk("div", "ev-title", pg.title); ti.setAttribute("role", "heading"); ti.setAttribute("aria-level", "2"); box.appendChild(ti);   /* not an h2: the site gives every h2 inside a card an icon */
-    box.appendChild(mk("p", "slide-tr ev-text", pg.excerpt));
+    box.classList.add("cv", pg.pic ? "cv-pic" : "cv-plain");
+    var body = box, ti;
+    if (pg.pic) {
+      box.appendChild(hero(pg.pic, pg.title || ""));
+      body = mk("div", "cv-panel", ""); box.appendChild(body);
+      body.appendChild(meta(pg.date, headOf(pg)));
+    } else {
+      var top = mk("div", "cv-top", "");
+      if (pg.next) top.appendChild(mk("span", "cv-kicker", headOf(pg)));
+      var bd = mk("div", "cv-badge", "");
+      bd.appendChild(mk("b", "", pg.dn)); top.appendChild(bd);
+      top.appendChild(mk("div", "cv-month", pg.mn));
+      top.appendChild(mk("div", "cv-kicker", pg.when ? t("ev_next_when", { w: pg.when }) : headOf(pg)));
+      box.appendChild(top);
+      body = mk("div", "cv-panel", ""); box.appendChild(body);
+    }
+    ti = mk("div", "ev-title cv-title", pg.title); ti.setAttribute("role", "heading"); ti.setAttribute("aria-level", "2"); body.appendChild(ti);   /* not an h2: the site gives every h2 inside a card an icon */
+    if (!pg.pic) body.appendChild(mk("div", "cv-rule", ""));
+    body.appendChild(mk("p", "ev-text cv-text", pg.excerpt));
     if (pg.more) {
       var b = mk("button", "ev-more", pg.all ? t("ev_all_btn", { n: A.num(pg.count) }) : t("ev_more"));
       b.type = "button";
       b.addEventListener("click", function () { openDlg(pg); });
-      box.appendChild(b);
+      body.appendChild(b);
     }
   }
   /* the window with the whole text (or the list of all the events of the day) */
@@ -282,6 +355,9 @@
   function renderDlg(pg, idx) {
     var title = dlg.querySelector("#evDlgT"), body = dlg.querySelector("#evDlgBody"), back = dlg.querySelector("#evDlgBack");
     body.textContent = "";
+    /* the window has the colours of the card it was opened from: mourning, joy or neither (an item of the list has its own) */
+    var tn = idx < 0 ? pg.tone : toneOf(pg.items[idx].title, pg.m);
+    if (tn) dlg.setAttribute("data-tone", tn); else dlg.removeAttribute("data-tone");
     back.hidden = !(pg.all && idx >= 0); back.textContent = t("ev_back");
     dlg.querySelector("#evDlgX").setAttribute("aria-label", t("hadith_close"));
     if (idx < 0) {
@@ -416,10 +492,11 @@
     fill(box, pg);
     el.body.appendChild(s);
     el.title.textContent = headOf(pg);
-    if (pg.img) { el.bg.style.backgroundImage = "url(" + IMG_DIR + pg.img.f + ")"; stage.classList.add("has-img"); }
-    else stage.classList.remove("has-img");
-    var nx = S.pages[(S.i + 1) % n];
-    if (nx && nx.img && n > 1) (new Image()).src = IMG_DIR + nx.img.f;
+    var card = !!(pg.ev || pg.img);
+    stage.classList.toggle("is-card", card);
+    if (card && pg.tone) stage.setAttribute("data-tone", pg.tone); else stage.removeAttribute("data-tone");
+    var nx = S.pages[(S.i + 1) % n], np = nx && (nx.pic || nx.img);
+    if (np && n > 1) (new Image()).src = IMG_DIR + np.f;
     var label = t("st_page", { n: A.num(S.i + 1), total: A.num(n) });
     s.setAttribute("role", "group"); s.setAttribute("aria-roledescription", "slide"); s.setAttribute("aria-label", label);
     var dots = el.dots.children;

@@ -309,11 +309,15 @@
     return root.AzanLang.t("dir", { card: names[card], deg: fa(Math.round(dev)), side: sides[side] });
   }
 
+  /* the pictures (images/moon): 0.2 % steps from 0 to 10 % and from 90 to 100 %, 0.5 % steps in between; the file with the
+     nearest percent is used. Names: MoonL31_5.webp = 31.5 % lit on the left, MoonR..._.webp = lit on the right, Moon00 / Moon100 = new / full moon */
   function imageName(p, waxing) {
-    var k = Math.round(p);
-    if (k <= 0) return "Moon00.gif";
-    if (k >= 100) return "Moon100.gif";
-    return "Moon" + (waxing ? "R" : "L") + p2(k) + ".gif";
+    var t;                                                   /* tenths of a percent */
+    if (p > 10 && p <= 90) t = Math.round(p * 2) * 5;
+    else t = Math.round(p / 0.2) * 2;
+    if (t <= 0) return "Moon00.webp";
+    if (t >= 1000) return "Moon100.webp";
+    return "Moon" + (waxing ? "R" : "L") + p2(Math.floor(t / 10)) + "_" + (t % 10) + ".webp";
   }
 
   var persianNum = new Intl.DateTimeFormat("en-u-ca-persian-nu-latn", { year: "numeric", month: "numeric", day: "numeric", timeZone: "UTC" });
@@ -500,6 +504,8 @@
       if (img.getAttribute("src") !== src) img.setAttribute("src", src);
       img.alt = root.AzanLang.t("moon_alt", { p: fa(o.illumNow.toFixed(1)) });
     }
+    var zb = document.getElementById("moonZoom");
+    if (zb) { var zl = root.AzanLang.t("moon_zoom"); zb.setAttribute("aria-label", zl); zb.title = zl; }
   }
   /* the card has two tabs: "the Moon right now" (the numbers) and "<next month> sighting" (every explanation: the main messages, the start
      of the month, why, the best time, the weather outlook and the note about the criterion). The second tab shows only when there is
@@ -561,6 +567,54 @@
     var tabNow = document.getElementById("mtab-now"), tabNext = document.getElementById("mtab-next");
     if (tabNow) tabNow.addEventListener("click", function () { showTab("now"); });
     if (tabNext) tabNext.addEventListener("click", function () { showTab("next"); });
+  }
+  /* the moon picture and the magnifier button open a large picture of the moon over a night sky with stars (always night, whatever
+     the time of day), so that the lit part can be seen clearly. A click anywhere, the X button or Escape closes it. */
+  var pop = null, popOpener = null;
+  function closePop() {
+    if (!pop || pop.hidden) return;
+    pop.hidden = true; document.documentElement.classList.remove("moon-pop-open");
+    if (popOpener && popOpener.focus) popOpener.focus();
+  }
+  function openPop(opener) {
+    var o = lastOut, A = root.AzanLang;
+    if (!o) return;
+    if (!pop) {
+      pop = document.createElement("div"); pop.className = "moon-pop"; pop.hidden = true;
+      pop.setAttribute("role", "dialog"); pop.setAttribute("aria-modal", "true");
+      pop.innerHTML = '<button type="button" class="moon-pop-x">×</button><div class="moon-pop-body"><img class="moon-pop-img" width="600" height="600" alt="">' +
+        '<div class="moon-pop-pct"><span></span><b></b></div></div>';
+      document.body.appendChild(pop);
+      pop.addEventListener("click", closePop);
+      document.addEventListener("keydown", function (e) {
+        if (!pop || pop.hidden) return;
+        if (e.key === "Escape") closePop();
+        else if (e.key === "Tab") { e.preventDefault(); pop.querySelector(".moon-pop-x").focus(); }
+      });
+    }
+    var alt = A.t("moon_alt", { p: fa(o.illumNow.toFixed(1)) });
+    pop.setAttribute("aria-label", alt);
+    pop.querySelector(".moon-pop-x").setAttribute("aria-label", A.t("hadith_close"));
+    var im = pop.querySelector(".moon-pop-img"); im.src = "images/moon/" + o.img; im.alt = alt;
+    pop.querySelector(".moon-pop-pct span").textContent = A.t("moon_now");
+    pop.querySelector(".moon-pop-pct b").textContent = A.percent(o.illumNow.toFixed(2));
+    popOpener = opener; pop.hidden = false; document.documentElement.classList.add("moon-pop-open");
+    pop.querySelector(".moon-pop-x").focus();
+  }
+  if (typeof document !== "undefined") {
+    var moonPic = document.getElementById("moonImg");
+    if (moonPic && moonPic.parentNode && !document.getElementById("moonZoom")) {
+      /* the button sits in the bottom-left corner of the night-sky box behind the moon, not on the moon */
+      var zoomBtn = document.createElement("button");
+      zoomBtn.type = "button"; zoomBtn.id = "moonZoom"; zoomBtn.className = "moon-zoom";
+      zoomBtn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="6.3" fill="none" stroke="currentColor" stroke-width="1.9"/>' +
+        '<path d="M6.6 8.4a4 4 0 0 1 2.6-2.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" opacity=".75"/>' +
+        '<path d="M15 15l5.4 5.4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>' +
+        '<path d="M10 7.5v5M7.5 10h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+      moonPic.parentNode.appendChild(zoomBtn);
+      zoomBtn.addEventListener("click", function () { openPop(zoomBtn); });
+      moonPic.addEventListener("click", function () { openPop(zoomBtn); });
+    }
   }
   function update(lat, lng, off) { state = { lat: lat, lng: lng, off: off }; render(); }
   if (typeof window !== "undefined" && window.addEventListener) window.addEventListener("azan:langchange", render);
